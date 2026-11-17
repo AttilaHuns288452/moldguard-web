@@ -34,7 +34,7 @@ export default function Hero() {
         <div>
           <div className="relative grid min-h-[470px] place-items-end justify-center overflow-hidden rounded-shell border border-line bg-card px-[26px] pt-[34px] shadow-[0_1px_2px_rgba(30,54,128,.05),0_10px_26px_-20px_rgba(30,54,128,.30)]">
             <img
-              src="/pod-hero.png"
+              src="/pod-hero.webp"
               alt="MoldGuard Pod, a compact matte-white environmental monitor with a status light, on a wooden shelf in a bright living room"
               width={1024}
               height={1024}

@@ -8,12 +8,8 @@ export default defineConfig({
     target: 'es2022',
     assetsInlineLimit: 2048,
     chunkSizeWarningLimit: 900,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules/three') || id.includes('@react-three')) return 'three'
-        },
-      },
-    },
+    // Vite emits <link rel=modulepreload> for every dynamic-import chunk, which
+    // downloads three.js during the hero paint and defeats the lazy split.
+    modulePreload: { polyfill: false, resolveDependencies: () => [] },
   },
 })
