@@ -1,6 +1,7 @@
 import Header from './components/Header'
 import Hero from './sections/Hero'
 import Problem from './sections/Problem'
+import Credibility from './sections/Credibility'
 import Meet from './sections/Meet'
 import SenseScoreAct from './sections/SenseScoreAct'
 import Features from './sections/Features'
@@ -24,6 +25,7 @@ export default function App() {
       <Header />
       <main id="main">
         <Hero />
+        <Credibility />
         <Problem />
         <Meet />
         <SenseScoreAct />

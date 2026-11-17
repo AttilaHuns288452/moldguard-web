@@ -180,3 +180,12 @@ export const OFFER = {
     cta: { label: 'Request a quotation', href: '#contact' },
   },
 }
+
+/** Authority signals. Every number here is countable from the project itself:
+ *  the roster in the PDF, and the sensor set the build actually specifies. */
+export const CREDIBILITY = [
+  { k: 'Fixed', label: 'one-time cost', note: 'No monitoring subscription, ever' },
+  { k: 'Itemized', label: 'hardware list', note: 'Sourced part by part, nothing bundled' },
+  { k: 'Yours', label: 'the system', note: 'No proprietary ecosystem after handover' },
+  { k: 'Local', label: 'loop on-device', note: 'Dehumidification does not need a screen open' },
+]
