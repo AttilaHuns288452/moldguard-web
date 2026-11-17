@@ -28,6 +28,8 @@ export function LineReveal({
       {lines.map((l, i) => (
         <span className="line" key={l}>
           <span style={{ '--i': i } as React.CSSProperties}>{l}</span>
+          {/* keeps the accessible name word-separated: spans concatenate with no space */}
+          <span className="sr-only"> </span>
         </span>
       ))}
     </Tag>
