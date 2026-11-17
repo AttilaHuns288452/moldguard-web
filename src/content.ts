@@ -18,7 +18,7 @@ export const HERO = {
   titleLines: ['Know mold is', 'coming before', 'it shows.'],
   lede:
     'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and activates a connected dehumidifier when conditions become unsafe.',
-  primary: { label: 'Get a quotation', href: '#contact' },
+  primary: { label: 'Get Started', href: '#contact' },
   secondary: { label: 'See how it works', href: '#how' },
 }
 
