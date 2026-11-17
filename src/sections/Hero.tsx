@@ -43,24 +43,24 @@ export default function Hero() {
             />
 
             {/* phone mock: 6px black bezel, pale app screen, deck values */}
-            <div className="absolute right-[14px] bottom-[14px] z-[2] w-[172px] origin-bottom-right rotate-[-1.2deg] overflow-hidden rounded-[26px] border-[6px] border-[#0a0a0a] bg-deeper shadow-[0_30px_60px_-18px_rgba(20,32,60,.55),0_2px_6px_rgba(20,32,60,.28)] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:rotate-0 hover:scale-[1.015]">
+            <div className="absolute right-[14px] bottom-[14px] z-[2] w-[196px] origin-bottom-right rotate-[-1.2deg] overflow-hidden rounded-[26px] border-[6px] border-[#0a0a0a] bg-deeper shadow-[0_30px_60px_-18px_rgba(20,32,60,.55),0_2px_6px_rgba(20,32,60,.28)] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:rotate-0 hover:scale-[1.015]">
               <div className="w-full overflow-hidden rounded-[20px] border border-line bg-[#eaf1f4]">
-                <div className="flex justify-between px-3.5 pt-2.5 pb-0.5 text-[10px] text-ink-3">
+                <div className="flex justify-between px-3.5 pt-2.5 pb-0.5 text-[11px] text-ink-3">
                   <span>MoldGuard</span>
                 </div>
                 <div className="px-3.5 pb-3">
-                  <span className="mb-1.5 block text-[10px] font-bold tracking-[0.1em] text-ink">Mold Risk Index</span>
+                  <span className="mb-1.5 block text-[10.5px] font-bold tracking-[0.1em] text-ink">Mold Risk Index</span>
                   <div className="measure text-[26px] leading-[1.1] font-semibold text-deep">
                     {APP_MOCK.risk}
                     <span className="text-[12px] text-ink-3">/100</span>
                   </div>
-                  <div className="mt-0.5 text-[10.5px] text-ink-3">{APP_MOCK.cap}</div>
+                  <div className="mt-0.5 text-[11px] text-ink-3">{APP_MOCK.cap}</div>
                   <div className="mt-2.5 border-t border-line">
                     {APP_MOCK.rooms.map((r) => (
-                      <div key={r.name} className="flex items-center justify-between gap-2.5 border-b border-line py-2 text-[11.5px] text-ink">
+                      <div key={r.name} className="flex items-center justify-between gap-2.5 border-b border-line py-2 text-[12px] text-ink">
                         <span>{r.name}</span>
                         <i
-                          className={`flex-none text-[10.5px] not-italic ${
+                          className={`flex-none text-[11px] not-italic ${
                             r.state === 'Elevated' ? 'font-semibold text-deep' : r.state === 'Running' ? 'text-accent-ink' : 'text-ink-3'
                           }`}
                         >
