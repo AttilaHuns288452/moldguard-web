@@ -71,7 +71,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={!valid}
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d6d0c8] disabled:text-[#8a837a] disabled:opacity-70 disabled:shadow-none"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#5b7591] disabled:opacity-70 disabled:shadow-none"
               >
                 Send message
                 <ArrowRight className="size-4" strokeWidth={2} />
@@ -127,7 +127,7 @@ function Field({ id, label, error, children }: { id: string; label: string; erro
       <label htmlFor={id} className="text-[12.5px] font-[650] text-ink">{label}</label>
       <div className="mt-1.5">{children}</div>
       {error ? (
-        <p id={`${id}-err`} className="mt-1.5 text-[11.5px] text-[#a8402b]">{error}</p>
+        <p id={`${id}-err`} className="mt-1.5 text-[11.5px] text-[#c0392b]">{error}</p>
       ) : null}
     </div>
   )

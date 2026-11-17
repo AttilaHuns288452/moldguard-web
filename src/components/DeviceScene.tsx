@@ -9,11 +9,11 @@ import type { HotspotId } from './DeviceViewer'
    Proportions are untouched: 317 x 292 x 823 mm, base sitting on y = 0. */
 
 export const HOTSPOTS = [
-  { id: 'display', label: 'Status display', copy: 'Nine apertures read the room; the cyan LED reports the current Mold Risk state.', at: [0.10, -0.117, 0.46] },
-  { id: 'sensors', label: 'Humidity / temperature', copy: 'Relative humidity and temperature are the Mold Risk Index core inputs.', at: [0.10, -0.117, 0.63] },
-  { id: 'tof',     label: 'Surface distance', copy: 'A proximity reading alongside humidity, temperature and VOC.', at: [-0.10, -0.117, 0.60] },
-  { id: 'dry',     label: 'Thermoelectric stack', copy: 'The six-module Peltier column that pulls moisture out of the air.', at: [-0.10, -0.117, 0.24] },
-  { id: 'power',   label: 'Control & relay board', copy: 'The brain of the loop: it decides when the dehumidifier runs.', at: [0.0, -0.117, 0.09] },
+  { id: 'display', label: 'Status display',   copy: 'Reads out the current risk state and the automation rule that is running.', at: [-0.154, 0.739, 0.055] },
+  { id: 'sensors', label: 'Humidity / temperature', copy: 'DHT11 feeds relative humidity and temperature to the Mold Risk Index.', at: [-0.021, 0.820, 0.035] },
+  { id: 'tof',     label: 'Surface distance', copy: 'VL53L0X time-of-flight sensor: a proximity reading alongside humidity, temperature and VOC.', at: [0.002, 0.711, -0.001] },
+  { id: 'dry',     label: 'Thermoelectric stack', copy: 'Six Peltier modules on the 0.8 m column, with fan and heatsink. This is what pulls moisture out of the air.', at: [-0.126, 0.400, -0.075] },
+  { id: 'power',   label: 'Control & relay board', copy: 'ESP32, relay module and stereo amp: the electronics that decide when the dehumidifier runs.', at: [0.001, 0.744, -0.019] },
 ] as const
 
 
@@ -30,7 +30,7 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
   const { camera, scene } = useThree()
   const { scene: model } = useGLTF('/moldguard.glb') as unknown as { scene: THREE.Group }
   const ready = useRef(false)
-  const spin = useRef(0)  // features are on the broad +Z face
+  const spin = useRef(-0.55)  // open showing the display + sensor head
   const drag = useRef({ down: false, x: 0, y: 0, yaw: 0, pitch: 0 })
   // Framing is computed, not eyeballed: the device is 0.823 m tall and the
   // vertical FOV governs, so the orbit radius must exceed h / (2 tan(fov/2)).
@@ -49,36 +49,9 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
       mats.forEach((x) => { if (x) (x as THREE.Material).side = THREE.FrontSide })
     })
 
-    // Normalise the model regardless of how the source file is oriented or
-    // scaled. The SketchUp export has arrived lying down, off-origin and in mm,
-    // so derive the world box and stand the longest axis up ourselves. This is
-    // the single place orientation is decided: never patch the GLB by eye.
-    model.updateWorldMatrix(true, true)
-    const box = new THREE.Box3().setFromObject(model)
-    const size = box.getSize(new THREE.Vector3())
-
-    // rotate so the longest axis becomes +Y
-    if (size.z > size.y && size.z >= size.x) {
-      model.rotation.x = -Math.PI / 2   // Z-up source
-    } else if (size.x > size.y && size.x >= size.z) {
-      model.rotation.z = Math.PI / 2    // X-up source
-    }
-
-    // scale to a known height (metres), whatever units the source used
-    const TARGET_H = 0.82
-    model.updateWorldMatrix(true, true)
-    const box2 = new THREE.Box3().setFromObject(model)
-    const h = box2.getSize(new THREE.Vector3()).y || 1
-    model.scale.multiplyScalar(TARGET_H / h)
-
-    // sit it on y = 0 and centre it on x/z
-    model.updateWorldMatrix(true, true)
-    const box3 = new THREE.Box3().setFromObject(model)
-    const c3 = box3.getCenter(new THREE.Vector3())
-    model.position.x -= c3.x
-    model.position.z -= c3.z
-    model.position.y -= box3.min.y
-
+    // The GLB is already correct: 0.317 x 0.823 x 0.292 m, tall axis on +Y,
+    // base at y=0 (verified against the file's node transforms). Do not
+    // "normalise" it - that is what previously laid it on its side.
     scene.add(model)
     ready.current = true
     onLoaded()
@@ -130,7 +103,7 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
     if (autoSpin && !drag.current.down) spin.current += dt * 0.2
     const yaw = spin.current + drag.current.yaw
     const pitch = drag.current.pitch
-    const r = 1.98 + (1 - ease) * 0.5   // fits 0.82m tall with 1.30x headroom
+    const r = 1.34 + (1 - ease) * 0.36   // the head is the only real volume; the column is 2mm thin by design
     camera.position.set(
       r * Math.sin(yaw) * Math.cos(pitch),
       target.y + 0.13 + r * Math.sin(pitch) * 0.9,
@@ -188,21 +161,21 @@ export default function DeviceScene(props: Props) {
       dpr={[1, 1.75]}
       shadows
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ fov: 30, near: 0.05, far: 40, position: [1.09, 0.41, 1.64] }}
+      camera={{ fov: 30, near: 0.05, far: 40, position: [-0.88, 0.41, 1.43] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
-        gl.toneMappingExposure = 1.08
+        gl.toneMappingExposure = 0.9
       }}
     >
       <AdaptiveDpr pixelated />
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={0.5} />
       <directionalLight
-        position={[1.3, 2.2, 1.5]} intensity={3.6} color="#fffaf4"
+        position={[1.2, 1.9, 1.5]} intensity={2.2} color="#eaf2ff"
         castShadow shadow-mapSize={[1024, 1024]}
       />
       <directionalLight position={[-1.8, 1.1, -0.7]} intensity={0.55} color="#eaf2fc" />
       <pointLight position={[0.2, 0.5, 1.5]} intensity={0.7} color="#ffffff" />
-      <Environment preset="studio" environmentIntensity={0.85} />
+      <Environment preset="studio" environmentIntensity={0.5} />
       <Rig {...props} />
       <ContactShadows
         position={[0, 0, 0]} opacity={0.62} scale={2.0} blur={1.6}

@@ -37,7 +37,7 @@ export default function Meet() {
                   {MEET.caption}
                 </span>
               </div>
-              <div className="relative h-[clamp(330px,46vw,470px)] w-full bg-[radial-gradient(72%_62%_at_50%_38%,#f4f9ff_0%,#e6eff9_56%,#d5e3f2_100%)]">
+              <div className="relative h-[clamp(330px,46vw,470px)] w-full bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
                 <DeviceViewer active={active} onHotspot={setActive} />
               </div>
               <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5">
@@ -46,7 +46,7 @@ export default function Meet() {
                 </span>
                 <span className="flex shrink-0 items-center gap-1.5 text-[0.6875rem] text-ink-3">
                   <RotateCcw className="size-3" strokeWidth={1.75} />
-                  Real SketchUp model
+                  SketchUp assembly
                 </span>
               </div>
             </div>

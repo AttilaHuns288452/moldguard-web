@@ -54,7 +54,7 @@ export default function Faq() {
                         className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border text-[13px] transition-all duration-300 ${
                           isOpen
                             ? 'rotate-45 border-accent-ink bg-accent-ink text-white'
-                            : 'border-[#b9b1a6] text-ink-2 group-hover:border-ink-3 group-hover:text-ink'
+                            : 'border-[#b9cde4] text-ink-2 group-hover:border-ink-3 group-hover:text-ink'
                         }`}
                       >
                         +

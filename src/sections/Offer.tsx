@@ -62,7 +62,7 @@ export default function Offer() {
               <ul className="mt-3 space-y-2">
                 {OFFER.notIncluded.map((t) => (
                   <li key={t} className="flex items-start gap-2 text-[13.5px] leading-relaxed text-ink-2">
-                    <Minus className="mt-1 size-3.5 shrink-0 text-[#a8705a]" strokeWidth={2.5} />
+                    <Minus className="mt-1 size-3.5 shrink-0 text-[#465e7a]" strokeWidth={2.5} />
                     {t}
                   </li>
                 ))}
