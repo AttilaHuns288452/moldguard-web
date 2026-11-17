@@ -5,7 +5,7 @@ import { splitTitle } from '../lib/motion'
 /** Own-it band: copy left, three points right. */
 export default function Ownership() {
   return (
-    <section id="ownership" className="section section-alt">
+    <section id="ownership" className="section border-t border-line">
       <div className="shell grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
         <Reveal>
           <div>

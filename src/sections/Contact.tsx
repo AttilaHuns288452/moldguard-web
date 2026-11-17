@@ -34,11 +34,11 @@ export default function Contact() {
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)] lg:items-start">
+        <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-start lg:gap-10">
           {/* lead form */}
           <Reveal>
             <form
-              className="rounded-soft border border-line bg-card p-6 md:p-7"
+              className="rounded-soft border border-line bg-card p-7 md:p-8"
               onSubmit={(e) => { e.preventDefault(); window.location.href = mailto }}
             >
               <div className="space-y-4">
@@ -83,9 +83,9 @@ export default function Contact() {
 
           {/* roster */}
           <Reveal delay={80}>
-            <div className="rounded-soft border border-line bg-card p-6 md:p-7">
+            <div className="rounded-soft border border-line bg-card p-7 md:p-8">
               <p className="text-[13px] font-[650] tracking-[0.1em] text-ink-3 uppercase">The team</p>
-              <div className="mt-5 grid gap-x-5 gap-y-5 sm:grid-cols-2">
+              <div className="mt-6 grid gap-x-6 gap-y-6 sm:grid-cols-2">
                 {TEAM.map((m) => (
                   <div key={m.name} className="flex items-start gap-3">
                     <span

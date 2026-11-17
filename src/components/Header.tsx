@@ -26,7 +26,7 @@ export default function Header() {
               <a
                 key={n.id}
                 href={`#${n.id}`}
-                className="nav-grow flex-1 py-2.5 text-center text-ink-2 transition-colors hover:text-ink md:flex-none md:py-1 md:text-left"
+                className="nav-grow flex min-h-11 flex-1 items-center justify-center py-2.5 text-center text-ink-2 transition-colors hover:text-ink md:min-h-0 md:flex-none md:justify-start md:py-1 md:text-left"
               >
                 {n.label}
               </a>
@@ -35,7 +35,7 @@ export default function Header() {
 
           <a
             href="#download"
-            className="ml-auto rounded-tight bg-accent-ink px-[18px] py-2.5 text-[14px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep hover:shadow-[0_10px_24px_-14px_rgba(30,54,128,.7)] active:scale-[.98] md:ml-0 md:-ml-4 md:px-[22px] md:py-[11px] md:text-[15px]"
+            className="ml-auto inline-flex min-h-11 items-center rounded-tight bg-accent-ink px-[18px] py-2.5 text-[14px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep hover:shadow-[0_10px_24px_-14px_rgba(30,54,128,.7)] active:scale-[.98] md:ml-0 md:-ml-4 md:px-[22px] md:py-[11px] md:text-[15px]"
           >
             Get Started
           </a>

@@ -23,10 +23,10 @@ export default function SenseScoreAct() {
           </Reveal>
         </div>
 
-        <div className="mt-[38px] grid border-t-2 border-deep sm:grid-cols-3">
+        <div className="mt-10 grid gap-px overflow-hidden rounded-soft border border-line bg-line sm:grid-cols-3">
           {SENSE_SCORE_ACT.steps.map((s, i) => (
             <Reveal key={s.n} delay={i * 70}>
-              <div className={`py-6 pr-6 ${i > 0 ? 'border-t border-line sm:border-t-0 sm:border-l' : ''}`}>
+              <div className="h-full bg-card px-6 py-7">
                 <span className="measure text-[11px] tracking-[0.16em] text-accent-ink">{s.n}</span>
                 <h3 className="mt-2 text-[1.13rem] font-[650] text-deep">{s.title}</h3>
                 <ul className="mt-2 space-y-1">
