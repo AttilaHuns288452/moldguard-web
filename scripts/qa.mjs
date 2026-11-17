@@ -94,6 +94,9 @@ for (const vp of VIEWPORTS) {
     record(`nav: ${h} resolves`, exists > 0)
   }
 
+  // content below the fold is visibility:hidden until revealed, so scroll to it
+  await page.evaluate(() => document.getElementById('meet').scrollIntoView())
+  await page.waitForTimeout(900)
   // data-flow accordion must actually open
   const det = page.locator('#meet details').first()
   const closed = await det.evaluate(d => d.open)
@@ -101,11 +104,17 @@ for (const vp of VIEWPORTS) {
   await page.waitForTimeout(300)
   record('meet: data-flow toggles', (await det.evaluate(d => d.open)) !== closed)
 
+  await page.evaluate(() => document.getElementById('how').scrollIntoView())
+  await page.waitForTimeout(600)
   // three-step columns render all three stages
   record('how: three stages present', (await page.locator('#how h3').count()) === 3)
+  await page.evaluate(() => document.getElementById('features').scrollIntoView())
+  await page.waitForTimeout(600)
   // six features render
   record('features: six items', (await page.locator('#features h3').count()) === 6)
 
+  await page.evaluate(() => document.getElementById('contact').scrollIntoView())
+  await page.waitForTimeout(700)
   // contact channels are real links
   record('contact: mailto present', (await page.locator('#contact a[href^="mailto:"]').count()) > 0)
   record('contact: tel present', (await page.locator('#contact a[href^="tel:"]').count()) > 0)

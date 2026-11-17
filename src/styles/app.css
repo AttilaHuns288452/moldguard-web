@@ -3,17 +3,24 @@
 /* ── section entrance ────────────────────────────────────────────────────
    Driven by an IntersectionObserver per element, so anything below the fold
    animates when it is actually reached instead of firing off-screen.        */
+/* opacity:0 alone leaves contents in the TAB ORDER, so a keyboard user could
+   focus a button they cannot see. visibility:hidden removes it from focus while
+   still allowing the transition; it flips to visible at the start of the reveal. */
 .reveal {
   opacity: 0;
+  visibility: hidden;
   transform: translateY(14px);
   transition:
     opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms),
     transform 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms);
   will-change: opacity, transform;
 }
-.reveal.is-in { opacity: 1; transform: none; }
+.reveal.is-in { opacity: 1; visibility: visible; transform: none; }
+/* a revealed child must be able to show itself even if its wrapper has not
+   revealed yet (e.g. a <details> the user tabs to early) */
+.reveal .reveal { visibility: visible; }
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal { opacity: 1; visibility: visible; transform: none; transition: none; }
 }
 
 .input {
@@ -78,11 +85,12 @@
   display: block;
   transform: translateY(105%) rotate(1.2deg);
   opacity: 0;
+  visibility: hidden;
   transition: transform var(--dur-media) var(--ease-out), opacity var(--dur-media) var(--ease-out);
   transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 90ms);
   will-change: transform;
 }
-.lines.is-in > .line > span { transform: none; opacity: 1; }
+.lines.is-in > .line > span { transform: none; opacity: 1; visibility: visible; }
 
 /* ── magnetic button: physical press + travelling arrow ───────────────────── */
 .btn-mag {
@@ -150,7 +158,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lines > .line > span { transform: none; opacity: 1; transition: none; }
+  .lines > .line > span { transform: none; opacity: 1; visibility: visible; transition: none; }
   .btn-mag, .btn-mag .ico, .card-lift, .ph-zoom img, .nav-grow::after,
   .scroll-progress, .dial-fill { transition: none !important; }
   .btn-mag:hover, .card-lift:hover, .ph-zoom:hover img { transform: none; }

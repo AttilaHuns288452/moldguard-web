@@ -7,7 +7,7 @@ export function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-export function useInView<T extends Element>(margin = '-12% 0px -8% 0px') {
+export function useInView<T extends Element>(margin = '0px 0px 18% 0px') {
   const ref = useRef<T>(null)
   const [inView, setInView] = useState(false)
   useEffect(() => {
