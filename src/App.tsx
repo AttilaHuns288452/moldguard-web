@@ -8,6 +8,7 @@ import Features from './sections/Features'
 import Ownership from './sections/Ownership'
 import Offer from './sections/Offer'
 import Placement from './sections/Placement'
+import AppFrames from './sections/AppFrames'
 import Faq from './sections/Faq'
 import Contact from './sections/Contact'
 import ClosingCta from './sections/ClosingCta'
@@ -32,6 +33,7 @@ export default function App() {
         <Features />
         <Ownership />
         <Placement />
+        <AppFrames />
         <Offer />
         <Faq />
         <Contact />
