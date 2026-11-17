@@ -23,7 +23,7 @@ export default function Placement() {
         <Reveal delay={90}>
           <div className="ph-zoom overflow-hidden rounded-[14px] bg-paper-deep">
             <img
-              src="/pod-bath.png"
+              src="/pod-bath.webp"
               alt={PLACEMENT.photoAlt}
               width={1024}
               height={1024}

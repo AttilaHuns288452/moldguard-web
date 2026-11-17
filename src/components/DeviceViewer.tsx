@@ -39,7 +39,7 @@ export default function DeviceViewer({ onHotspot, active }: Props) {
           setTimeout(mount, 300)
         }
       },
-      { rootMargin: '180px' },
+      { rootMargin: '0px' },   // load only when the viewer is actually close
     )
     io.observe(el)
     return () => io.disconnect()
