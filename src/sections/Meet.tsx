@@ -37,7 +37,7 @@ export default function Meet() {
                   {MEET.caption}
                 </span>
               </div>
-              <div className="relative h-[clamp(330px,46vw,470px)] w-full bg-[radial-gradient(72%_62%_at_50%_38%,#f1eee8_0%,#e7e2db_56%,#dbd5cc_100%)]">
+              <div className="relative h-[clamp(330px,46vw,470px)] w-full bg-[radial-gradient(72%_62%_at_50%_38%,#f4f9ff_0%,#e6eff9_56%,#d5e3f2_100%)]">
                 <DeviceViewer active={active} onHotspot={setActive} />
               </div>
               <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5">

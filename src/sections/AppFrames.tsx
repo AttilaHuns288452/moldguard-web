@@ -36,7 +36,7 @@ export default function AppFrames() {
                   aria-pressed={active === i}
                   className={`rounded-tight border px-3.5 py-2 text-[13px] transition-colors ${
                     active === i
-                      ? 'border-accent-ink bg-[#3f51b50f] font-[650] text-deep'
+                      ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep'
                       : 'border-line text-ink-2 hover:border-line-hi hover:text-ink'
                   }`}
                 >

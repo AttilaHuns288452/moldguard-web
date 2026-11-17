@@ -51,7 +51,7 @@ export default function Header() {
 
           <a
             href="#download"
-            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-tight border border-line-hi px-[16px] py-2.5 text-[14px] font-[650] text-deep transition-colors duration-200 hover:border-deep hover:bg-[#1e36800a] active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
+            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-tight border border-line-hi px-[16px] py-2.5 text-[14px] font-[650] text-deep transition-colors duration-200 hover:border-deep hover:bg-[#15385e0a] active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
           >
             Get Started
           </a>

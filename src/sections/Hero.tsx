@@ -21,7 +21,7 @@ export default function Hero() {
         aria-hidden="true"
         style={{
           background:
-            'radial-gradient(46% 44% at 50% 42%, #ffffff 0%, #f6f2ec 52%, #ebe5dc 100%)',
+            'radial-gradient(52% 50% at 50% 42%, #ffffff 0%, #f2f7fd 50%, #dde9f6 100%)',
         }}
       />
 

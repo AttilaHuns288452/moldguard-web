@@ -29,9 +29,9 @@ export function IndexDial({ value = 38 }: { value?: number }) {
     <div ref={ref} className="relative shrink-0">
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
         <g transform={`rotate(150 ${size / 2} ${size / 2})`}>
-          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e3ded6" strokeWidth="3" strokeDasharray={`${arc} ${c}`} />
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#d7e3f2" strokeWidth="3" strokeDasharray={`${arc} ${c}`} />
           <circle
-            cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#3f51b5" strokeWidth="3.5"
+            cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#2563eb" strokeWidth="3.5"
             strokeDasharray={`${filled} ${c}`} strokeLinecap="round" className="dial-fill"
           />
         </g>
@@ -42,7 +42,7 @@ export function IndexDial({ value = 38 }: { value?: number }) {
               key={t}
               x1={size / 2 + Math.cos(a) * (r - 8)} y1={size / 2 + Math.sin(a) * (r - 8)}
               x2={size / 2 + Math.cos(a) * (r - 3)} y2={size / 2 + Math.sin(a) * (r - 3)}
-              stroke="#ccc5ba" strokeWidth="1"
+              stroke="#b9cde4" strokeWidth="1"
             />
           )
         })}
