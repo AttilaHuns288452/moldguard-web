@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Menu, X, ArrowRight } from 'lucide-react'
 import { Logo } from './Marks'
 
 const NAV = [
@@ -10,6 +11,7 @@ const NAV = [
 ]
 
 export default function Header() {
+  const [mobileOpen, setMobileOpen] = useState(false)
   // keep anchor jumps clear of the sticky header, whatever height it takes
   useEffect(() => {
     const el = document.querySelector('header')
@@ -35,7 +37,7 @@ export default function Header() {
           </a>
 
           {/* desktop links */}
-          <div className="order-3 flex w-full basis-full gap-2 text-[13.5px] font-medium md:order-3 md:basis-full lg:order-none lg:ml-auto lg:w-auto lg:basis-auto lg:gap-7 lg:text-[14px]">
+          <div className="order-3 hidden w-full basis-full gap-2 text-[13.5px] font-medium lg:order-none lg:ml-auto lg:flex lg:w-auto lg:basis-auto lg:gap-7 lg:text-[14px]">
             {NAV.map((n) => (
               <a
                 key={n.id}
@@ -49,11 +51,38 @@ export default function Header() {
 
           <a
             href="#download"
-            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center rounded-tight bg-accent-ink px-[18px] py-2.5 text-[14px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep hover:shadow-[0_10px_24px_-14px_rgba(30,54,128,.7)] active:scale-[.98] lg:ml-0 lg:-ml-2 lg:px-[20px] lg:py-[11px] lg:text-[14.5px]"
+            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-tight border border-line-hi px-[16px] py-2.5 text-[14px] font-[650] text-deep transition-colors duration-200 hover:border-deep hover:bg-[#1e36800a] active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
           >
             Get Started
           </a>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            className="order-1 grid size-11 shrink-0 place-items-center rounded-tight border border-line-hi text-deep lg:hidden"
+          >
+            {mobileOpen ? <X className="size-5" strokeWidth={2} /> : <Menu className="size-5" strokeWidth={2} />}
+          </button>
         </nav>
+
+        {mobileOpen && (
+          <nav id="mobile-menu" aria-label="Mobile" className="shell border-t border-line pb-4 lg:hidden">
+            {NAV.map((n) => (
+              <a
+                key={n.id}
+                href={`#${n.id}`}
+                onClick={() => setMobileOpen(false)}
+                className="flex min-h-12 items-center justify-between border-b border-line text-[16px] text-ink-2 active:text-deep"
+              >
+                {n.label}
+                <ArrowRight className="size-4 text-ink-3" strokeWidth={2} />
+              </a>
+            ))}
+          </nav>
+        )}
       </header>
     </>
   )

@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
-import { RotateCcw, Maximize2 } from 'lucide-react'
+import { RotateCcw, RefreshCw, Maximize2 } from 'lucide-react'
 import { prefersReducedMotion } from '../lib/motion'
 
 /* Lazy: the whole three.js stack only downloads once the hero is actually in
@@ -102,38 +102,37 @@ export default function DeviceViewer({ onHotspot, active }: Props) {
         )}
       </div>
 
-      {/* Controls */}
+      {/* Controls recede: icon-only, no filled pill competing with the CTA */}
       {!failed && (
-        <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 px-4 pb-1">
-          <span className="text-[0.6562rem] font-semibold tracking-[0.12em] text-ink-3 uppercase">
-            Drag to rotate
-          </span>
-          <div className="flex items-center gap-1.5">
+        <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-1 pb-1">
+          <span className="text-[11px] tracking-[0.02em] text-ink-3/90">Drag to rotate</span>
+          <div className="flex items-center gap-0.5">
             <button
               type="button"
               onClick={() => setAutoSpin((v) => !v)}
               aria-pressed={autoSpin}
-              className="inline-flex min-h-8 items-center rounded-full border border-line bg-card/90 px-3 text-[0.6875rem] tracking-[0.1em] text-ink-3 uppercase backdrop-blur-sm transition-colors hover:border-ink-3 hover:text-ink"
+              aria-label={autoSpin ? 'Stop auto-rotation' : 'Start auto-rotation'}
+              className={`grid size-8 place-items-center rounded-full transition-colors ${
+                autoSpin ? 'text-deep' : 'text-ink-3 hover:text-ink'
+              } hover:bg-line/50`}
             >
-              {autoSpin ? 'Spin on' : 'Spin off'}
+              <RotateCcw className="size-3.5" strokeWidth={1.9} />
             </button>
             <button
               type="button"
               onClick={() => setResetKey((k) => k + 1)}
-              className="grid size-8 place-items-center rounded-full border border-line bg-card/90 text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2"
-              aria-label="Reset camera"
+              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/50 hover:text-ink"
+              aria-label="Reset the view"
             >
-              <RotateCcw className="size-3.5" strokeWidth={1.75} />
+              <RefreshCw className="size-3.5" strokeWidth={1.9} />
             </button>
             <button
               type="button"
-              onClick={() => {
-                hostRef.current?.parentElement?.requestFullscreen?.().catch(() => {})
-              }}
-              className="hidden rounded-full border border-line bg-card/90 p-1.5 text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2 md:block"
-              aria-label="View model fullscreen"
+              onClick={() => { hostRef.current?.parentElement?.requestFullscreen?.().catch(() => {}) }}
+              className="hidden size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/50 hover:text-ink md:grid"
+              aria-label="View the model fullscreen"
             >
-              <Maximize2 className="size-3.5" strokeWidth={1.75} />
+              <Maximize2 className="size-3.5" strokeWidth={1.9} />
             </button>
           </div>
         </div>

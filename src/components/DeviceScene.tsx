@@ -99,7 +99,7 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
     if (autoSpin && !drag.current.down) spin.current += dt * 0.2
     const yaw = spin.current + drag.current.yaw
     const pitch = drag.current.pitch
-    const r = 1.72 + (1 - ease) * 0.55  // settles from 2.27m to 1.72m
+    const r = 1.98 + (1 - ease) * 0.5   // fits 0.82m tall with 1.30x headroom
     camera.position.set(
       r * Math.sin(yaw) * Math.cos(pitch),
       target.y + 0.13 + r * Math.sin(pitch) * 0.9,
@@ -157,24 +157,24 @@ export default function DeviceScene(props: Props) {
       dpr={[1, 1.75]}
       shadows
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ fov: 30, near: 0.05, far: 40, position: [1.04, 0.41, 1.38] }}
+      camera={{ fov: 30, near: 0.05, far: 40, position: [1.09, 0.41, 1.64] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
-        gl.toneMappingExposure = 1.02
+        gl.toneMappingExposure = 1.08
       }}
     >
       <AdaptiveDpr pixelated />
-      <ambientLight intensity={1.15} />
+      <ambientLight intensity={0.3} />
       <directionalLight
-        position={[1.5, 2.0, 1.6]} intensity={2.0} color="#ffffff"
+        position={[1.3, 2.2, 1.5]} intensity={3.6} color="#fffaf4"
         castShadow shadow-mapSize={[1024, 1024]}
       />
       <directionalLight position={[-1.8, 1.1, -0.7]} intensity={0.55} color="#eaf2fc" />
-      <pointLight position={[0.15, 0.6, 1.4]} intensity={0.5} color="#ffffff" />
-      <Environment preset="studio" environmentIntensity={0.55} />
+      <pointLight position={[0.2, 0.5, 1.5]} intensity={0.7} color="#ffffff" />
+      <Environment preset="studio" environmentIntensity={0.85} />
       <Rig {...props} />
       <ContactShadows
-        position={[0, 0, 0]} opacity={0.42} scale={2.4} blur={2.4}
+        position={[0, 0, 0]} opacity={0.62} scale={2.0} blur={1.6}
         far={0.95} resolution={512} color="#465e7a"
       />
       {HOTSPOTS.map((h) => (
