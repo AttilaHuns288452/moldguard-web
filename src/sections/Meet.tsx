@@ -36,7 +36,6 @@ export default function Meet() {
                 <span className="text-[0.6875rem] font-semibold tracking-[0.12em] text-ink-3 uppercase">
                   {MEET.caption}
                 </span>
-                <span className="measure text-[0.6875rem] tracking-[0.08em] text-ink-3">82 cm tall</span>
               </div>
               <div className="relative h-[clamp(330px,46vw,470px)] w-full bg-[radial-gradient(72%_62%_at_50%_38%,#f1eee8_0%,#e7e2db_56%,#dbd5cc_100%)]">
                 <DeviceViewer active={active} onHotspot={setActive} />

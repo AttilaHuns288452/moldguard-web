@@ -22,7 +22,7 @@ export default function Problem() {
         <div className="mt-12 grid gap-x-14 gap-y-0 border-t-2 border-deep sm:grid-cols-2">
           {PROBLEM.items.map((it, i) => (
             <Reveal key={it.n} delay={i * 60}>
-              <div className="card-lift border-b border-line py-6">
+              <div className="card-lift flex h-full flex-col justify-start border-b border-line py-6">
                 <span className="measure text-[11px] tracking-[0.16em] text-accent-ink">{it.n}</span>
                 <h3 className="mt-2 text-[1.13rem] font-[650] text-deep">{it.title}</h3>
                 <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-2">{it.body}</p>

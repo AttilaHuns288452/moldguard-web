@@ -18,7 +18,7 @@ export const HERO = {
   titleLines: ['Know mold is', 'coming before', 'it shows.'],
   lede:
     'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and activates a connected dehumidifier when conditions become unsafe.',
-  primary: { label: 'Check your risk', href: '#contact' },
+  primary: { label: 'Get a quotation', href: '#contact' },
   secondary: { label: 'See how it works', href: '#how' },
 }
 
@@ -66,7 +66,7 @@ export const SENSE_SCORE_ACT = {
   steps: [
     { n: '01', title: 'Sense', items: ['Humidity', 'Temperature', 'Air quality'] },
     { n: '02', title: 'Score', items: ['Mold Risk Index', 'Exposure duration', 'Dew-point conditions'] },
-    { n: '03', title: 'Act', items: ['Dehumidification', 'Alerts'] },
+    { n: '03', title: 'Act', items: ['Dehumidification', 'Alerts', 'Manual override'] },
   ],
 }
 
@@ -103,7 +103,7 @@ export const PLACEMENT = {
 
 export const CTA = {
   title: 'Protect your space before mold appears.',
-  lede: 'Get the app, or talk to the team about your space.',
+  lede: 'Tell us about your rooms and we will come back with a hardware list and a price.',
   primary: { label: 'Request a quotation', href: '#contact' },
   secondary: { label: 'See how it works', href: '#how' },
 }

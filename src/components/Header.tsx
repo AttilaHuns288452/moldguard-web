@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Logo } from './Marks'
 
 const NAV = [
@@ -9,6 +10,17 @@ const NAV = [
 ]
 
 export default function Header() {
+  // keep anchor jumps clear of the sticky header, whatever height it takes
+  useEffect(() => {
+    const el = document.querySelector('header')
+    if (!el) return
+    const apply = () => document.documentElement.style.setProperty('--header-h', `${el.offsetHeight}px`)
+    apply()
+    const ro = new ResizeObserver(apply)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-0 focus:top-0 focus:z-50 focus:rounded-br-[10px] focus:bg-deep focus:px-4 focus:py-2 focus:text-on-dark">
