@@ -21,7 +21,7 @@ const VIEWPORTS = [
   { name: '1920', w: 1920, h: 1080 },
 ]
 
-const SECTIONS = ['top', 'problem', 'loop', 'risk', 'features', 'app', 'ownership', 'team', 'faq', 'contact']
+const SECTIONS = ['top', 'problem', 'meet', 'how', 'features', 'ownership', 'placement', 'contact', 'download']
 
 const results = []
 const record = (name, ok, detail = '') => results.push({ name, ok, detail })
@@ -60,7 +60,8 @@ for (const vp of VIEWPORTS) {
 
   // 3D canvas must produce actual pixels
   if (vp.w >= 768) {
-    await page.evaluate(() => document.getElementById('top')?.scrollIntoView())
+    // the 3D viewer now lives in the Meet section, not the hero
+    await page.evaluate(() => document.getElementById('meet')?.scrollIntoView())
     await page.waitForTimeout(2500)
     const canvasBox = await page.locator('[data-device-canvas] canvas').first().boundingBox().catch(() => null)
     record(`${vp.name}: canvas mounted`, !!canvasBox, canvasBox ? `${Math.round(canvasBox.width)}x${Math.round(canvasBox.height)}` : 'none')
@@ -93,46 +94,21 @@ for (const vp of VIEWPORTS) {
     record(`nav: ${h} resolves`, exists > 0)
   }
 
-  // FAQ: item 0 starts open, so assert the toggle actually flips state
-  const faqBtn = page.locator('#faq button[aria-expanded]').first()
-  const openCount = () => page.evaluate(() =>
-    [...document.querySelectorAll('#faq [id^=faq-]')].filter(d => d.offsetHeight > 0).length)
-  const before = await openCount()
-  await faqBtn.click()
+  // data-flow accordion must actually open
+  const det = page.locator('#meet details').first()
+  const closed = await det.evaluate(d => d.open)
+  await page.locator('#meet details summary').first().click()
   await page.waitForTimeout(300)
-  const after = await openCount()
-  record('faq: toggles state', before !== after, `${before} -> ${after}`)
-  await faqBtn.click()
+  record('meet: data-flow toggles', (await det.evaluate(d => d.open)) !== closed)
 
-  // loop step switcher
-  await page.locator('#loop ol button').nth(2).click()
-  await page.waitForTimeout(300)
-  record('loop: step 3 selectable', (await page.locator('#loop button[aria-expanded="true"]').count()) === 1)
+  // three-step columns render all three stages
+  record('how: three stages present', (await page.locator('#how h3').count()) === 3)
+  // six features render
+  record('features: six items', (await page.locator('#features h3').count()) === 6)
 
-  // app tabs: switching to History must change the rendered screen body
-  const roomBody = await page.locator('#app').textContent()
-  await page.locator('#app button[aria-pressed]').nth(1).click()
-  await page.waitForTimeout(350)
-  const histBody = await page.locator('#app').textContent()
-  record('app: history tab switches', !!histBody && histBody.includes('7 d'), histBody?.slice(0, 60))
-  record('app: room tab content present', !!roomBody && /risk/i.test(roomBody), roomBody?.slice(0, 40))
-
-  // contact form: disabled until valid, then composes a mailto
-  const submit = page.locator('#contact button[type=submit]')
-  record('contact: submit disabled when empty', await submit.isDisabled())
-  await page.fill('#c-name', 'QA Tester')
-  await page.fill('#c-email', 'qa@example.com')
-  await page.fill('#c-msg', 'Testing the contact path.')
-  await page.waitForTimeout(200)
-  record('contact: submit enables when valid', await submit.isEnabled())
-  // the form must compose a working mailto and say so
-  const mailtoOk = await page.evaluate(() => {
-    const btn = document.querySelector('#contact button[type=submit]')
-    if (!btn) return false
-    const note = document.querySelector('#contact form p')
-    return !!note && /mail app/i.test(note.textContent || '')
-  })
-  record('contact: mailto handoff disclosed', mailtoOk)
+  // contact channels are real links
+  record('contact: mailto present', (await page.locator('#contact a[href^="mailto:"]').count()) > 0)
+  record('contact: tel present', (await page.locator('#contact a[href^="tel:"]').count()) > 0)
 
   // every CTA resolves
   const ctas = await page.locator('a[href^="#"], a[href^="mailto:"], a[href^="tel:"]').evaluateAll((as) =>

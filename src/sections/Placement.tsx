@@ -1,0 +1,38 @@
+import { ArrowRight } from 'lucide-react'
+import { PLACEMENT } from '../content'
+import { Reveal } from '../components/ui'
+
+export default function Placement() {
+  return (
+    <section id="placement" className="section">
+      <div className="shell grid items-center gap-10 md:grid-cols-2 md:gap-11">
+        <Reveal>
+          <div>
+            <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep">
+              {PLACEMENT.title}
+            </h2>
+            <p className="lede mt-2">{PLACEMENT.lede}</p>
+            <a
+              href={PLACEMENT.cta.href}
+              className="mt-5 inline-flex items-center gap-2.5 rounded-tight border border-line-hi bg-card px-5 py-2.5 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3"
+            >
+              {PLACEMENT.cta.label}
+              <ArrowRight className="size-[15px]" strokeWidth={2} />
+            </a>
+          </div>
+        </Reveal>
+        <Reveal delay={90}>
+          <div className="overflow-hidden rounded-[14px] bg-paper-deep">
+            <img
+              src="/pod-bath.png"
+              alt={PLACEMENT.photoAlt}
+              width={1024}
+              height={1024}
+              className="aspect-[4/3] w-full object-cover"
+            />
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}

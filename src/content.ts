@@ -1,7 +1,7 @@
 /**
  * Single source of truth for every claim on this site.
- * Derived from MoldGuard.pdf (the team's own proposal deck). Nothing here is
- * invented: if a fact is not in the deck it does not appear on the site.
+ * Copy is ported verbatim from the approved promo site
+ * (attilahuns288452.github.io/moldguard-promo-site) and traces to MoldGuard.pdf.
  */
 
 export const CONTACT = {
@@ -11,131 +11,102 @@ export const CONTACT = {
   year: 2026,
 }
 
-export const LOOP = [
-  {
-    id: 'sense',
-    index: '01',
-    name: 'Sense',
-    head: 'Sense the room, continuously.',
-    body:
-      'A compact sensor pod watches the conditions mold actually cares about: relative humidity, temperature, and volatile organic compounds. Humidity and temperature feed the risk engine’s core inputs. VOCs add context, read together with everything else rather than as a verdict.',
-    meta: 'Readings stream in around the clock',
-  },
-  {
-    id: 'analyze',
-    index: '02',
-    name: 'Analyze',
-    head: 'Score the risk, not just a number.',
-    body:
-      'The Mold Risk Index combines humidity, temperature, and how long those conditions persist, instead of reacting to a single humidity threshold. That is what makes the prediction early: it catches the window where mold can start, before it does. Outdoor forecast data sharpens that window further.',
-    meta: 'Mold Risk Index engine',
-  },
-  {
-    id: 'respond',
-    index: '03',
-    name: 'Respond',
-    head: 'Act: dehumidify, no hands.',
-    body:
-      'When the index crosses the risk threshold, MoldGuard switches the connected dehumidifier on and pulls moisture back down, closing the loop without you touching anything. Extracted water collects in the removable 1 L tank, monitored so you are told before it is full.',
-    meta: 'Dehumidifier running on auto',
-  },
-  {
-    id: 'protect',
-    index: '04',
-    name: 'Protect',
-    head: 'Report: see everything, anywhere.',
-    body:
-      'Live status and full history live in the app and web dashboard. The moment risk rises, you get an alert, and the dehumidifier has already responded. You can step in with manual override from anywhere, any time.',
-    meta: 'App + web dashboard',
-  },
-]
+/** Hero: the approved headline and lede. */
+export const HERO = {
+  cat: 'IoT mold risk prevention & detection',
+  titleLead: 'Know mold is coming',
+  titleTail: 'before it\u00a0shows.',
+  lede:
+    'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and activates a connected dehumidifier when conditions become unsafe.',
+  primary: { label: 'Get Started', href: '#download' },
+  secondary: { label: 'See how it works', href: '#how' },
+}
 
-export const RISK_FACTORS = [
-  { label: 'Relative humidity', note: 'Core input' },
-  { label: 'Temperature', note: 'Core input' },
-  { label: 'Sustained exposure', note: 'How long conditions persist' },
-  { label: 'Virtual surface dew-point margin', note: 'Condensation headroom' },
-  { label: 'Weather forecast', note: 'Additional context' },
-  { label: 'VOC / air quality', note: 'Supplementary context only' },
-]
+/** Hero app mock (approved values, illustrative). */
+export const APP_MOCK = {
+  risk: 38,
+  cap: 'Conditions steady',
+  rooms: [
+    { name: 'Living room', state: 'Low' },
+    { name: 'Bedroom', state: 'Low' },
+    { name: 'Closet', state: 'Elevated' },
+    { name: 'Dehumidifier', state: 'Running' },
+  ],
+}
 
-export const FEATURES = [
-  {
-    id: 'engine',
-    title: 'Mold Risk Index engine',
-    lead: 'Real-time risk scoring built from humidity, temperature, and sustained exposure duration, with a virtual surface dew-point calculation. It goes beyond the single-threshold triggers used by commercial dehumidifiers and avoids false triggers during temporary humidity spikes.',
-    kind: 'primary',
-  },
-  {
-    id: 'sensors',
-    title: 'Environmental & VOC monitoring',
-    lead: 'Temperature, humidity, and air quality measured together, continuously, so the risk score is built on the full picture, not one input.',
-    note: 'We treat VOC as context, never standalone proof: research shows microbial VOC levels are often too low for reliable detection and easily confounded by household sources.',
-  },
-  {
-    id: 'auto',
-    title: 'Automatic dehumidification',
-    lead: 'When risk climbs, the dehumidifier switches itself on, and off again once conditions return to safe range. The loop closes with no manual action, no scheduling, no remembering.',
-  },
-  {
-    id: 'analytics',
-    title: 'Analytics & history',
-    lead: 'Look back at any room, any week. Humidity, temperature, and dew-point trends are logged over time, with multi-room and multi-unit views for larger households, dormitories, or property managers.',
-  },
-  {
-    id: 'alerts',
-    title: 'Alerts',
-    lead: 'Real-time push notifications as risk rises, so a room never waits for you to check on it.',
-  },
-  {
-    id: 'automations',
-    title: 'Automations',
-    lead: 'The loop’s decisions are visible, not hidden in a black box: the rule the system runs is written right on the screen. Runs automatically. You can override any time from the app.',
-  },
-]
+export const PROBLEM = {
+  title: 'By the time you can see mold, it has already been growing.',
+  lede: 'High humidity can persist for weeks before mold becomes visible. Most people find out too late.',
+  items: [
+    { n: '01', title: 'Discovered too late', body: 'Households usually notice mold only after visible growth or odor.' },
+    { n: '02', title: 'Dumb triggers', body: 'Typical dehumidifiers react to a single humidity number, ignoring exposure duration and temperature.' },
+    { n: '03', title: 'Zero feedback', body: 'Passive moisture absorbers offer no monitoring, no data, no automation.' },
+    { n: '04', title: 'Priced for enterprises', body: 'Building-grade monitoring is out of reach for renters and small property owners.' },
+  ],
+}
 
-export const COMPARISON = [
-  {
-    option: 'Passive moisture absorbers',
-    does: 'Chemical moisture absorption, no sensors',
-    cost: 'Low one-time cost',
-    drawback: 'No monitoring, no data, no automation',
-  },
-  {
-    option: 'Commercial dehumidifiers',
-    does: 'App-controlled humidity threshold triggers',
-    cost: 'Mid-to-high retail hardware cost',
-    drawback: 'No mold-specific modeling; locked to vendor app; no web dashboard',
-  },
-  {
-    option: 'MoldGuard V1.0',
-    does:
-      'Mold Risk Index (humidity + temperature + duration), supplementary VOC context, predictive weather integration, closed-loop auto-dehumidification, water-tank monitoring, web + mobile dashboard',
-    cost: 'Fixed development fee',
-    drawback: 'Requires dedicated power source; periodic water-tank emptying',
-    ours: true,
-  },
-]
+export const MEET = {
+  title: 'Meet MoldGuard.',
+  lede: 'One device senses the room. One system understands it. When risk rises, it responds on its own.',
+  caption: 'MoldGuard Pod · tabletop or wall-mounted',
+  stages: [
+    { n: '01', title: 'The pod senses', body: 'Temperature, humidity and air quality, continuously.' },
+    { n: '02', title: 'The system understands', body: 'Readings become an environmental picture of the room.' },
+    { n: '03', title: 'The system flags risk', body: 'A single Mold Risk Index, updated in real time.' },
+    { n: '04', title: 'The system responds', body: 'The dehumidifier switches itself on and back off.' },
+  ],
+  flowLede:
+    'MoldGuard monitors indoor conditions, identifies increasing mold or condensation risk, and can automatically control dehumidification.',
+  flowNote: 'Illustrative demo data.',
+}
 
-export const STEPS = [
-  { n: '1', title: 'Place the unit', body: 'Tabletop or wall-mounted, near humidity-prone areas: bathrooms, closets, basements.' },
-  { n: '2', title: 'Connect to WiFi', body: 'The device joins your home network and syncs to the dashboard in real time.' },
-  { n: '3', title: 'Watch the loop run', body: 'From here it is automatic. Check trends in the dashboard, get alerts in the app, empty the tank when it is full.' },
-]
+export const SENSE_SCORE_ACT = {
+  title: 'Sense. Score. Act.',
+  cta: { label: 'Full walkthrough', href: '#how' },
+  steps: [
+    { n: '01', title: 'Sense', items: ['Humidity', 'Temperature', 'Air quality'] },
+    { n: '02', title: 'Score', items: ['Mold Risk Index', 'Exposure duration', 'Dew-point conditions'] },
+    { n: '03', title: 'Act', items: ['Dehumidification', 'Alerts'] },
+  ],
+}
 
-export const OWNERSHIP = [
-  { title: 'Itemized hardware', body: 'Components sourced individually, listed line by line, not bundled into a black box.' },
-  { title: 'One development fee', body: 'Built and delivered for a fixed cost. No recurring monitoring subscription.' },
-  { title: 'Full ownership', body: 'No proprietary ecosystem. The build is yours once handed over.' },
-  { title: 'Around your dehumidifier', body: 'The unit is designed around a dehumidifier selected for the setup, not the reverse.' },
-]
+export const FEATURES = {
+  title: 'Built for mold, not just moisture.',
+  cta: { label: 'Explore the features', href: '#features' },
+  items: [
+    { n: '1', title: 'Mold Risk Index Engine', body: 'Risk scoring based on humidity, temperature and exposure duration.' },
+    { n: '2', title: 'Early Detection', body: 'VOC sensing helps identify developing microbial conditions before visible signs.' },
+    { n: '3', title: 'Auto-Dehumidification', body: 'Responds automatically when risk rises.' },
+    { n: '4', title: 'Dashboard & Analytics', body: 'Historical trends and multi-room visibility.' },
+    { n: '5', title: 'Mobile Alerts & Control', body: 'Know when something changes and act remotely.' },
+    { n: '6', title: 'No Recurring Subscription', body: 'Own the system without monthly monitoring fees.' },
+  ],
+}
 
-export const PLACEMENT = [
-  { room: 'Bathrooms', note: 'Steam, splashing, and cold surfaces meet every day.' },
-  { room: 'Closets', note: 'Enclosed, unventilated, and easy to forget for months.' },
-  { room: 'Basements', note: 'Cool walls, ground moisture, and weak airflow.' },
-  { room: 'Humidity-prone rooms', note: 'Anywhere warm air meets a cold surface.' },
-]
+export const OWN = {
+  title: "Own it, don't rent it.",
+  lede: 'Standard, individually sourced parts built around a dehumidifier you choose. The system is yours, with no proprietary ecosystem.',
+  points: [
+    { title: 'Open hardware', body: 'Individually sourced, standard parts.' },
+    { title: 'Fixed cost', body: 'One development cost, no monthly fees.' },
+    { title: 'Your system', body: 'Works with your own dehumidifier.' },
+  ],
+}
+
+export const PLACEMENT = {
+  title: 'Made for the rooms where mold actually starts.',
+  lede:
+    'Place MoldGuard in bathrooms, closets, and basements, near the humidity that feeds growth. It works on a tabletop or mounted on the wall.',
+  cta: { label: 'Placement & setup', href: '#how' },
+  photoAlt: 'MoldGuard Pod on a bathroom vanity, monitoring humidity near the shower',
+}
+
+export const CTA = {
+  title: 'Protect your space before mold appears.',
+  lede: 'Get the app, or talk to the team about your space.',
+  primary: { label: 'Get Started', href: '#download' },
+  secondary: { label: 'Contact us', href: '#contact' },
+}
 
 export const TEAM = [
   { initials: 'LB', name: 'Louie Jein D. Banting', role: 'Project Manager / Firmware Dev' },
@@ -148,7 +119,6 @@ export const TEAM = [
   { initials: 'AS', name: 'Attila P. Sabiniano', role: 'Frontend Lead Dev' },
 ]
 
-/** Questions the deck raises. Answers are constrained to what the deck establishes. */
 export const FAQ = [
   {
     q: 'What is MoldGuard?',
@@ -156,15 +126,15 @@ export const FAQ = [
   },
   {
     q: 'How does it detect mold risk?',
-    a: 'It does not look for mold directly. It scores the conditions mold needs: relative humidity, temperature, and how long those conditions persist, plus a virtual surface dew-point margin so condensation headroom is part of the score. Outdoor forecast data is additional context. VOC readings are supplementary context, never standalone proof.',
+    a: 'It does not look for mold directly. It scores the conditions mold needs: relative humidity, temperature, and how long those conditions persist, plus a virtual surface dew-point margin so condensation headroom is part of the score. VOC readings are supplementary context, never standalone proof.',
   },
   {
     q: 'Does it control a dehumidifier?',
-    a: 'Yes. When the index crosses the risk threshold the connected dehumidifier is switched on automatically, and switched off again once conditions return to a safe range. You can override at any time from the app.',
+    a: 'Yes. When the index crosses the risk threshold the connected dehumidifier is switched on automatically, and switched off again once conditions return to a safe range.',
   },
   {
     q: 'What does the app show?',
-    a: 'Live room status, current environmental readings, the risk state, humidity / temperature / dew-point trends over 24 hours, 7 days, or 30 days, the automation rule that is currently running, and alerts as risk rises.',
+    a: 'Live room status, current environmental readings, the risk state, humidity / temperature / dew-point trends, the automation rule that is currently running, and alerts as risk rises.',
   },
   {
     q: 'Can I monitor more than one room?',
@@ -172,22 +142,18 @@ export const FAQ = [
   },
   {
     q: 'How do I set it up?',
-    a: 'Three steps: place the unit (tabletop or wall-mounted, near a humidity-prone area), connect it to WiFi, and let the loop run. Installation and handover can be handled on-site or remotely, with training and documentation.',
+    a: 'Place the unit (tabletop or wall-mounted, near a humidity-prone area), connect it to WiFi, and let the loop run.',
   },
   {
     q: 'What maintenance does it need?',
-    a: 'Emptying the removable 1 L water tank that collects the extracted moisture. The tank is monitored, so you are told before it is full. The unit needs a dedicated power source.',
-  },
-  {
-    q: 'Does it work without the internet?',
-    a: 'The loop itself runs on the device and its connected dehumidifier, so dehumidification is not dependent on a screen being open. Live dashboards, history, weather context, and push alerts are the parts that travel over the network. The team can confirm the exact offline behaviour for your setup.',
+    a: 'Emptying the removable 1 L water tank that collects the extracted moisture. The tank is monitored, so you are told before it is full.',
   },
   {
     q: 'How much does it cost?',
-    a: 'MoldGuard is a fixed-cost build rather than a subscription: itemized hardware, one development fee, and full ownership with no recurring monitoring fee. Because the hardware list depends on your space, the team quotes per installation.',
+    a: 'MoldGuard is a fixed-cost build rather than a subscription: itemized hardware, one development fee, and full ownership with no recurring monitoring fee.',
   },
   {
     q: 'Who is it for?',
-    a: 'Homes, dormitories, and property managers who have humidity-prone rooms and want the risk handled rather than merely displayed: bathrooms, closets, basements, and anywhere warm air meets a cold surface.',
+    a: 'Homes, dormitories, and property managers who have humidity-prone rooms and want the risk handled rather than merely displayed.',
   },
 ]

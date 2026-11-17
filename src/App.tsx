@@ -1,17 +1,19 @@
 import Header from './components/Header'
 import Hero from './sections/Hero'
 import Problem from './sections/Problem'
-import Loop from './sections/Loop'
-import RiskIndex from './sections/RiskIndex'
+import Meet from './sections/Meet'
+import SenseScoreAct from './sections/SenseScoreAct'
 import Features from './sections/Features'
-import AppShowcase from './sections/AppShowcase'
 import Ownership from './sections/Ownership'
-import Team from './sections/Team'
-import Faq from './sections/Faq'
+import Placement from './sections/Placement'
 import Contact from './sections/Contact'
 import ClosingCta from './sections/ClosingCta'
 import Footer from './sections/Footer'
 
+/**
+ * Section order ported from the approved promo site:
+ * hero · problem · meet · sense/score/act · features · own-it · placement · CTA
+ */
 export default function App() {
   return (
     <>
@@ -19,13 +21,11 @@ export default function App() {
       <main id="main">
         <Hero />
         <Problem />
-        <Loop />
-        <RiskIndex />
+        <Meet />
+        <SenseScoreAct />
         <Features />
-        <AppShowcase />
         <Ownership />
-        <Team />
-        <Faq />
+        <Placement />
         <Contact />
         <ClosingCta />
       </main>
