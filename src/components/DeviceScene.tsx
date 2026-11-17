@@ -30,7 +30,7 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
   const { camera, scene } = useThree()
   const { scene: model } = useGLTF('/moldguard.glb') as unknown as { scene: THREE.Group }
   const ready = useRef(false)
-  const spin = useRef(0)
+  const spin = useRef(0)  // features are on the broad +Z face
   const drag = useRef({ down: false, x: 0, y: 0, yaw: 0, pitch: 0 })
   // Framing is computed, not eyeballed: the device is 0.823 m tall and the
   // vertical FOV governs, so the orbit radius must exceed h / (2 tan(fov/2)).
@@ -48,6 +48,37 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
       const mats = Array.isArray(m.material) ? m.material : [m.material]
       mats.forEach((x) => { if (x) (x as THREE.Material).side = THREE.FrontSide })
     })
+
+    // Normalise the model regardless of how the source file is oriented or
+    // scaled. The SketchUp export has arrived lying down, off-origin and in mm,
+    // so derive the world box and stand the longest axis up ourselves. This is
+    // the single place orientation is decided: never patch the GLB by eye.
+    model.updateWorldMatrix(true, true)
+    const box = new THREE.Box3().setFromObject(model)
+    const size = box.getSize(new THREE.Vector3())
+
+    // rotate so the longest axis becomes +Y
+    if (size.z > size.y && size.z >= size.x) {
+      model.rotation.x = -Math.PI / 2   // Z-up source
+    } else if (size.x > size.y && size.x >= size.z) {
+      model.rotation.z = Math.PI / 2    // X-up source
+    }
+
+    // scale to a known height (metres), whatever units the source used
+    const TARGET_H = 0.82
+    model.updateWorldMatrix(true, true)
+    const box2 = new THREE.Box3().setFromObject(model)
+    const h = box2.getSize(new THREE.Vector3()).y || 1
+    model.scale.multiplyScalar(TARGET_H / h)
+
+    // sit it on y = 0 and centre it on x/z
+    model.updateWorldMatrix(true, true)
+    const box3 = new THREE.Box3().setFromObject(model)
+    const c3 = box3.getCenter(new THREE.Vector3())
+    model.position.x -= c3.x
+    model.position.z -= c3.z
+    model.position.y -= box3.min.y
+
     scene.add(model)
     ready.current = true
     onLoaded()
