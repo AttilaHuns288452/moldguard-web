@@ -71,10 +71,10 @@ export default function Contact() {
               </p>
 
               <div className="mt-5 flex flex-wrap gap-x-6 gap-y-1 border-t border-line pt-4 text-[13.5px]">
-                <a href={`mailto:${CONTACT.email}`} className="text-ink-2 underline-offset-2 hover:text-deep hover:underline">
+                <a href={`mailto:${CONTACT.email}`} className="inline-flex min-h-8 items-center text-ink-2 underline-offset-2 hover:text-deep hover:underline">
                   {CONTACT.email}
                 </a>
-                <a href={`tel:${CONTACT.phoneHref}`} className="text-ink-2 underline-offset-2 hover:text-deep hover:underline">
+                <a href={`tel:${CONTACT.phoneHref}`} className="inline-flex min-h-8 items-center text-ink-2 underline-offset-2 hover:text-deep hover:underline">
                   {CONTACT.phone}
                 </a>
               </div>

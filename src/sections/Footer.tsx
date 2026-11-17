@@ -22,17 +22,17 @@ export default function Footer() {
 
         <nav aria-label="Footer" className="grid gap-2 text-[14px]">
           {LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="inline-flex min-h-8 items-center text-ink-2 transition-colors hover:text-ink">
+            <a key={l.href} href={l.href} className="inline-flex min-h-8 items-center py-1 text-ink-2 transition-colors hover:text-ink">
               {l.label}
             </a>
           ))}
         </nav>
 
         <div className="grid gap-2 text-[14px]">
-          <a href={`mailto:${CONTACT.email}`} className="text-ink-2 transition-colors hover:text-ink">
+          <a href={`mailto:${CONTACT.email}`} className="inline-flex min-h-8 items-center py-1 text-ink-2 transition-colors hover:text-ink">
             {CONTACT.email}
           </a>
-          <a href={`tel:${CONTACT.phoneHref}`} className="text-ink-2 transition-colors hover:text-ink">
+          <a href={`tel:${CONTACT.phoneHref}`} className="inline-flex min-h-8 items-center py-1 text-ink-2 transition-colors hover:text-ink">
             {CONTACT.phone}
           </a>
         </div>

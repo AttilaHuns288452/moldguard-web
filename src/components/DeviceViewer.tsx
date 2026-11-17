@@ -113,14 +113,14 @@ export default function DeviceViewer({ onHotspot, active }: Props) {
               type="button"
               onClick={() => setAutoSpin((v) => !v)}
               aria-pressed={autoSpin}
-              className="rounded-tight border border-line-hi bg-card px-2.5 py-1.5 text-[0.6562rem] font-semibold tracking-[0.12em] text-ink-3 uppercase transition-colors hover:border-line-hi hover:text-ink-2"
+              className="inline-flex min-h-8 items-center rounded-full border border-line bg-card/90 px-3 text-[0.6875rem] tracking-[0.1em] text-ink-3 uppercase backdrop-blur-sm transition-colors hover:border-ink-3 hover:text-ink"
             >
               {autoSpin ? 'Spin on' : 'Spin off'}
             </button>
             <button
               type="button"
               onClick={() => setResetKey((k) => k + 1)}
-              className="grid size-7 place-items-center rounded-full border border-line bg-card/90 text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2"
+              className="grid size-8 place-items-center rounded-full border border-line bg-card/90 text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2"
               aria-label="Reset camera"
             >
               <RotateCcw className="size-3.5" strokeWidth={1.75} />
