@@ -1,0 +1,78 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is MoldGuard?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "An IoT mold-risk prevention and detection system. A compact sensor pod watches a room, runs a Mold Risk Index over those readings, and closes the loop by switching a connected dehumidifier on and off. Live readings and history are in the app and web dashboard."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does it detect mold risk?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It does not look for mold directly. It scores the conditions mold needs: relative humidity, temperature, and how long those conditions persist, plus a virtual surface dew-point margin so condensation headroom is part of the score. VOC readings are supplementary context, never standalone proof."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it control a dehumidifier?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. When the index crosses the risk threshold the connected dehumidifier is switched on automatically, and switched off again once conditions return to a safe range."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the app show?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Live room status, current environmental readings, the risk state, humidity / temperature / dew-point trends, the automation rule that is currently running, and alerts as risk rises."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I monitor more than one room?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Multi-room and multi-unit views are part of the design, aimed at larger households, dormitories, and property managers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I set it up?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Place the unit (tabletop or wall-mounted, near a humidity-prone area), connect it to WiFi, and let the loop run."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What maintenance does it need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Emptying the removable 1 L water tank that collects the extracted moisture. The tank is monitored, so you are told before it is full."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does it cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MoldGuard is a fixed-cost build rather than a subscription: itemized hardware, one development fee, and full ownership with no recurring monitoring fee."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is it for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Homes, dormitories, and property managers who have humidity-prone rooms and want the risk handled rather than merely displayed."
+      }
+    }
+  ]
+}

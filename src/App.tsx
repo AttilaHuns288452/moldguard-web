@@ -5,7 +5,9 @@ import Meet from './sections/Meet'
 import SenseScoreAct from './sections/SenseScoreAct'
 import Features from './sections/Features'
 import Ownership from './sections/Ownership'
+import Offer from './sections/Offer'
 import Placement from './sections/Placement'
+import Faq from './sections/Faq'
 import Contact from './sections/Contact'
 import ClosingCta from './sections/ClosingCta'
 import Footer from './sections/Footer'
@@ -28,6 +30,8 @@ export default function App() {
         <Features />
         <Ownership />
         <Placement />
+        <Offer />
+        <Faq />
         <Contact />
         <ClosingCta />
       </main>

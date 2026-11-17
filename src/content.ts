@@ -157,3 +157,26 @@ export const FAQ = [
     a: 'Homes, dormitories, and property managers who have humidity-prone rooms and want the risk handled rather than merely displayed.',
   },
 ]
+
+/** The offer, stated plainly. The deck publishes a fixed one-time cost model but
+ *  not a number, so the page states the model and routes to a quotation rather
+ *  than inventing a price. */
+export const OFFER = {
+  title: 'What you are buying',
+  lede: 'One unit, one fixed development cost, no monitoring subscription. The hardware is itemized line by line, so nothing is hidden inside a bundle.',
+  included: [
+    { k: 'The MoldGuard pod', v: 'Sensor unit, ready to monitor' },
+    { k: 'Dashboard + app', v: 'Live risk, history, alerts, override' },
+    { k: 'Automation', v: 'Runs your connected dehumidifier, not ours' },
+    { k: 'Installation', v: 'On-site or remote, with handover' },
+  ],
+  notIncluded: [
+    'We do not supply the dehumidifier — you pick one and we build around it',
+  ],
+  price: {
+    model: 'One-time cost',
+    note: 'Fixed for the hardware you need. Quoted per installation, because the room count sets the hardware list, and that list is itemized before you commit.',
+    promise: 'No monthly monitoring fee, ever.',
+    cta: { label: 'Request a quotation', href: '#contact' },
+  },
+}

@@ -28,6 +28,16 @@ export default function Hero() {
               {HERO.secondary.label}
             </MagButton>
           </div>
+
+          {/* proof strip: the honest guarantees, visible above the fold */}
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-5 text-[13px] text-ink-2">
+            {['No monitoring subscription', 'Fixed one-time cost', 'Open, itemized hardware', 'You own the system'].map((t) => (
+              <li key={t} className="flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-accent-ink" aria-hidden="true" />
+                {t}
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* showcase: product photo + light phone mock, as on the approved site */}

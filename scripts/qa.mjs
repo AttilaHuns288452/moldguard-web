@@ -21,7 +21,7 @@ const VIEWPORTS = [
   { name: '1920', w: 1920, h: 1080 },
 ]
 
-const SECTIONS = ['top', 'problem', 'meet', 'how', 'features', 'ownership', 'placement', 'contact', 'download']
+const SECTIONS = ['top', 'problem', 'meet', 'how', 'features', 'ownership', 'placement', 'offer', 'faq', 'contact', 'download']
 
 const results = []
 const record = (name, ok, detail = '') => results.push({ name, ok, detail })
