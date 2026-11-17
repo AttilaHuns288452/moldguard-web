@@ -13,7 +13,13 @@ export default function Contact() {
   const [email, setEmail] = useState('')
   const [about, setAbout] = useState('')
 
-  const valid = name.trim().length > 0 && /.+@.+\..+/.test(email) && about.trim().length > 0
+  const errs = {
+    name: name.trim().length === 0 ? 'Enter your name' : '',
+    email: /.+@.+\..+/.test(email) ? '' : 'Enter an email we can reply to',
+    about: about.trim().length === 0 ? 'Tell us about the space' : '',
+  }
+  const touched = { name: name.length > 0, email: email.length > 0, about: about.length > 0 }
+  const valid = !errs.name && !errs.email && !errs.about
   const mailto =
     `mailto:${CONTACT.email}?subject=${encodeURIComponent(`MoldGuard enquiry — ${name || 'website'}`)}` +
     `&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${about}`)}`
@@ -42,17 +48,23 @@ export default function Contact() {
               onSubmit={(e) => { e.preventDefault(); window.location.href = mailto }}
             >
               <div className="space-y-4">
-                <Field id="c-name" label="Name">
+                <Field id="c-name" label="Name" error={touched.name ? errs.name : ''}>
                   <input id="c-name" required value={name} onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name" autoComplete="name" className="input" />
+                    placeholder="Your name" autoComplete="name" className="input"
+                    aria-invalid={touched.name && !!errs.name}
+                    aria-describedby={touched.name && errs.name ? 'c-name-err' : undefined} />
                 </Field>
-                <Field id="c-email" label="Email">
+                <Field id="c-email" label="Email" error={touched.email ? errs.email : ''}>
                   <input id="c-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com" autoComplete="email" className="input" />
+                    placeholder="you@example.com" autoComplete="email" className="input"
+                    aria-invalid={touched.email && !!errs.email}
+                    aria-describedby={touched.email && errs.email ? 'c-email-err' : undefined} />
                 </Field>
-                <Field id="c-about" label="About your space">
+                <Field id="c-about" label="About your space" error={touched.about ? errs.about : ''}>
                   <textarea id="c-about" required rows={4} value={about} onChange={(e) => setAbout(e.target.value)}
-                    placeholder="Bathroom and a basement, damp most of the year…" className="input resize-y" />
+                    placeholder="Bathroom and a basement, damp most of the year…" className="input resize-y"
+                    aria-invalid={touched.about && !!errs.about}
+                    aria-describedby={touched.about && errs.about ? 'c-about-err' : undefined} />
                 </Field>
               </div>
 
@@ -109,11 +121,14 @@ export default function Contact() {
   )
 }
 
-function Field({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
       <label htmlFor={id} className="text-[12.5px] font-[650] text-ink">{label}</label>
       <div className="mt-1.5">{children}</div>
+      {error ? (
+        <p id={`${id}-err`} className="mt-1.5 text-[11.5px] text-[#a8402b]">{error}</p>
+      ) : null}
     </div>
   )
 }
