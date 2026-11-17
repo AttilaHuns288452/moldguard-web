@@ -3,7 +3,8 @@ import { RotateCcw } from 'lucide-react'
 import DeviceViewer from '../components/DeviceViewer'
 import type { HotspotId } from '../components/DeviceViewer'
 import { MEET } from '../content'
-import { Reveal } from '../components/ui'
+import { Reveal, LineReveal } from '../components/ui'
+import { splitTitle } from '../lib/motion'
 
 /**
  * Meet MoldGuard: the real 3D model gets its own full-size section (the hero
@@ -17,9 +18,10 @@ export default function Meet() {
       <div className="shell">
         <div className="max-w-[720px]">
           <Reveal>
-            <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep">
-              {MEET.title}
-            </h2>
+            <LineReveal
+              lines={splitTitle(MEET.title)}
+              className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
+            />
           </Reveal>
           <Reveal delay={70}>
             <p className="mt-2 text-[1.05rem] leading-relaxed text-ink-2">{MEET.lede}</p>

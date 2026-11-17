@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { PLACEMENT } from '../content'
-import { Reveal } from '../components/ui'
+import { Reveal, LineReveal } from '../components/ui'
+import { splitTitle } from '../lib/motion'
 
 export default function Placement() {
   return (
@@ -8,9 +9,7 @@ export default function Placement() {
       <div className="shell grid items-center gap-10 md:grid-cols-2 md:gap-11">
         <Reveal>
           <div>
-            <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep">
-              {PLACEMENT.title}
-            </h2>
+            <LineReveal lines={splitTitle(PLACEMENT.title)} className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep" />
             <p className="lede mt-2">{PLACEMENT.lede}</p>
             <a
               href={PLACEMENT.cta.href}
@@ -22,7 +21,7 @@ export default function Placement() {
           </div>
         </Reveal>
         <Reveal delay={90}>
-          <div className="overflow-hidden rounded-[14px] bg-paper-deep">
+          <div className="ph-zoom overflow-hidden rounded-[14px] bg-paper-deep">
             <img
               src="/pod-bath.png"
               alt={PLACEMENT.photoAlt}

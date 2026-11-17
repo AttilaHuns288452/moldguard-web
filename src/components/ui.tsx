@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react'
-import { useInView } from '../lib/motion'
+import { useEffect, useRef, type ReactNode } from 'react'
+import { useInView, prefersReducedMotion } from '../lib/motion'
 
+/** Viewport-driven reveal. Never mount-driven: content below the fold would
+ *  otherwise animate off-screen and read as an abrupt pop. */
 export function Reveal({
   children, delay = 0, className = '', as: Tag = 'div',
 }: { children: ReactNode; delay?: number; className?: string; as?: 'div' | 'li' | 'section' }) {
@@ -16,61 +18,64 @@ export function Reveal({
   )
 }
 
-export function Eyebrow({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <p className={`eyebrow ${className}`}>{children}</p>
-}
-
-export function SectionHead({
-  index, label, title, lead, align = 'left', max = 'max-w-2xl',
-}: { index?: string; label: string; title: ReactNode; lead?: ReactNode; align?: 'left' | 'center'; max?: string }) {
+/** Line-by-line mask lift for headings. Pass each line as its own string. */
+export function LineReveal({
+  lines, className = '', delay = 0, as: Tag = 'h2',
+}: { lines: string[]; className?: string; delay?: number; as?: 'h1' | 'h2' }) {
+  const [ref, inView] = useInView<HTMLHeadingElement>()
   return (
-    <div className={`${align === 'center' ? 'mx-auto text-center' : ''} ${max}`}>
-      <Reveal>
-        <Eyebrow className="mb-5 flex items-center gap-3">
-          {index && <span className="font-mono text-[0.6875rem] text-accent">{index}</span>}
-          {index && <span className="h-px w-6 bg-line-hi" aria-hidden="true" />}
-          {label}
-        </Eyebrow>
-      </Reveal>
-      <Reveal delay={70}>
-        <h2 className="text-[clamp(1.9rem,4.4vw,3.1rem)] font-medium text-ink">{title}</h2>
-      </Reveal>
-      {lead && (
-        <Reveal delay={140}>
-          <p className="mt-5 text-[1.0625rem] leading-relaxed text-ink-2">{lead}</p>
-        </Reveal>
-      )}
-    </div>
+    <Tag ref={ref} className={`lines ${inView ? 'is-in' : ''} ${className}`} style={{ '--d': `${delay}ms` } as React.CSSProperties}>
+      {lines.map((l, i) => (
+        <span className="line" key={l}>
+          <span style={{ '--i': i } as React.CSSProperties}>{l}</span>
+        </span>
+      ))}
+    </Tag>
   )
 }
 
-export function Cta({
-  href, children, variant = 'solid', external,
-}: { href: string; children: ReactNode; variant?: 'solid' | 'ghost'; external?: boolean }) {
+/** Magnetic CTA: physical press, travelling icon in its own circular island. */
+export function MagButton({
+  href, children, variant = 'solid', icon,
+}: { href: string; children: ReactNode; variant?: 'solid' | 'ghost'; icon?: ReactNode }) {
   const cls =
     variant === 'solid'
-      ? 'bg-accent-ink text-white hover:bg-[#1d4ed8] shadow-[0_16px_44px_-18px_#2563eb]'
-      : 'border border-line-hi text-ink-2 hover:border-line-hi hover:bg-white/[0.035]'
+      ? 'bg-accent-ink text-white hover:bg-deep hover:shadow-[0_10px_30px_-12px_rgba(30,54,128,.5)]'
+      : 'bg-card text-ink border border-line-hi hover:border-ink-3'
   return (
-    <a
-      href={href}
-      {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
-      className={`group inline-flex items-center justify-center gap-2.5 rounded-tight px-6 py-3.5 text-[0.9375rem] font-medium transition-colors duration-200 ${cls}`}
-    >
+    <a href={href} className={`btn-mag ${cls}`}>
       {children}
+      {icon && (
+        <span className={`ico ${variant === 'solid' ? 'bg-white/15' : 'bg-[#2b2b2b0a]'}`} aria-hidden="true">
+          {icon}
+        </span>
+      )}
     </a>
   )
 }
 
-export function Rule({ className = '' }: { className?: string }) {
-  return <div className={`hairline ${className}`} aria-hidden="true" />
-}
-
-export function DemoTag({ children = 'Illustrative data' }: { children?: ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-3/25 bg-ink-3/[0.07] px-2.5 py-1 text-[0.6562rem] font-semibold tracking-[0.12em] text-ink-3 uppercase">
-      <span className="size-1 rounded-full bg-ink-3" aria-hidden="true" />
-      {children}
-    </span>
-  )
+/** Scroll progress hairline — the single scroll-linked indicator on the page. */
+export function ScrollProgress() {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || prefersReducedMotion()) return
+    let last = 0
+    const paint = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      const p = max > 0 ? Math.min(1, window.scrollY / max) : 0
+      el.style.setProperty('--p', String(p))
+    }
+    const onScroll = () => {
+      const now = performance.now()
+      if (now - last < 60) return      // ponytail: ~16Hz is plenty for a hairline
+      last = now
+      paint()
+    }
+    paint()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', paint, { passive: true })
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', paint) }
+  }, [])
+  return <div ref={ref} className="scroll-progress" aria-hidden="true" />
 }

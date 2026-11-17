@@ -30,3 +30,13 @@ export const HEADER_H = 68
 export function clamp(n: number, lo: number, hi: number) {
   return Math.min(hi, Math.max(lo, n))
 }
+
+/** Split a headline into reveal lines. Breaks after a period, or mid-string at
+ *  the last space so long single-sentence headlines still lift in two beats. */
+export function splitTitle(title: string): string[] {
+  const parts = title.split(/(?<=\.)\s+/).filter(Boolean)
+  if (parts.length > 1) return parts
+  if (title.length < 26) return [title]
+  const mid = Math.floor(title.lastIndexOf(' ', title.length * 0.58))
+  return mid > 8 ? [title.slice(0, mid), title.slice(mid + 1)] : [title]
+}

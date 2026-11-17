@@ -23,7 +23,7 @@ export default function Contact() {
           <Reveal>
             <ul className="grid gap-px overflow-hidden rounded-soft border border-line bg-line">
               <li className="bg-card">
-                <a href={`mailto:${CONTACT.email}`} className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-surface">
+                <a href={`mailto:${CONTACT.email}`} className="card-lift flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface">
                   <span>
                     <span className="block text-[13.5px] font-[650] text-ink">Email</span>
                     <span className="mt-0.5 block text-[15px] text-ink-2">{CONTACT.email}</span>
@@ -32,7 +32,7 @@ export default function Contact() {
                 </a>
               </li>
               <li className="bg-card">
-                <a href={`tel:${CONTACT.phoneHref}`} className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-surface">
+                <a href={`tel:${CONTACT.phoneHref}`} className="card-lift flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface">
                   <span>
                     <span className="block text-[13.5px] font-[650] text-ink">Phone</span>
                     <span className="mt-0.5 block text-[15px] text-ink-2">{CONTACT.phone}</span>

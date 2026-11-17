@@ -1,5 +1,6 @@
 import { CTA } from '../content'
-import { Reveal } from '../components/ui'
+import { Reveal, LineReveal } from '../components/ui'
+import { splitTitle } from '../lib/motion'
 
 /** Navy CTA band, matching the approved site's final section. */
 export default function ClosingCta() {
@@ -9,9 +10,7 @@ export default function ClosingCta() {
         <Reveal>
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
-              <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-white">
-                {CTA.title}
-              </h2>
+              <LineReveal lines={splitTitle(CTA.title)} className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-white" />
               <p className="mt-1.5 max-w-[560px] text-[1.05rem] leading-relaxed text-on-dark-2">{CTA.lede}</p>
             </div>
             <div className="flex flex-wrap gap-3">

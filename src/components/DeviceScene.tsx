@@ -9,11 +9,11 @@ import type { HotspotId } from './DeviceViewer'
    Proportions are untouched: 317 x 292 x 823 mm, base sitting on y = 0. */
 
 export const HOTSPOTS = [
-  { id: 'display', label: 'Status display',   copy: 'Shows the current risk state and the automation rule that is running.', at: [-0.154, 0.108, 0.739] },
-  { id: 'sensors', label: 'Humidity / temperature', copy: 'Relative humidity and temperature are the Mold Risk Index core inputs.', at: [-0.021, 0.045, 0.828] },
-  { id: 'tof',     label: 'Surface distance', copy: 'A proximity reading alongside humidity, temperature and VOC.', at: [0.004, 0.006, 0.711] },
-  { id: 'dry',     label: 'Thermoelectric stack', copy: 'The six-module Peltier column that pulls moisture out of the air.', at: [-0.150, 0.010, 0.400] },
-  { id: 'power',   label: 'Control & relay board', copy: 'The brain of the loop: it decides when the dehumidifier runs.', at: [0.030, 0.030, 0.762] },
+  { id: 'display', label: 'Status display', copy: 'Nine apertures read the room; the cyan LED reports the current Mold Risk state.', at: [0.10, -0.117, 0.46] },
+  { id: 'sensors', label: 'Humidity / temperature', copy: 'Relative humidity and temperature are the Mold Risk Index core inputs.', at: [0.10, -0.117, 0.63] },
+  { id: 'tof',     label: 'Surface distance', copy: 'A proximity reading alongside humidity, temperature and VOC.', at: [-0.10, -0.117, 0.60] },
+  { id: 'dry',     label: 'Thermoelectric stack', copy: 'The six-module Peltier column that pulls moisture out of the air.', at: [-0.10, -0.117, 0.24] },
+  { id: 'power',   label: 'Control & relay board', copy: 'The brain of the loop: it decides when the dehumidifier runs.', at: [0.0, -0.117, 0.09] },
 ] as const
 
 
@@ -34,8 +34,9 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
   const drag = useRef({ down: false, x: 0, y: 0, yaw: 0, pitch: 0 })
   // Framing is computed, not eyeballed: the device is 0.823 m tall and the
   // vertical FOV governs, so the orbit radius must exceed h / (2 tan(fov/2)).
-  const MODEL_H = 0.823
+  const MODEL_H = 0.82
   const target = new THREE.Vector3(0, MODEL_H / 2, 0)
+  let settle = 0
 
   useEffect(() => {
     model.traverse((o) => {
@@ -91,10 +92,14 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
 
   useFrame((_, dt) => {
     if (!ready.current) return
+    // brief settle: the camera eases out from further back on first paint,
+    // so the product arrives rather than being simply there.
+    if (settle < 1) settle = Math.min(1, settle + dt * 0.9)
+    const ease = 1 - Math.pow(1 - settle, 3)
     if (autoSpin && !drag.current.down) spin.current += dt * 0.2
     const yaw = spin.current + drag.current.yaw
     const pitch = drag.current.pitch
-    const r = 1.70  // 1.10x headroom over MODEL_H at fov 30 -> model fills the stage
+    const r = 1.72 + (1 - ease) * 0.55  // settles from 2.27m to 1.72m
     camera.position.set(
       r * Math.sin(yaw) * Math.cos(pitch),
       target.y + 0.13 + r * Math.sin(pitch) * 0.9,
@@ -152,7 +157,7 @@ export default function DeviceScene(props: Props) {
       dpr={[1, 1.75]}
       shadows
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ fov: 30, near: 0.05, far: 40, position: [1.02, 0.41, 1.36] }}
+      camera={{ fov: 30, near: 0.05, far: 40, position: [1.04, 0.41, 1.38] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
         gl.toneMappingExposure = 1.02

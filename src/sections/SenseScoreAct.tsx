@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { SENSE_SCORE_ACT } from '../content'
-import { Reveal } from '../components/ui'
+import { Reveal, LineReveal } from '../components/ui'
+import { splitTitle } from '../lib/motion'
 
 /** Three-column hairline steps: 01/02/03 with item lists. */
 export default function SenseScoreAct() {
@@ -9,9 +10,7 @@ export default function SenseScoreAct() {
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <Reveal>
-            <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep">
-              {SENSE_SCORE_ACT.title}
-            </h2>
+            <LineReveal lines={splitTitle(SENSE_SCORE_ACT.title)} className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep" />
           </Reveal>
           <Reveal delay={60}>
             <a

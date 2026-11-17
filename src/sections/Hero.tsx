@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { HERO, APP_MOCK } from '../content'
+import { LineReveal, MagButton } from '../components/ui'
 
 /**
  * Hero ported from the approved site: editorial split, real product photo on the
@@ -13,24 +14,19 @@ export default function Hero() {
         {/* copy */}
         <div>
           <p className="text-[0.8125rem] font-medium tracking-[0.01em] text-ink-3">{HERO.cat}</p>
-          <h1 className="mt-5 max-w-[15ch] text-[clamp(2.75rem,5.8vw,4.6rem)] leading-[1.02] font-bold tracking-[-0.032em] text-deep">
-            {HERO.titleLead} {HERO.titleTail}
-          </h1>
+          <LineReveal
+            as="h1"
+            className="mt-5 max-w-[15ch] text-[clamp(2.75rem,5.8vw,4.6rem)] leading-[1.02] font-bold tracking-[-0.032em] text-deep"
+            lines={[HERO.titleLead, HERO.titleTail]}
+          />
           <p className="lede mt-5">{HERO.lede}</p>
           <div className="mt-[30px] flex flex-wrap gap-3">
-            <a
-              href={HERO.primary.href}
-              className="inline-flex items-center gap-2.5 rounded-[10px] bg-accent-ink px-[28px] py-[14px] text-[16px] font-semibold text-white transition-colors hover:bg-deep"
-            >
+            <MagButton href={HERO.primary.href} icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
               {HERO.primary.label}
-            </a>
-            <a
-              href={HERO.secondary.href}
-              className="inline-flex items-center gap-2.5 rounded-[10px] border border-line-hi bg-card px-[28px] py-[14px] text-[16px] font-semibold text-ink transition-colors hover:border-ink-3"
-            >
+            </MagButton>
+            <MagButton href={HERO.secondary.href} variant="ghost" icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
               {HERO.secondary.label}
-              <ArrowRight className="size-4" strokeWidth={2} />
-            </a>
+            </MagButton>
           </div>
         </div>
 
@@ -42,7 +38,7 @@ export default function Hero() {
               alt="MoldGuard Pod, a compact matte-white environmental monitor with a status light, on a wooden shelf in a bright living room"
               width={1024}
               height={1024}
-              className="aspect-[1/1.06] w-full rounded-[18px] border border-line object-cover"
+              className="aspect-[1/1.06] w-full rounded-[18px] border border-line object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] hover:scale-[1.02]"
               style={{ objectPosition: '42% 62%' }}
             />
 

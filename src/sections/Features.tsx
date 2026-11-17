@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { FEATURES } from '../content'
-import { Reveal } from '../components/ui'
+import { Reveal, LineReveal } from '../components/ui'
+import { splitTitle } from '../lib/motion'
 
 /** Editorial two-column numbered feature rows. */
 export default function Features() {
@@ -9,9 +10,7 @@ export default function Features() {
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <Reveal>
-            <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep">
-              {FEATURES.title}
-            </h2>
+            <LineReveal lines={splitTitle(FEATURES.title)} className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep" />
           </Reveal>
           <Reveal delay={60}>
             <a
@@ -27,7 +26,7 @@ export default function Features() {
         <div className="mt-[38px] grid gap-x-14 border-t-2 border-deep sm:grid-cols-2">
           {FEATURES.items.map((f, i) => (
             <Reveal key={f.n} delay={i * 55}>
-              <div className="flex gap-5 border-b border-line py-5">
+              <div className="card-lift flex gap-5 border-b border-line py-5">
                 <span className="measure w-4 shrink-0 pt-0.5 text-[11px] tracking-[0.16em] text-accent-ink">{f.n}</span>
                 <div>
                   <h3 className="text-[1.05rem] font-[650] text-deep">{f.title}</h3>

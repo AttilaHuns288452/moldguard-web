@@ -56,3 +56,102 @@
 [data-device-canvas] { touch-action: pan-y; }
 [data-device-canvas] canvas { cursor: grab; }
 [data-device-canvas] canvas:active { cursor: grabbing; }
+
+/* ============================================================================
+   MOTION SYSTEM — one language, documented once.
+   Durations: 180ms (micro) · 420ms (reveal) · 700ms (media). Distances: 16px.
+   Easing: cubic-bezier(.22,1,.36,1) for entrances (decelerating, no bounce),
+           cubic-bezier(.4,0,.2,1) for state changes.
+   Only transform/opacity animate. Nothing animates layout.
+   ========================================================================= */
+:root {
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --ease-state: cubic-bezier(.4,0,.2,1);
+  --dur-micro: 180ms;
+  --dur-reveal: 420ms;
+  --dur-media: 700ms;
+}
+
+/* ── text reveal: per-line mask lift, used on section headings ─────────────── */
+.lines > .line { display: block; overflow: hidden; }
+.lines > .line > span {
+  display: block;
+  transform: translateY(105%) rotate(1.2deg);
+  opacity: 0;
+  transition: transform var(--dur-media) var(--ease-out), opacity var(--dur-media) var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 90ms);
+  will-change: transform;
+}
+.lines.is-in > .line > span { transform: none; opacity: 1; }
+
+/* ── magnetic button: physical press + travelling arrow ───────────────────── */
+.btn-mag {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 10px;
+  border-radius: 10px; padding: 14px 22px 14px 28px;
+  font-weight: 600; font-size: 16px; line-height: 1.2;
+  transition: transform var(--dur-micro) var(--ease-state),
+              background-color var(--dur-micro) var(--ease-state),
+              box-shadow var(--dur-micro) var(--ease-state);
+  will-change: transform;
+}
+.btn-mag:hover { transform: translateY(-1px); }
+.btn-mag:active { transform: scale(.985); }
+.btn-mag .ico {
+  display: grid; place-items: center; flex: none;
+  width: 26px; height: 26px; border-radius: 50%;
+  transition: transform var(--dur-micro) var(--ease-state);
+}
+.btn-mag:hover .ico { transform: translateX(3px) translateY(-1px) scale(1.06); }
+
+/* ── card depth: rises and warms on hover, no layout shift ────────────────── */
+.card-lift {
+  transition: transform var(--dur-micro) var(--ease-state),
+              box-shadow var(--dur-micro) var(--ease-state),
+              border-color var(--dur-micro) var(--ease-state);
+  will-change: transform;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1px 3px rgba(30,54,128,.07), 0 18px 40px -26px rgba(30,54,128,.42);
+  border-color: var(--color-line-hi);
+}
+
+/* ── photo: slow scale on the image only, so the frame stays put ──────────── */
+.ph-zoom { overflow: hidden; }
+.ph-zoom img {
+  transition: transform 900ms var(--ease-out), filter 900ms var(--ease-out);
+  will-change: transform;
+}
+.ph-zoom:hover img { transform: scale(1.045); }
+
+/* ── nav underline that grows from the left ──────────────────────────────── */
+.nav-grow { position: relative; }
+.nav-grow::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-micro) var(--ease-state);
+}
+.nav-grow:hover::after, .nav-grow[aria-current="true"]::after { transform: scaleX(1); }
+
+/* ── scroll progress hairline: the one scroll-linked indicator ───────────── */
+.scroll-progress {
+  position: fixed; left: 0; top: 0; height: 2px; z-index: 60;
+  background: var(--color-accent);
+  width: 100%; transform-origin: left;
+  transform: scaleX(var(--p, 0));
+  pointer-events: none;
+}
+
+/* ── gauge needle + count: dial feels live when it enters view ────────────── */
+.dial-fill {
+  transition: stroke-dasharray 1100ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lines > .line > span { transform: none; opacity: 1; transition: none; }
+  .btn-mag, .btn-mag .ico, .card-lift, .ph-zoom img, .nav-grow::after,
+  .scroll-progress, .dial-fill { transition: none !important; }
+  .btn-mag:hover, .card-lift:hover, .ph-zoom:hover img { transform: none; }
+}

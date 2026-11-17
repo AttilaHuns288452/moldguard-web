@@ -9,6 +9,7 @@ import Placement from './sections/Placement'
 import Contact from './sections/Contact'
 import ClosingCta from './sections/ClosingCta'
 import Footer from './sections/Footer'
+import { ScrollProgress } from './components/ui'
 
 /**
  * Section order ported from the approved promo site:
@@ -17,6 +18,7 @@ import Footer from './sections/Footer'
 export default function App() {
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main id="main">
         <Hero />
