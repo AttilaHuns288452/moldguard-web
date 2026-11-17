@@ -5,7 +5,7 @@ import { splitTitle } from '../lib/motion'
 /** Navy CTA band, matching the approved site's final section. */
 export default function ClosingCta() {
   return (
-    <section id="download" className="section-alt bg-deep py-[72px]">
+    <section id="download" className="bg-deep py-[72px] md:py-[88px]">
       <div className="shell">
         <Reveal>
           <div className="flex flex-wrap items-center justify-between gap-6">

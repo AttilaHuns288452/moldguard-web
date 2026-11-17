@@ -1,63 +1,103 @@
+import { useState } from 'react'
 import { CONTACT, TEAM } from '../content'
-import { Reveal } from '../components/ui'
+import { Reveal, LineReveal } from '../components/ui'
+import { ArrowRight, Check } from 'lucide-react'
 
-/** Contact: direct channels + the roster. Matches the approved contact page intent. */
+/**
+ * Contact. The approved site points at email/phone; a promotional page also needs
+ * a real lead-capture path, so this composes a mailto: and says exactly that
+ * rather than faking a submission.
+ */
 export default function Contact() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [about, setAbout] = useState('')
+
+  const valid = name.trim().length > 0 && /.+@.+\..+/.test(email) && about.trim().length > 0
+  const mailto =
+    `mailto:${CONTACT.email}?subject=${encodeURIComponent(`MoldGuard enquiry — ${name || 'website'}`)}` +
+    `&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${about}`)}`
+
   return (
     <section id="contact" className="section">
       <div className="shell">
         <div className="max-w-[720px]">
-          <Reveal>
-            <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep">
-              Talk to the team.
-            </h2>
-          </Reveal>
+          <LineReveal
+            lines={['Talk to', 'the team.']}
+            className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
+          />
           <Reveal delay={70}>
-            <p className="lede mt-2">
-              Ask about your space or request a quotation. Every message goes straight to the team.
+            <p className="lede mt-3">
+              Ask about your space or request a quotation. Which rooms, roughly how damp, and we
+              will come back with a hardware list.
             </p>
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 md:items-start">
+        <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)] lg:items-start">
+          {/* lead form */}
           <Reveal>
-            <ul className="grid gap-px overflow-hidden rounded-soft border border-line bg-line">
-              <li className="bg-card">
-                <a href={`mailto:${CONTACT.email}`} className="card-lift flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface">
-                  <span>
-                    <span className="block text-[13.5px] font-[650] text-ink">Email</span>
-                    <span className="mt-0.5 block text-[15px] text-ink-2">{CONTACT.email}</span>
-                  </span>
-                  <span className="text-ink-3" aria-hidden="true">&rarr;</span>
+            <form
+              className="rounded-soft border border-line bg-card p-6 md:p-7"
+              onSubmit={(e) => { e.preventDefault(); window.location.href = mailto }}
+            >
+              <div className="space-y-4">
+                <Field id="c-name" label="Name">
+                  <input id="c-name" required value={name} onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name" autoComplete="name" className="input" />
+                </Field>
+                <Field id="c-email" label="Email">
+                  <input id="c-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com" autoComplete="email" className="input" />
+                </Field>
+                <Field id="c-about" label="About your space">
+                  <textarea id="c-about" required rows={4} value={about} onChange={(e) => setAbout(e.target.value)}
+                    placeholder="Bathroom and a basement, damp most of the year…" className="input resize-y" />
+                </Field>
+              </div>
+
+              <button
+                type="submit"
+                disabled={!valid}
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d6d0c8] disabled:text-[#8a837a] disabled:opacity-70 disabled:shadow-none"
+              >
+                Send message
+                <ArrowRight className="size-4" strokeWidth={2} />
+              </button>
+
+              <p className="mt-3 flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink-3">
+                <Check className="mt-0.5 size-3 shrink-0 text-accent-ink" strokeWidth={2.5} />
+                Opens your own mail app with the message ready &mdash; nothing is stored on this page.
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-x-6 gap-y-1 border-t border-line pt-4 text-[13.5px]">
+                <a href={`mailto:${CONTACT.email}`} className="text-ink-2 underline-offset-2 hover:text-deep hover:underline">
+                  {CONTACT.email}
                 </a>
-              </li>
-              <li className="bg-card">
-                <a href={`tel:${CONTACT.phoneHref}`} className="card-lift flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface">
-                  <span>
-                    <span className="block text-[13.5px] font-[650] text-ink">Phone</span>
-                    <span className="mt-0.5 block text-[15px] text-ink-2">{CONTACT.phone}</span>
-                  </span>
-                  <span className="text-ink-3" aria-hidden="true">&rarr;</span>
+                <a href={`tel:${CONTACT.phoneHref}`} className="text-ink-2 underline-offset-2 hover:text-deep hover:underline">
+                  {CONTACT.phone}
                 </a>
-              </li>
-            </ul>
-            <p className="form-note">Prototype build. Nothing on this page is stored or submitted to a backend.</p>
+              </div>
+            </form>
           </Reveal>
 
+          {/* roster */}
           <Reveal delay={80}>
-            <div className="rounded-soft border border-line bg-card p-6">
-              <p className="text-[13.5px] font-[650] text-ink">The team</p>
-              <div className="mt-4 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+            <div className="rounded-soft border border-line bg-card p-6 md:p-7">
+              <p className="text-[13px] font-[650] tracking-[0.1em] text-ink-3 uppercase">The team</p>
+              <div className="mt-5 grid gap-x-5 gap-y-5 sm:grid-cols-2">
                 {TEAM.map((m) => (
-                  <div key={m.name}>
+                  <div key={m.name} className="flex items-start gap-3">
                     <span
-                      className="grid size-11 place-items-center rounded-full bg-gradient-to-br from-ink-3 to-deep text-[0.88rem] font-bold text-on-dark"
+                      className="grid size-9 shrink-0 place-items-center rounded-full bg-[#eae6e0] text-[0.75rem] font-bold text-deep"
                       aria-hidden="true"
                     >
                       {m.initials}
                     </span>
-                    <p className="mt-2 text-[13.5px] leading-snug font-[650] text-ink">{m.name}</p>
-                    <p className="text-[10px] tracking-[0.1em] text-ink-3 uppercase">{m.role}</p>
+                    <div>
+                      <p className="text-[13.5px] leading-snug font-[650] text-ink">{m.name}</p>
+                      <p className="mt-0.5 text-[11px] leading-snug text-ink-3">{m.role}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -66,5 +106,14 @@ export default function Contact() {
         </div>
       </div>
     </section>
+  )
+}
+
+function Field({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label htmlFor={id} className="text-[12.5px] font-[650] text-ink">{label}</label>
+      <div className="mt-1.5">{children}</div>
+    </div>
   )
 }

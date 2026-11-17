@@ -28,31 +28,37 @@ export default function Meet() {
           </Reveal>
         </div>
 
-        <div className="mt-10 grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="mt-10 grid items-start gap-10 lg:grid-cols-[0.95fr_1.05fr]">
           {/* the interactive model */}
           <Reveal>
             <div className="relative overflow-hidden rounded-[14px] border border-line bg-card shadow-[0_1px_2px_rgba(30,54,128,.05),0_10px_26px_-20px_rgba(30,54,128,.30)]">
               <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
-                <span className="text-[0.625rem] font-semibold tracking-[0.12em] text-ink-3 uppercase">
+                <span className="text-[0.6875rem] font-semibold tracking-[0.12em] text-ink-3 uppercase">
                   {MEET.caption}
                 </span>
-                <span className="measure text-[0.5625rem] tracking-[0.1em] text-ink-3 uppercase">317 × 292 × 823 mm</span>
+                <span className="measure text-[0.6875rem] tracking-[0.08em] text-ink-3">82 cm tall</span>
               </div>
-              <div className="relative h-[clamp(330px,46vw,470px)] w-full">
+              <div className="relative h-[clamp(330px,46vw,470px)] w-full bg-[radial-gradient(72%_62%_at_50%_38%,#f1eee8_0%,#e7e2db_56%,#dbd5cc_100%)]">
                 <DeviceViewer active={active} onHotspot={setActive} />
               </div>
-              <div className="flex items-center justify-between border-t border-line px-4 py-2.5">
-                <span className="text-[0.625rem] tracking-[0.1em] text-ink-3 uppercase">Drag to rotate</span>
-                <span className="flex items-center gap-1.5 text-[0.625rem] text-ink-3">
+              <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5">
+                <span className="text-[0.6875rem] leading-relaxed text-ink-3">
+                  Interactive &mdash; drag to orbit, scroll to zoom
+                </span>
+                <span className="flex shrink-0 items-center gap-1.5 text-[0.6875rem] text-ink-3">
                   <RotateCcw className="size-3" strokeWidth={1.75} />
-                  Engineering cutaway &middot; real model
+                  Real SketchUp model
                 </span>
               </div>
             </div>
           </Reveal>
 
           {/* four stages */}
-          <ol>
+          <div>
+            <p className="mb-1 text-[0.6875rem] font-semibold tracking-[0.14em] text-ink-3 uppercase">
+              The loop
+            </p>
+            <ol>
             {MEET.stages.map((s, i) => (
               <Reveal as="li" key={s.n} delay={i * 65}>
                 <div className="flex gap-4 border-b border-line py-4 last:border-b-0">
@@ -63,15 +69,19 @@ export default function Meet() {
                   </div>
                 </div>
               </Reveal>
-            ))}
-          </ol>
+              ))}
+            </ol>
+          </div>
         </div>
 
         {/* data-flow detail */}
         <Reveal delay={80}>
-          <details className="mt-8 rounded-soft border border-line bg-card">
-            <summary className="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 text-[15.5px] font-[650] text-deep">
+          <details className="group mt-10 rounded-soft border border-line bg-card">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-[15.5px] font-[650] text-deep marker:content-none">
               See the full data flow
+              <span className="grid size-7 place-items-center rounded-full border border-line-hi text-ink-3 transition-transform duration-300 group-open:rotate-45">
+                +
+              </span>
             </summary>
             <div className="px-5 pb-5">
               <FlowDiagram />

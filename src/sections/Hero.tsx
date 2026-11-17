@@ -17,7 +17,7 @@ export default function Hero() {
           <LineReveal
             as="h1"
             className="mt-5 max-w-[15ch] text-[clamp(2.75rem,5.8vw,4.6rem)] leading-[1.02] font-bold tracking-[-0.032em] text-deep"
-            lines={[HERO.titleLead, HERO.titleTail]}
+            lines={HERO.titleLines}
           />
           <p className="lede mt-5">{HERO.lede}</p>
           <div className="mt-[30px] flex flex-wrap gap-3">
@@ -43,7 +43,7 @@ export default function Hero() {
             />
 
             {/* phone mock: 6px black bezel, pale app screen, deck values */}
-            <div className="absolute right-[18px] bottom-[18px] z-[2] w-[168px] overflow-hidden rounded-[26px] border-[6px] border-[#0a0a0a] bg-deeper shadow-[0_22px_48px_rgba(30,54,128,.28)]">
+            <div className="absolute right-[14px] bottom-[14px] z-[2] w-[172px] origin-bottom-right rotate-[-1.2deg] overflow-hidden rounded-[26px] border-[6px] border-[#0a0a0a] bg-deeper shadow-[0_30px_60px_-18px_rgba(20,32,60,.55),0_2px_6px_rgba(20,32,60,.28)] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:rotate-0 hover:scale-[1.015]">
               <div className="w-full overflow-hidden rounded-[20px] border border-line bg-[#eaf1f4]">
                 <div className="flex justify-between px-3.5 pt-2.5 pb-0.5 text-[10px] text-ink-3">
                   <span>MoldGuard</span>

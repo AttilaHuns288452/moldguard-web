@@ -120,7 +120,7 @@ export default function DeviceViewer({ onHotspot, active }: Props) {
             <button
               type="button"
               onClick={() => setResetKey((k) => k + 1)}
-              className="grid size-8 place-items-center rounded-tight border border-line-hi bg-card text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2"
+              className="grid size-7 place-items-center rounded-full border border-line bg-card/90 text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2"
               aria-label="Reset camera"
             >
               <RotateCcw className="size-3.5" strokeWidth={1.75} />
@@ -130,7 +130,7 @@ export default function DeviceViewer({ onHotspot, active }: Props) {
               onClick={() => {
                 hostRef.current?.parentElement?.requestFullscreen?.().catch(() => {})
               }}
-              className="hidden rounded-tight border border-line-hi bg-card p-1.5 text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2 md:block"
+              className="hidden rounded-full border border-line bg-card/90 p-1.5 text-ink-3 transition-colors hover:border-line-hi hover:text-ink-2 md:block"
               aria-label="View model fullscreen"
             >
               <Maximize2 className="size-3.5" strokeWidth={1.75} />

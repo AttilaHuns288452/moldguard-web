@@ -174,7 +174,7 @@ export default function DeviceScene(props: Props) {
       <Environment preset="studio" environmentIntensity={0.55} />
       <Rig {...props} />
       <ContactShadows
-        position={[0, 0, 0]} opacity={0.30} scale={2.6} blur={3.0}
+        position={[0, 0, 0]} opacity={0.42} scale={2.4} blur={2.4}
         far={0.95} resolution={512} color="#465e7a"
       />
       {HOTSPOTS.map((h) => (
