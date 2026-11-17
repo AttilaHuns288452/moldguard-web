@@ -89,12 +89,15 @@
 }
 
 @layer utilities {
+  /* Page-1 text layer of the PDF: content spans x=80..1199.9pt of a 1280pt page
+     => 6.25% inset per side, 87.50% content. A percentage keeps the same optical
+     margin at every viewport instead of a fixed px pad. */
   .shell {
     width: 100%;
-    max-width: 1120px;
     margin-inline: auto;
-    padding-inline: 28px;
+    padding-inline: 6.25%;
   }
+  @media (max-width: 900px) { .shell { padding-inline: 22px; } }
 
   /* mono readouts: measurements and row indices ONLY */
   .measure {
