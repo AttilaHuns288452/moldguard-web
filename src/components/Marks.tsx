@@ -1,14 +1,18 @@
-/** Brand mark: a shield-ish enclosure with a rising risk arc. Pure SVG, inline. */
+/**
+ * MoldGuard mark. This is the actual mark from the PDF (extracted at 600 dpi and
+ * trimmed), not a hand-traced approximation — previous attempts approximated the
+ * shield silhouettes and were not faithful.
+ */
 export function Logo({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={className} aria-hidden="true" fill="none">
-      <path
-        d="M16 4.4 6.6 8.2v9.1c0 5.4 4.2 9.5 9.4 10.3 5.2-.8 9.4-4.9 9.4-10.3V8.2z"
-        stroke="currentColor" strokeWidth="1.5"
-      />
-      <path d="M10.6 20.6c1.5-4.4 3.3-6.6 5.4-6.6s3.9 2.2 5.4 6.6" stroke="currentColor" strokeWidth="1.4" opacity=".55" />
-      <circle cx="16" cy="15.2" r="2.1" fill="currentColor" />
-    </svg>
+    <img
+      src="/mark.png"
+      alt=""
+      width={256}
+      height={256}
+      className={`${className} object-contain`}
+      aria-hidden="true"
+    />
   )
 }
 

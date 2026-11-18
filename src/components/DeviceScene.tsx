@@ -34,8 +34,9 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
   const drag = useRef({ down: false, x: 0, y: 0, yaw: 0, pitch: 0 })
   // Framing is computed, not eyeballed: the device is 0.823 m tall and the
   // vertical FOV governs, so the orbit radius must exceed h / (2 tan(fov/2)).
-  const MODEL_H = 0.82
-  const target = new THREE.Vector3(0, MODEL_H / 2, 0)
+  // Framing is derived from the model itself, so no hand-set radius can crop it.
+  const target = new THREE.Vector3(0, 0.41, 0)   // updated from the model's own bbox
+  const fitR = useRef(1.9)
   let settle = 0
 
   useEffect(() => {
@@ -49,9 +50,30 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
       mats.forEach((x) => { if (x) (x as THREE.Material).side = THREE.FrontSide })
     })
 
-    // The GLB is already correct: 0.317 x 0.823 x 0.292 m, tall axis on +Y,
-    // base at y=0 (verified against the file's node transforms). Do not
-    // "normalise" it - that is what previously laid it on its side.
+    // Normalise POSITION only — never rotation. The GLB is authored Y-up
+    // (verified: 0.317 x 0.823 x 0.292, base at y=0, no rotation nodes), so any
+    // rotation here fights the file. We only guarantee it is centred on x/z and
+    // sitting on y=0, then frame the camera from its measured box.
+    model.updateWorldMatrix(true, true)
+    const box = new THREE.Box3().setFromObject(model)
+    model.position.x -= box.getCenter(new THREE.Vector3()).x
+    model.position.z -= box.getCenter(new THREE.Vector3()).z
+    model.position.y -= box.min.y
+
+    // Re-measure after the move and derive the orbit radius from the real extent,
+    // so the model always fills the stage regardless of the source file.
+    model.updateWorldMatrix(true, true)
+    const bb = new THREE.Box3().setFromObject(model)
+    const sz = bb.getSize(new THREE.Vector3())
+    const cam = camera as THREE.PerspectiveCamera
+    const halfFov = THREE.MathUtils.degToRad(cam.fov / 2)
+    // Frame the head (0.16m) with room for the column to read, not the whole 0.82m
+    fitR.current = Math.max(
+      (0.405 / (2 * Math.tan(halfFov))) / 0.86,
+      (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.7,
+    )
+    target.y = 0.09   // the assembly's mass is the 160mm control head at the base
+
     scene.add(model)
     ready.current = true
     onLoaded()
@@ -103,11 +125,12 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
     if (autoSpin && !drag.current.down) spin.current += dt * 0.2
     const yaw = spin.current + drag.current.yaw
     const pitch = drag.current.pitch
-    const r = 1.34 + (1 - ease) * 0.36   // the head is the only real volume; the column is 2mm thin by design
+    const r = fitR.current   // settle is applied to the camera below, not to r
+    const rs = r * (1 + (1 - ease) * 0.16)   // arrival: back off, ease in
     camera.position.set(
-      r * Math.sin(yaw) * Math.cos(pitch),
-      target.y + 0.13 + r * Math.sin(pitch) * 0.9,
-      r * Math.cos(yaw) * Math.cos(pitch),
+      rs * Math.sin(yaw) * Math.cos(pitch),
+      target.y + rs * Math.sin(pitch),
+      rs * Math.cos(yaw) * Math.cos(pitch),
     )
     camera.lookAt(target)
   })
@@ -161,7 +184,7 @@ export default function DeviceScene(props: Props) {
       dpr={[1, 1.75]}
       shadows
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ fov: 30, near: 0.05, far: 40, position: [-0.88, 0.41, 1.43] }}
+      camera={{ fov: 30, near: 0.05, far: 40, position: [-0.95, 0.47, 1.55] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
         gl.toneMappingExposure = 0.9
