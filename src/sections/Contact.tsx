@@ -113,6 +113,25 @@ export default function Contact() {
             </div>
           </Reveal>
         </div>
+        {/* PDF page 4: from message to quote in three steps */}
+        <div className="mt-14 border-t border-line pt-10">
+          <Reveal>
+            <h3 className="max-w-[22ch] text-[clamp(1.4rem,2.6vw,1.9rem)] font-[650] text-deep">
+              {CONTACT_PAGE.steps.title}
+            </h3>
+          </Reveal>
+          <ol className="mt-6 grid gap-px overflow-hidden rounded-soft border border-line bg-line md:grid-cols-3">
+            {CONTACT_PAGE.steps.items.map((s2, i) => (
+              <Reveal as="li" key={s2.n} delay={i * 60}>
+                <div className="h-full bg-card px-5 py-5">
+                  <span className="measure text-[11px] tracking-[0.14em] text-accent">{s2.n}</span>
+                  <h4 className="mt-1.5 text-[15px] font-[650] text-deep">{s2.title}</h4>
+                  <p className="mt-1 text-[13.5px] leading-relaxed text-ink-2">{s2.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   )
