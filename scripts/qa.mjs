@@ -80,8 +80,14 @@ for (const vp of VIEWPORTS) {
   if (vp.w >= 768) {
     // the 3D viewer now lives in the Meet section, not the hero
     await page.evaluate(() => document.getElementById('meet')?.scrollIntoView())
-    await page.waitForTimeout(2500)
-    const canvasBox = await page.locator('[data-device-canvas] canvas').first().boundingBox().catch(() => null)
+    // The scene mounts lazily on intersection + requestIdleCallback, so poll
+    // instead of trusting one fixed wait (a 2.5s sleep flakes under load).
+    let canvasBox = null
+    for (let i = 0; i < 24; i++) {
+      await page.waitForTimeout(500)
+      canvasBox = await page.locator('[data-device-canvas] canvas').first().boundingBox().catch(() => null)
+      if (canvasBox) break
+    }
     record(`${vp.name}: canvas mounted`, !!canvasBox, canvasBox ? `${Math.round(canvasBox.width)}x${Math.round(canvasBox.height)}` : 'none')
     if (canvasBox) {
       const shot = await page.locator('[data-device-canvas]').first().screenshot({ path: `${OUT}/${vp.name}-canvas.png` })
