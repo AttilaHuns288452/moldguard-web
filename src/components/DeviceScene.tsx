@@ -199,9 +199,13 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       // exploded view: push each part outward along its own offset from centre
       const base = basePos.current[part.id]
       if (base) {
-        const dir = new THREE.Vector3(part.at[0], part.at[1] - 0.41, part.at[2]).normalize()
+        // Offsets are measured from the real body centre (y = 0.127), not the
+        // old fake-tower value, and scaled to the 0.25 m body so the parts
+        // actually separate instead of nudging.
+        const c = new THREE.Vector3(0, 0.127, 0)
+        const dir = new THREE.Vector3(part.at[0], part.at[1], part.at[2]).sub(c).normalize()
         const goal = mode === 'explode'
-          ? base.clone().add(dir.multiplyScalar(0.11))
+          ? base.clone().add(dir.multiplyScalar(0.075))
           : base.clone()
         m.position.lerp(goal, k)
       }
@@ -230,7 +234,9 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     if (autoSpin && !drag.current.down) spin.current += dt * 0.2
     const yaw = spin.current + drag.current.yaw
     const pitch = drag.current.pitch
-    const r = (fitR.current / zoom) * (1 + (1 - ease) * 0.16)
+    // pull back a little in exploded view so the separated parts stay in frame
+    const explodePad = mode === 'explode' ? 1.28 : 1
+    const r = (fitR.current / zoom) * explodePad * (1 + (1 - ease) * 0.16)
     camera.position.set(
       r * Math.sin(yaw) * Math.cos(pitch),
       target.current.y + r * Math.sin(pitch),
