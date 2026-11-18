@@ -5,7 +5,6 @@ import { Logo } from './Marks'
 import { navigate, pathFor, type Page } from '../lib/route'
 
 const NAV: { id: Page; label: string }[] = [
-  { id: 'home', label: 'Home' },
   { id: 'features', label: 'Features' },
   { id: 'how-it-works', label: 'How it works' },
   { id: 'contact', label: 'Contact' },

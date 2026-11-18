@@ -6,7 +6,7 @@ import { splitTitle } from '../lib/motion'
 /** Three-column hairline steps: 01/02/03 with item lists. */
 export default function SenseScoreAct() {
   return (
-    <section id="how" className="section">
+    <section id="sense-score-act" className="section band-white">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <Reveal>

@@ -3,24 +3,20 @@ import { HERO } from '../content'
 import { LineReveal, MagButton } from '../components/ui'
 
 /**
- * Hero: the product itself, in 3D. Nothing competes with it — no eyebrow, no
- * card chrome, no mockup. The model sits on its own lit stage and is the first
- * thing the eye lands on after the headline.
+ * Hero: the product itself, in 3D. Nothing competes with it — no card chrome,
+ * no mockup. The model sits on its own lit stage and is the first thing the eye
+ * lands on after the headline.
+ *
+ * Background is the PDF's flat #f7fbff hero band (sampled 105..750pt of page 1),
+ * NOT a gradient: an authored gradient is a different design direction.
  */
 export default function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden">
-      {/* one authored background: a soft pool of light where the product stands */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-        style={{
-          background:
-            'linear-gradient(180deg,#ffffff 0%,#f7fbff 55%,#eaf2fc 100%)',
-        }}
-      />
-
-      <div className="shell relative grid items-center gap-8 pt-4 pb-10 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-6 lg:pt-6 lg:pb-14">
+    <section id="top" className="relative overflow-hidden bg-[#f7fbff]">
+      {/* Column split measured off the PDF: content 1120pt = text 36.3% ·
+          19.4% gap · photo 41.8%. The photo is SQUARE (468x473pt), not the
+          landscape panel a 50/50 split produces. */}
+      <div className="shell relative grid items-center gap-8 pt-10 pb-10 lg:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] lg:gap-[19%] lg:pt-[118px] lg:pb-[75px]">
         {/* copy */}
         <div className="relative z-10">
           <p className="mb-4 text-[13px] text-ink-3">IoT mold risk prevention &amp; detection</p>
@@ -39,12 +35,6 @@ export default function Hero() {
               {HERO.secondary.label}
             </MagButton>
           </div>
-
-          {/* the honest guarantees, as a quiet line rather than a stat block */}
-          <p className="mt-9 max-w-[46ch] text-[12.5px] leading-relaxed text-ink-3">
-            No monitoring subscription. Fixed one-time cost. Open, itemized hardware.
-            Yours after handover.
-          </p>
         </div>
 
         {/* the artboard's hero visual: lifestyle photo + dark app card overlay */}
@@ -54,24 +44,25 @@ export default function Hero() {
               src="/pod-hero.webp"
               alt="MoldGuard Pod on a wooden shelf in a bright living room"
               width={1024} height={1086}
-              className="aspect-[1/1.1] w-full rounded-[16px] object-cover"
+              className="aspect-[1/1.01] w-full rounded-[16px] object-cover"
               style={{ objectPosition: '42% 62%' }}
             />
           </figure>
 
-          {/* app card: navy panel, exactly the artboard's readout */}
-          <div className="absolute right-3 bottom-6 w-[212px] rounded-[18px] border border-[#2b5c8f] bg-deep p-3.5 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)]">
-            <p className="text-[11px] font-[650] text-on-dark">MoldGuard</p>
-            <p className="mt-2 text-[10px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
-            <p className="measure text-[26px] leading-none font-semibold text-white">
-              38<span className="text-[11px] text-on-dark-2">/100</span>
+          {/* app card: navy panel, exactly the artboard's readout. It overlaps
+              the photo's right edge into the white frame, as the PDF does. */}
+          <div className="absolute -right-1 bottom-8 w-[236px] rounded-[18px] border border-[#2b5c8f] bg-deep p-4 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)]">
+            <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
+            <p className="mt-2.5 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
+            <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">
+              38<span className="text-[13px] text-on-dark-2">/100</span>
             </p>
-            <p className="mt-0.5 text-[10px] text-on-dark-2">Conditions steady</p>
-            <ul className="mt-2.5 divide-y divide-[#eaf2fc1f] border-t border-[#eaf2fc1f]">
+            <p className="mt-1 text-[11.5px] text-on-dark-2">Conditions steady</p>
+            <ul className="mt-3 divide-y divide-[#eaf2fc24] border-t border-[#eaf2fc24]">
               {[['Living room', 'Low', false], ['Bedroom', 'Low', false], ['Closet', 'Elevated', true], ['Dehumidifier', 'Running', true]].map(([n, st, hot]) => (
-                <li key={n as string} className="flex items-center justify-between gap-2 py-1.5">
-                  <span className="text-[11px] text-on-dark-2">{n}</span>
-                  <span className={`text-[11px] font-[650] ${hot ? 'text-cyan-bright' : 'text-on-dark'}`} style={hot ? { color: '#7fb6ff' } : undefined}>{st}</span>
+                <li key={n as string} className="flex items-center justify-between gap-2 py-2">
+                  <span className="text-[12px] text-on-dark-2">{n}</span>
+                  <span className={`text-[12px] font-[650] ${hot ? 'text-on-dark' : 'text-on-dark'}`} style={hot ? { color: '#7fb6ff' } : undefined}>{st}</span>
                 </li>
               ))}
             </ul>

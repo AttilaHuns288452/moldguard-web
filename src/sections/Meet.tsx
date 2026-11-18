@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ArrowLeft, ArrowRight, Boxes, Eye, Layers, Play } from 'lucide-react'
 import DeviceViewer from '../components/DeviceViewer'
+import DataFlow from '../components/DataFlow'
 import { PARTS, PART_BY_ID, TOUR, type PartId } from '../components/parts'
 import { MEET } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
@@ -35,7 +36,7 @@ export default function Meet() {
   }
 
   return (
-    <section id="meet" className="section section-alt">
+    <section id="meet" className="section band-pale">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[620px]">
@@ -197,12 +198,10 @@ export default function Meet() {
           ))}
         </ol>
 
+        {/* PDF page 1: "See the full data flow" — the band that makes this the
+            largest section of the artboard. */}
         <Reveal delay={80}>
-          <div className="mt-6 rounded-soft border border-line bg-card p-5">
-            <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{MEET.flowLabel}</p>
-            <p className="mt-2 max-w-[74ch] text-[14.5px] leading-relaxed text-ink-2">{MEET.flowLede}</p>
-            <p className="mt-1.5 text-[12px] text-ink-3">{MEET.flowNote}</p>
-          </div>
+          <DataFlow />
         </Reveal>
       </div>
     </section>

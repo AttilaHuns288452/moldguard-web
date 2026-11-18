@@ -127,5 +127,17 @@
 
   .section      { padding: 108px 0; }
   .section-tight{ padding: 72px 0; }
-  .section-alt  { background: var(--color-paper-deep); }
+
+  /* ── page-1 band map, sampled from the PDF at the page edge (1280pt canvas)
+       hero #f7fbff · problem #fff · meet #eaf2fc · sense/score/act #fff
+       features #eaf2fc · own-it #15385e · placement #fff · cta #15385e
+       footer #15385e
+     Sections alternate white / ice-blue with two navy interruptions. That
+     rhythm IS the approved composition; a wrong band reads as a different
+     design even when every component inside is correct.                    */
+  .band-white { background: #ffffff; }
+  .band-pale  { background: var(--color-paper); }
+  .band-dark  { background: var(--color-deep); color: var(--color-on-dark); }
+  /* kept for the secondary pages, which have no sampled band map of their own */
+  .section-alt  { background: var(--color-paper); }
 }

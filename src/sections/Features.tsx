@@ -2,21 +2,17 @@ import { ArrowRight } from 'lucide-react'
 import { FEATURES } from '../content'
 import { Reveal, LineReveal, MagButton } from '../components/ui'
 import { splitTitle } from '../lib/motion'
-import { IndexDial } from '../components/IndexDial'
 
 /**
- * Feature showcase. Copy is the approved list, but a six-row checklist buries
- * the differentiator, so capability 1 gets a hero card with a live index dial
- * and the remaining five read as editorial rows.
+ * PDF page 1, band 0.602–0.702: a plain 2×3 numbered grid, heading left and
+ * "Explore the features" right. The PDF has NO hero card and no index dial
+ * here — an invented hero card made this band 13.8% of the page against the
+ * reference's 10.0% and pushed the whole page 38% longer than the artboard.
+ * Six equal cells are the approved composition.
  */
 export default function Features() {
-  const [hero, ...others] = FEATURES.items
-  // 5 leftovers in a 2-col grid leaves an orphan cell, so the last one closes the grid full-width.
-  const rest = others.slice(0, -1)
-  const closing = others[others.length - 1]
-
   return (
-    <section id="features" className="section section-alt">
+    <section id="features" className="section band-pale">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div className="max-w-[720px]">
@@ -32,25 +28,8 @@ export default function Features() {
           </Reveal>
         </div>
 
-        {/* hero capability */}
-        <Reveal delay={80}>
-          <article className="card-lift mt-10 grid items-center gap-8 rounded-shell border border-line bg-card p-7 shadow-[0_1px_2px_rgba(30,54,128,.05),0_10px_26px_-20px_rgba(30,54,128,.30)] md:grid-cols-[minmax(0,1fr)_auto] md:p-9">
-            <div>
-              <span className="measure text-[0.6875rem] tracking-[0.16em] text-accent-ink">{hero.n}</span>
-              <h3 className="mt-2 text-[clamp(1.25rem,2.2vw,1.5rem)] font-[650] text-deep">{hero.title}</h3>
-              <p className="mt-2 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">{hero.body}</p>
-              <p className="mt-4 border-l border-line-hi pl-4 text-[13.5px] leading-relaxed text-ink-3">
-                Scored from humidity, temperature and how long those conditions persist &mdash; not a
-                single humidity threshold.
-              </p>
-            </div>
-            <IndexDial value={38} />
-          </article>
-        </Reveal>
-
-        {/* remaining capabilities */}
-        <div className="mt-4 grid gap-x-12 border-t-2 border-deep sm:grid-cols-2">
-          {rest.map((f, i) => (
+        <div className="mt-10 grid gap-x-14 border-t-2 border-deep sm:grid-cols-2">
+          {FEATURES.items.map((f, i) => (
             <Reveal key={f.n} delay={i * 55}>
               <div className="card-lift flex gap-5 border-b border-line py-5">
                 <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>
@@ -62,17 +41,6 @@ export default function Features() {
             </Reveal>
           ))}
         </div>
-
-        {/* closing row: full width so the grid never ends on a half-empty cell */}
-        <Reveal delay={60}>
-          <div className="card-lift mt-4 flex flex-wrap items-baseline justify-between gap-3 border-b border-line pb-5 pt-5">
-            <div className="flex items-baseline gap-5">
-              <span className="measure text-[0.6875rem] tracking-[0.16em] text-accent-ink">{closing.n}</span>
-              <h3 className="text-[1.05rem] font-[650] text-deep">{closing.title}</h3>
-            </div>
-            <p className="text-[14.5px] text-ink-2">{closing.body}</p>
-          </div>
-        </Reveal>
       </div>
     </section>
   )

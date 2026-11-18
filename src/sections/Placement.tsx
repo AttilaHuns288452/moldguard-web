@@ -5,7 +5,7 @@ import { splitTitle } from '../lib/motion'
 
 export default function Placement() {
   return (
-    <section id="placement" className="section section-alt">
+    <section id="placement" className="section band-white">
       <div className="shell grid items-center gap-10 md:grid-cols-2 md:gap-11">
         <Reveal>
           <div>

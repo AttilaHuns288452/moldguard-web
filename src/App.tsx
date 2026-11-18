@@ -25,10 +25,20 @@ import GetApp from './sections/GetApp'
 import ClosingCta from './sections/ClosingCta'
 
 /**
- * Five pages, matching the five artboards in MoldGuard.pdf:
- *   /            — page 1: hero, problem, meet, the loop, features, own-it, placement
- *   /features    — page 2: capabilities + comparison
- *   /how-it-works— page 3: the closed loop, sense/score/act
+ * Page 1 of the PDF, in the PDF's own order and with the PDF's own bands.
+ *
+ * The band map is sampled from the page edge of MoldGuard.pdf p1:
+ *   hero #f7fbff · problem #fff · meet #eaf2fc · sense/score/act #fff
+ *   features #eaf2fc · own-it #15385e · placement #fff · cta #15385e · footer #15385e
+ *
+ * Only page-1 sections belong here. `risk`, `what` and `capabilities` live on
+ * PDF page 2 and appear on /features instead — splicing them into page 1 made
+ * the home page 8,441px of a 6,053pt artboard (38% longer than the reference)
+ * and broke the approved composition.
+ *
+ *   /            — page 1
+ *   /features    — page 2: capabilities + comparison + what-it-does
+ *   /how-it-works— page 3: the closed loop, sense/score/act, setup
  *   /contact     — page 4: contact + team
  *   /download    — page 5: get the app
  */
@@ -55,10 +65,8 @@ export default function App() {
             <Hero />
             <Problem />
             <Meet />
-            <RiskShowcase />
+            <SenseScoreAct />
             <Features />
-            <WhatItDoes />
-            <Capabilities />
             <Ownership />
             <Placement />
             <ClosingCta />
@@ -69,7 +77,7 @@ export default function App() {
             <Capabilities />
             <Features />
             <WhatItDoes />
-            <Capabilities />
+            <RiskShowcase />
             <SenseScoreAct />
             <Placement />
             <ClosingCta />
