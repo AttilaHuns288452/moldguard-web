@@ -6,10 +6,12 @@ import { pageFromLocation, type Page } from './lib/route'
 
 // page 1 of the PDF
 import Hero from './sections/Hero'
-import Credibility from './sections/Credibility'
 import Problem from './sections/Problem'
 import Meet from './sections/Meet'
+import Loop from './sections/Loop'
+import Capabilities from './sections/Capabilities'
 import RiskShowcase from './sections/RiskShowcase'
+import WhatItDoes from './sections/WhatItDoes'
 // page 2
 import SenseScoreAct from './sections/SenseScoreAct'
 // page 3 (how it works)
@@ -17,7 +19,6 @@ import Features from './sections/Features'
 import Ownership from './sections/Ownership'
 import Placement from './sections/Placement'
 // other artboards
-import Offer from './sections/Offer'
 import Faq from './sections/Faq'
 import Contact from './sections/Contact'
 import GetApp from './sections/GetApp'
@@ -52,11 +53,12 @@ export default function App() {
         {page === 'home' && (
           <>
             <Hero />
-            <Credibility />
             <Problem />
             <Meet />
             <RiskShowcase />
             <Features />
+            <WhatItDoes />
+            <Capabilities />
             <Ownership />
             <Placement />
             <ClosingCta />
@@ -64,7 +66,10 @@ export default function App() {
         )}
         {page === 'features' && (
           <>
+            <Capabilities />
             <Features />
+            <WhatItDoes />
+            <Capabilities />
             <SenseScoreAct />
             <Placement />
             <ClosingCta />
@@ -72,11 +77,11 @@ export default function App() {
         )}
         {page === 'how-it-works' && (
           <>
+            <Loop />
             <SenseScoreAct />
             <Meet />
             <RiskShowcase />
             <Ownership />
-            <Offer />
             <Faq />
             <ClosingCta />
           </>
@@ -90,7 +95,6 @@ export default function App() {
         {page === 'download' && (
           <>
             <GetApp />
-            <Offer />
             <ClosingCta />
           </>
         )}

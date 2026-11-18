@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CONTACT, TEAM } from '../content'
+import { CONTACT, TEAM, CONTACT_PAGE } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
 import { ArrowRight, Check } from 'lucide-react'
 
@@ -29,14 +29,11 @@ export default function Contact() {
       <div className="shell">
         <div className="max-w-[720px]">
           <LineReveal
-            lines={['Talk to', 'the team.']}
+            lines={['Let\'s keep your space', 'ahead of mold.']}
             className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
           />
           <Reveal delay={70}>
-            <p className="lede mt-3">
-              Ask about your space or request a quotation. Which rooms, roughly how damp, and we
-              will come back with a hardware list.
-            </p>
+            <p className="lede mt-3">{CONTACT_PAGE.lede}</p>
           </Reveal>
         </div>
 
@@ -96,7 +93,7 @@ export default function Contact() {
           {/* roster */}
           <Reveal delay={80}>
             <div className="rounded-soft border border-line bg-card p-7 md:p-8">
-              <p className="text-[13px] font-[650] tracking-[0.1em] text-ink-3 uppercase">The team</p>
+              <p className="text-[13px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{CONTACT_PAGE.teamTitle}</p>
               <div className="mt-6 grid gap-x-6 gap-y-6 sm:grid-cols-2">
                 {TEAM.map((m) => (
                   <div key={m.name} className="flex items-start gap-3">

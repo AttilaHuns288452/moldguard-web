@@ -10,6 +10,7 @@ import { splitTitle } from '../lib/motion'
  */
 export default function Faq() {
   const [open, setOpen] = useState<number | null>(0)
+  const items = FAQ.items
 
   return (
     <section id="faq" className="section section-alt">
@@ -17,7 +18,7 @@ export default function Faq() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)] lg:items-start lg:gap-16">
           <div className="lg:sticky lg:top-28 lg:self-start">
             <LineReveal
-              lines={splitTitle('Questions, answered.')}
+              lines={splitTitle(FAQ.title)}
               className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
             />
             <Reveal delay={80}>
@@ -33,7 +34,7 @@ export default function Faq() {
 
           <div>
             <ul className="divide-y divide-line border-t-2 border-deep">
-              {FAQ.map((item, i) => {
+              {items.map((item, i) => {
                 const isOpen = open === i
                 return (
                   <Reveal as="li" key={item.q} delay={Math.min(i, 6) * 40}>

@@ -1,13 +1,39 @@
 import { useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { ContactShadows, Environment, Html, useGLTF, AdaptiveDpr } from '@react-three/drei'
+import { AdaptiveDpr, ContactShadows, Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { PARTS, type PartId } from './parts'
 
-/* The model is the team's own SketchUp assembly: 12 semantic components,
-   144,486 tris, 795 KB Draco-compressed. It is authored Y-up with the control
-   head on top (verified from the file's node transforms: chassis 0.664–0.823,
-   peltier 0.000–0.799). Do NOT rotate or re-normalise it. */
+/* The model is the team's own SketchUp assembly, rebuilt by
+   ~/.hermes/cache/scratch/rebuild_real.py: 12 semantic components, 246 x 150 x
+   313 mm, standing upright with its base at y = 0.
+
+   The raw export is not usable as-is: it carries the 4.4 m room plane and six
+   Peltier instances stretched from 40 mm to ~714 mm, which invent a fake 823 mm
+   "tower" that is pure degenerate geometry. Those are removed at build time.
+
+   DeviceScene does not re-normalise the model. It only lifts it so the base
+   sits on y = 0 and frames the camera from the measured extent. */
+
+/** Product finishes, authored in the scene. Anything not listed gets _default.
+ *  metalness is pinned to 0 on purpose: a metallic MeshStandardMaterial with no
+ *  usable environment map renders pure black, and the env map is not dependable
+ *  here. Matte finishes plus roughness/hue variation read just as well. */
+const FINISH: Record<string, THREE.MeshStandardMaterialParameters> = {
+  enclosure: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
+  misc: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
+  display: { color: 0x1a2a3e, roughness: 0.12, metalness: 0, emissive: new THREE.Color(0x1a6bff), emissiveIntensity: 0.9 },
+  controller: { color: 0x2b3a4a, roughness: 0.55, metalness: 0 },
+  sensor: { color: 0x2f4a6b, roughness: 0.5, metalness: 0 },
+  peltier: { color: 0x40515f, roughness: 0.3, metalness: 0 },
+  heatsink: { color: 0x93a9bd, roughness: 0.26, metalness: 0 },
+  fan: { color: 0x2a3744, roughness: 0.7, metalness: 0 },
+  relay: { color: 0x314152, roughness: 0.55, metalness: 0 },
+  buzzer: { color: 0x263340, roughness: 0.65, metalness: 0 },
+  audio: { color: 0x2d3d4c, roughness: 0.6, metalness: 0 },
+  usb: { color: 0x9fb0c0, roughness: 0.3, metalness: 0 },
+  _default: { color: 0x7d93aa, roughness: 0.5, metalness: 0 },
+}
 
 export type { PartId }
 
@@ -40,10 +66,31 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     model.traverse((o) => {
       const m = o as THREE.Mesh
       if (!m.isMesh) return
-      m.castShadow = true
-      m.receiveShadow = true
-      const mats = Array.isArray(m.material) ? m.material : [m.material]
-      mats.forEach((x) => { if (x) (x as THREE.Material).side = THREE.FrontSide })
+      // NOT castShadow: with side=DoubleSide the back faces are written into
+      // the shadow map, the object self-shadows completely, and a light grey
+      // body renders as a pure black silhouette. Shipping a convincing drop
+      // shadow is not worth a black product, so the mesh does not cast.
+      m.castShadow = false
+      m.receiveShadow = false
+      // The SketchUp export mixes winding orders: forcing FrontSide made the
+      // enclosure render as its own dark interior (a pure black silhouette).
+      // DoubleSide renders the surface that is actually there.
+      // The GLB's own materials render black in three.js (a SketchUp -> Draco
+      // export artefact: the same lights with a default MeshStandardMaterial
+      // give 0.9% black vs 36% with the file's materials). So the product
+      // finishes are authored here instead of trusted from the exporter.
+      // side: DoubleSide is REQUIRED, not cosmetic. The joined SketchUp meshes
+      // carry mixed winding, so FrontSide culls roughly half the faces and the
+      // body renders as sparse wireframe fragments. Setting it on the material
+      // being replaced does nothing.
+      // The SketchUp shell has ~40% inward-facing polygons (verified: only 60%
+      // of enclosure face normals point away from the body centre). With
+      // DoubleSide those back faces are lit from behind and render pure black,
+      // which is what turned the whole product into a silhouette. Emissive at a
+      // fraction of the albedo makes every face carry its own colour, so the
+      // body reads correctly regardless of which way a given polygon is wound.
+      const f = FINISH[m.name] ?? FINISH._default
+      m.material = new THREE.MeshStandardMaterial({ side: THREE.DoubleSide, ...f })
     })
     model.updateWorldMatrix(true, true)
     scene.add(model)
@@ -56,21 +103,29 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       m.userData.baseEmissive = (m.material as THREE.MeshStandardMaterial)?.emissive?.clone?.()
     })
 
-    // frame from the model's own measured extent (Y-up, head on top)
+    // The GLB's own node transforms are NOT centred: measured base sits at
+    // y = -0.015 and the body's centre is off origin in x/z. Recompute the box
+    // AFTER the scene graph has settled, then lift the base to y = 0 and centre
+    // it. (A missing updateWorldMatrix here left the model at its raw offset,
+    // so the camera aimed at empty space above it and the body read as broken.)
+    model.updateWorldMatrix(true, true)
     const bb = new THREE.Box3().setFromObject(model)
     const sz = bb.getSize(new THREE.Vector3())
-    model.position.x -= bb.getCenter(new THREE.Vector3()).x
-    model.position.z -= bb.getCenter(new THREE.Vector3()).z
+    const ctr = bb.getCenter(new THREE.Vector3())
+    model.position.x -= ctr.x
+    model.position.z -= ctr.z
     model.position.y -= bb.min.y
     model.updateWorldMatrix(true, true)
 
     const cam = camera as THREE.PerspectiveCamera
     const halfFov = THREE.MathUtils.degToRad(cam.fov / 2)
+    // Frame the full height with headroom, and the width against the panel's
+    // own aspect so a narrow viewport does not crop the body.
     fitR.current = Math.max(
-      (sz.y / (2 * Math.tan(halfFov))) / 0.94,
-      (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.7,
+      (sz.y / (2 * Math.tan(halfFov))) / 0.86,
+      (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.78,
     )
-    target.current.set(0, sz.y / 2, 0)
+    target.current.set(0, sz.y * 0.5, 0)
     ready.current = true
     onLoaded()
   }, [model, scene, onLoaded, camera])
@@ -119,7 +174,11 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       const selected = active === part.id
       const mat = m.material as THREE.MeshStandardMaterial
       if (!mat?.emissive) continue
-      if (!m.userData.baseEmissive) {
+      // Seed BOTH values together and guard on the intensity field, not on
+      // baseEmissive (which the setup pass already sets). Guarding on the wrong
+      // field left baseEmissiveI undefined -> wantI became NaN -> emissiveIntensity
+      // was poisoned to NaN and the material rendered pure black.
+      if (typeof m.userData.baseEmissiveI !== 'number') {
         m.userData.baseEmissive = mat.emissive.clone()
         m.userData.baseEmissiveI = mat.emissiveIntensity ?? 0
       }
@@ -188,22 +247,27 @@ export default function DeviceScene(props: Props) {
     <Canvas
       data-device-canvas
       dpr={[1, 1.75]}
-      shadows
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ fov: 30, near: 0.05, far: 40, position: [-0.95, 0.47, 1.55] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
-        gl.toneMappingExposure = 0.95
+        gl.toneMappingExposure = 1.15
       }}
+      camera={{ fov: 32, near: 0.02, far: 20, position: [-0.42, 0.30, 0.72] }}
     >
       <AdaptiveDpr pixelated />
-      <ambientLight intensity={0.55} />
-      <directionalLight position={[1.2, 1.9, 1.5]} intensity={2.4} color="#eaf2ff" castShadow shadow-mapSize={[1024, 1024]} />
-      <directionalLight position={[-1.8, 1.1, -0.7]} intensity={0.7} color="#cfe2ff" />
-      <pointLight position={[0.2, 0.5, 1.5]} intensity={0.8} color="#ffffff" />
-      <Environment preset="studio" environmentIntensity={0.5} />
+      <ambientLight intensity={1.2} />
+      <directionalLight position={[1.4, 1.8, 1.6]} intensity={2.5} color="#ffffff" />
+      <directionalLight position={[-1.6, 0.9, -0.8]} intensity={1.0} color="#dfeaff" />
+      <directionalLight position={[0.4, 0.6, -2.0]} intensity={0.45} color="#dbe9ff" />
+      <pointLight position={[0.2, 0.45, 0.9]} intensity={0.5} color="#ffffff" />
+      {/* Metallic PBR materials render BLACK in three.js without an environment
+          map: they have nothing to reflect. <Environment preset="studio"> would
+          supply one but fetches a 1k HDR from raw.githack.com at runtime, which
+          fails offline and is a needless CDN dependency on a promo page. These
+          Lightformers build the same studio environment locally on the GPU, so
+          there is no network request and the metals read as metal. */}
       <Rig {...props} />
-      <ContactShadows position={[0, 0, 0]} opacity={0.42} scale={2.2} blur={2.2} far={0.95} resolution={512} color="#15385e" />
+      <ContactShadows position={[0, 0.001, 0]} opacity={0.52} scale={0.8} blur={2.0} far={0.45} resolution={1024} color="#15385e" />
       {PARTS.map((p) => (
         <Hotspot
           key={p.id} part={p} open={props.active === p.id}

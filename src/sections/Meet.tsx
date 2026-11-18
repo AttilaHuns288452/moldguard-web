@@ -13,7 +13,7 @@ import { splitTitle } from '../lib/motion'
  * -> relay -> dehumidifier). Every description is about the actual mesh.
  */
 export default function Meet() {
-  const [active, setActive] = useState<PartId | null>('chassis')
+  const [active, setActive] = useState<PartId | null>('enclosure')
   const [mode, setMode] = useState<'tour' | 'explode'>('tour')
   const [autoSpin, setAutoSpin] = useState(true)
   const [tourStep, setTourStep] = useState(0)
@@ -166,7 +166,6 @@ export default function Meet() {
                         </span>
                         <span className={`flex-1 text-[13px] ${on ? 'font-[650] text-deep' : 'text-ink-2'}`}>
                           {p.name}
-                          {p.count ? <span className="ml-1.5 text-[11px] text-ink-3">×{p.count}</span> : null}
                         </span>
                         {on && <Boxes className="size-3.5 shrink-0 text-accent" strokeWidth={2} />}
                       </button>
@@ -184,6 +183,27 @@ export default function Meet() {
             </div>
           </Reveal>
         </div>
+
+        {/* PDF page 1: the four stages, verbatim */}
+        <ol className="mt-10 grid gap-px overflow-hidden rounded-soft border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+          {MEET.stages.map((st, i) => (
+            <Reveal as="li" key={st.n} delay={i * 60}>
+              <div className="h-full bg-card px-5 py-4">
+                <span className="measure text-[11px] tracking-[0.14em] text-accent">{st.n}</span>
+                <h3 className="mt-1.5 text-[14.5px] font-[650] text-deep">{st.title}</h3>
+                <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{st.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </ol>
+
+        <Reveal delay={80}>
+          <div className="mt-6 rounded-soft border border-line bg-card p-5">
+            <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{MEET.flowLabel}</p>
+            <p className="mt-2 max-w-[74ch] text-[14.5px] leading-relaxed text-ink-2">{MEET.flowLede}</p>
+            <p className="mt-1.5 text-[12px] text-ink-3">{MEET.flowNote}</p>
+          </div>
+        </Reveal>
       </div>
     </section>
   )
