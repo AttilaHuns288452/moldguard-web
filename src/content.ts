@@ -277,12 +277,6 @@ export const AUTOMATIONS = {
   note: 'Runs automatically. You can override any time from the app.',
 }
 
-export const GET_APP = {
-  title: 'Get the MoldGuard app.',
-  lede: 'Monitor your home from anywhere.',
-  caption: 'Scan to get the app',
-}
-
 /** Illustrative scenarios. The only invented numbers, labelled as demo data,
  *  anchored to the PDF's own sample readings. */
 export const RISK_SCENARIOS = [

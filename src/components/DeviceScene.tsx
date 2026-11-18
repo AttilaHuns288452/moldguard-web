@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { AdaptiveDpr, ContactShadows, Html, useGLTF } from '@react-three/drei'
+import { AdaptiveDpr, Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { PARTS, type PartId } from './parts'
 
@@ -19,10 +19,13 @@ import { PARTS, type PartId } from './parts'
  *  metalness is pinned to 0 on purpose: a metallic MeshStandardMaterial with no
  *  usable environment map renders pure black, and the env map is not dependable
  *  here. Matte finishes plus roughness/hue variation read just as well. */
+// Finishes. The shell colours are sampled from the approved product photography
+// (public/pod-hero.webp body = #fef9ef lit, i.e. a warm ivory albedo) — the old
+// blue-grey #8ea6bf read as an untextured CAD part next to those photos.
 const FINISH: Record<string, THREE.MeshStandardMaterialParameters> = {
-  skin: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
-  enclosure: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
-  misc: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
+  skin: { color: 0xe9e1d4, roughness: 0.55, metalness: 0 },
+  enclosure: { color: 0xe9e1d4, roughness: 0.55, metalness: 0 },
+  misc: { color: 0xded5c6, roughness: 0.6, metalness: 0 },
   display: { color: 0x1a2a3e, roughness: 0.12, metalness: 0, emissive: new THREE.Color(0x1a6bff), emissiveIntensity: 0.9 },
   controller: { color: 0x2b3a4a, roughness: 0.55, metalness: 0 },
   sensor: { color: 0x2f4a6b, roughness: 0.5, metalness: 0 },
@@ -32,11 +35,30 @@ const FINISH: Record<string, THREE.MeshStandardMaterialParameters> = {
   relay: { color: 0x314152, roughness: 0.55, metalness: 0 },
   buzzer: { color: 0x263340, roughness: 0.65, metalness: 0 },
   audio: { color: 0x2d3d4c, roughness: 0.6, metalness: 0 },
-  usb: { color: 0x9fb0c0, roughness: 0.3, metalness: 0 },
-  _default: { color: 0x7d93aa, roughness: 0.5, metalness: 0 },
+  usb: { color: 0xb8c4cf, roughness: 0.3, metalness: 0 },
+  _default: { color: 0xd6cdbe, roughness: 0.55, metalness: 0 },
 }
 
 export type { PartId }
+
+/** Soft radial blob used as the product's ground shadow. Built once on a 2D
+ *  canvas so it costs nothing at runtime and needs no asset or network. */
+let blob: THREE.CanvasTexture | null = null
+function shadowBlob(): THREE.CanvasTexture {
+  if (blob) return blob
+  const s = 128
+  const c = document.createElement('canvas')
+  c.width = c.height = s
+  const g = c.getContext('2d')!
+  const grad = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2)
+  grad.addColorStop(0, 'rgba(21,56,94,0.55)')
+  grad.addColorStop(0.55, 'rgba(21,56,94,0.20)')
+  grad.addColorStop(1, 'rgba(21,56,94,0)')
+  g.fillStyle = grad
+  g.fillRect(0, 0, s, s)
+  blob = new THREE.CanvasTexture(c)
+  return blob
+}
 
 export type ViewerMode = 'tour' | 'explode'
 
@@ -284,16 +306,20 @@ export default function DeviceScene(props: Props) {
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
-        gl.toneMappingExposure = 1.15
+        gl.toneMappingExposure = 1.72
       }}
       camera={{ fov: 32, near: 0.02, far: 20, position: [-0.42, 0.30, 0.72] }}
     >
       <AdaptiveDpr pixelated />
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[1.4, 1.8, 1.6]} intensity={2.5} color="#ffffff" />
-      <directionalLight position={[-1.6, 0.9, -0.8]} intensity={1.0} color="#dfeaff" />
-      <directionalLight position={[0.4, 0.6, -2.0]} intensity={0.45} color="#dbe9ff" />
-      <pointLight position={[0.2, 0.45, 0.9]} intensity={0.5} color="#ffffff" />
+      {/* Warm key + warm fill, not the old blue-grey rig. The approved product
+          photos are a warm room (#fef9ef body, ~3000K light); a blue fill
+          neutralised the ivory albedo to #d7d4cf and the model read as bare
+          CAD instead of the product. */}
+      <ambientLight intensity={0.42} color="#fff6ea" />
+      <directionalLight position={[1.4, 1.8, 1.6]} intensity={3.1} color="#fffaf2" />
+      <directionalLight position={[-1.6, 0.9, -0.8]} intensity={0.8} color="#f2f0ff" />
+      <directionalLight position={[0.4, 0.6, -2.0]} intensity={0.4} color="#eeeaff" />
+      <pointLight position={[0.2, 0.45, 0.9]} intensity={0.45} color="#fff8f0" />
       {/* Metallic PBR materials render BLACK in three.js without an environment
           map: they have nothing to reflect. <Environment preset="studio"> would
           supply one but fetches a 1k HDR from raw.githack.com at runtime, which
@@ -301,7 +327,15 @@ export default function DeviceScene(props: Props) {
           Lightformers build the same studio environment locally on the GPU, so
           there is no network request and the metals read as metal. */}
       <Rig {...props} />
-      <ContactShadows position={[0, 0.001, 0]} opacity={0.52} scale={0.8} blur={2.0} far={0.45} resolution={1024} color="#15385e" />
+      {/* ponytail: a soft radial blob, not ContactShadows. The product meshes
+          must stay castShadow=false (DoubleSide back faces write into the shadow
+          map and the body self-shadows to a black silhouette), so a real shadow
+          pass can never render — ContactShadows was silently drawing nothing.
+          One transparent plane is what actually grounds the product. */}
+      <mesh position={[0, 0.0015, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[0.62, 0.46]} />
+        <meshBasicMaterial transparent depthWrite={false} map={shadowBlob()} />
+      </mesh>
       {PARTS.map((p) => (
         <Hotspot
           key={p.id} part={p} open={props.active === p.id}
