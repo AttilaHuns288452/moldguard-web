@@ -188,6 +188,13 @@ for (const vp of VIEWPORTS) {
   }
   record('links: all internal routes resolve', bad.length === 0, bad.join(' ') || `${new Set(hrefs).size} routes`)
 
+  // The approved Figma application frames must actually reach the page. They were
+  // built, then dropped from /download, and only a QR code was left — so this is
+  // the check that would have caught it.
+  await open(page, base + '/download', 800)
+  const frames = await page.locator('#app .mg').count()
+  record('download: four Figma app frames render', frames === 4, `${frames} frames`)
+
   // keyboard: from a clean load, the first tab stop must be the skip link
   await open(page, URL, 700)
   await page.keyboard.press('Tab')
