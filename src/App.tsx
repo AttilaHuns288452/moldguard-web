@@ -9,6 +9,7 @@ import Hero from './sections/Hero'
 import Credibility from './sections/Credibility'
 import Problem from './sections/Problem'
 import Meet from './sections/Meet'
+import RiskShowcase from './sections/RiskShowcase'
 // page 2
 import SenseScoreAct from './sections/SenseScoreAct'
 // page 3 (how it works)
@@ -54,6 +55,7 @@ export default function App() {
             <Credibility />
             <Problem />
             <Meet />
+            <RiskShowcase />
             <Features />
             <Ownership />
             <Placement />
@@ -72,6 +74,7 @@ export default function App() {
           <>
             <SenseScoreAct />
             <Meet />
+            <RiskShowcase />
             <Ownership />
             <Offer />
             <Faq />

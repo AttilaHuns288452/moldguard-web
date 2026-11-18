@@ -1,59 +1,89 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
-import { RotateCcw, RefreshCw, Maximize2 } from 'lucide-react'
-import { prefersReducedMotion } from '../lib/motion'
+import { RotateCcw, RefreshCw, Maximize2, ZoomIn, ZoomOut } from 'lucide-react'
+import type { PartId } from './parts'
 
-/* Lazy: the whole three.js stack only downloads once the hero is actually in
-   view and the visitor has not asked for reduced motion. */
 const Scene = lazy(() => import('./DeviceScene'))
 
-export type HotspotId = 'display' | 'sensors' | 'tof' | 'dry' | 'power'
+type Props = {
+  active: PartId | null
+  onSelect: (id: PartId | null) => void
+  autoSpin: boolean
+  mode: 'tour' | 'explode'
+}
 
-type Props = { onHotspot: (id: HotspotId | null) => void; active: HotspotId | null }
-
-export default function DeviceViewer({ onHotspot, active }: Props) {
+/** 3D stage: lazy WebGL, real zoom, selection, graceful fallback. */
+export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
-  const [mounted, setMounted] = useState(false)      // three has been asked for
-  const [loaded, setLoaded] = useState(false)        // glb parsed
-  const [failed, setFailed] = useState(false)        // no webgl / glb error
+  const [mounted, setMounted] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const [failed, setFailed] = useState(false)
   const [resetKey, setResetKey] = useState(0)
-  const [autoSpin, setAutoSpin] = useState(!prefersReducedMotion())
+  const [zoom, setZoom] = useState(1)
+  const [hovering, setHovering] = useState(false)
 
-  // Pull three.js down only when the hero is in view AND the page has already
-  // painted. Loading the 3D scene eagerly competes with LCP for the same
-  // bandwidth and main thread, so it waits for idle after first paint.
   useEffect(() => {
     const el = hostRef.current
     if (!el) return
-    let armed = false
-    const mount = () => { if (armed) setMounted(true) }
     const io = new IntersectionObserver(
       (entries) => {
         if (!entries.some((e) => e.isIntersecting)) return
         io.disconnect()
-        armed = true
-        // wait for the first paint / next idle window
         if ('requestIdleCallback' in window) {
-          ;(window as unknown as { requestIdleCallback: (cb: () => void, o?: { timeout: number }) => void })
-            .requestIdleCallback(mount, { timeout: 1200 })
-        } else {
-          setTimeout(mount, 300)
-        }
+          (window as unknown as { requestIdleCallback: (cb: () => void, o?: { timeout: number }) => void })
+            .requestIdleCallback(() => setMounted(true), { timeout: 1200 })
+        } else setTimeout(() => setMounted(true), 300)
       },
-      { rootMargin: '0px' },   // load only when the viewer is actually close
+      { rootMargin: '0px' },
     )
     io.observe(el)
     return () => io.disconnect()
   }, [])
 
-  // WebGL availability gate — never mount a canvas that cannot render.
-  const webglOk = useRef(true)
   useEffect(() => {
     try {
       const c = document.createElement('canvas')
-      const gl = c.getContext('webgl2') ?? c.getContext('webgl')
-      webglOk.current = !!gl
-    } catch { webglOk.current = false }
-    if (!webglOk.current) setFailed(true)
+      if (!(c.getContext('webgl2') ?? c.getContext('webgl'))) setFailed(true)
+    } catch { setFailed(true) }
+  }, [])
+
+  useEffect(() => {
+    if (!hovering) return
+    const t = setTimeout(() => setHovering(false), 1400)
+    return () => clearTimeout(t)
+  }, [hovering])
+
+  // Wheel + pinch zoom on the stage (the button labels used to promise this).
+  useEffect(() => {
+    const el = hostRef.current
+    if (!el) return
+    const clamp = (z: number) => Math.min(2.4, Math.max(0.55, z))
+    const onWheel = (e: WheelEvent) => {
+      if (!e.ctrlKey && Math.abs(e.deltaY) < 2) return
+      e.preventDefault()
+      setZoom((z) => clamp(z - e.deltaY * 0.0016))
+    }
+    let pinchStart: number | null = null
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) pinchStart = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY)
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 2 || pinchStart === null) return
+      const d = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY)
+      setZoom((z) => clamp(z * (d / pinchStart!)))
+      pinchStart = d
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: true })
+    return () => {
+      el.removeEventListener('wheel', onWheel)
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+    }
   }, [])
 
   return (
@@ -61,77 +91,69 @@ export default function DeviceViewer({ onHotspot, active }: Props) {
       <div
         ref={hostRef}
         className="relative h-full w-full touch-none"
-        aria-label="Interactive 3D model of the MoldGuard device. Drag to rotate, scroll to zoom."
-        role="img"
+        role="application"
+        aria-label="Interactive 3D model of the MoldGuard assembly. Drag to orbit, scroll to zoom, and select a component to read about it."
       >
         {mounted && !failed ? (
           <Suspense fallback={null}>
             <Scene
-              resetKey={resetKey}
-              autoSpin={autoSpin}
               active={active}
-              onHotspot={onHotspot}
+              onSelect={onSelect}
+              mode={mode}
+              autoSpin={autoSpin && !hovering}
+              resetKey={resetKey}
+              zoom={zoom}
               onLoaded={() => setLoaded(true)}
-              onError={() => setFailed(true)}
+              onHoverHotspot={() => setHovering(true)}
             />
           </Suspense>
         ) : null}
 
-        {/* Static fallback: shown until the model is parsed, or if WebGL is absent. */}
         {!loaded && !failed && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-              <div className="device-silhouette relative h-[62%] w-[19%] min-h-[170px] min-w-[54px] rounded-[6px] border border-line-hi bg-gradient-to-b from-[#c9d8ea] to-[#94a9c4]">
-                <span className="absolute inset-x-[16%] top-[6%] h-[10%] rounded-[2px] bg-accent/12" />
-                <span className="absolute inset-x-[30%] bottom-[10%] h-px bg-line-hi" />
-              </div>
-              <span className="text-[0.6562rem] font-semibold tracking-[0.12em] text-ink-3 uppercase">
-                Loading model
-              </span>
-            </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-[6px] border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
+            <span className="text-[0.6875rem] font-semibold tracking-[0.14em] text-ink-3 uppercase">Loading model</span>
           </div>
         )}
 
         {failed && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
-            <div className="device-silhouette h-[62%] w-[19%] min-h-[170px] min-w-[56px] rounded-[6px] border border-line-hi bg-gradient-to-b from-[#c9d8ea] to-[#94a9c4]" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
+            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-[6px] border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
             <p className="max-w-xs text-[0.8125rem] leading-relaxed text-ink-3">
-              3D view unavailable on this device. Everything below describes the same hardware.
+              3D unavailable on this device. Every component is listed beside the model.
             </p>
           </div>
         )}
       </div>
 
-      {/* Controls recede: icon-only, no filled pill competing with the CTA */}
       {!failed && (
-        <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-1 pb-1">
-          <span className="text-[11px] tracking-[0.02em] text-ink-3/90">Drag to rotate</span>
+        <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-2 pb-1">
+          <span className="text-[11px] text-ink-3">Drag to orbit · scroll to zoom</span>
           <div className="flex items-center gap-0.5">
-            <button
-              type="button"
-              onClick={() => setAutoSpin((v) => !v)}
-              aria-pressed={autoSpin}
-              aria-label={autoSpin ? 'Stop auto-rotation' : 'Start auto-rotation'}
-              className={`grid size-8 place-items-center rounded-full transition-colors ${
-                autoSpin ? 'text-deep' : 'text-ink-3 hover:text-ink'
-              } hover:bg-line/50`}
-            >
+            <button type="button" onClick={() => setZoom((z) => Math.min(2.4, z + 0.18))}
+              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              aria-label="Zoom in">
+              <ZoomIn className="size-4" strokeWidth={1.9} />
+            </button>
+            <button type="button" onClick={() => setZoom((z) => Math.max(0.55, z - 0.18))}
+              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              aria-label="Zoom out">
+              <ZoomOut className="size-4" strokeWidth={1.9} />
+            </button>
+            <button type="button" onClick={() => { setZoom(1); setResetKey((k) => k + 1) }}
+              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              aria-label="Reset the view">
               <RotateCcw className="size-3.5" strokeWidth={1.9} />
             </button>
-            <button
-              type="button"
-              onClick={() => setResetKey((k) => k + 1)}
-              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/50 hover:text-ink"
-              aria-label="Reset the view"
-            >
+            <button type="button" onClick={() => setResetKey((k) => k + 1)}
+              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink md:hidden"
+              aria-label="Recentre">
               <RefreshCw className="size-3.5" strokeWidth={1.9} />
             </button>
-            <button
-              type="button"
-              onClick={() => { hostRef.current?.parentElement?.requestFullscreen?.().catch(() => {}) }}
-              className="hidden size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/50 hover:text-ink md:grid"
-              aria-label="View the model fullscreen"
-            >
+            <button type="button"
+              onClick={() => hostRef.current?.parentElement?.requestFullscreen?.().catch(() => {})}
+              className="hidden size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink md:grid"
+              aria-label="View the model fullscreen">
               <Maximize2 className="size-3.5" strokeWidth={1.9} />
             </button>
           </div>

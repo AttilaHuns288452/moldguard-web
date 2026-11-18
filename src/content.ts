@@ -189,3 +189,15 @@ export const CREDIBILITY = [
   { k: 'Yours', label: 'the system', note: 'No proprietary ecosystem after handover' },
   { k: 'Local', label: 'loop on-device', note: 'Dehumidification does not need a screen open' },
 ]
+
+/** Illustrative risk scenarios for the index showcase. Not device data. */
+export const RISK_SCENARIOS = [
+  { label: 'Closet',        room: 'Closet',        index: 87, band: 'Act',   rh: 79, temp: 29, hours: 26, dew: 0.4,
+    note: 'Warm and humid for over a day. This is the window where mold starts, and the loop has already switched the dehumidifier on.' },
+  { label: 'Bathroom',     room: 'Bathroom',      index: 58, band: 'Watch', rh: 71, temp: 29, hours: 9,  dew: 1.6,
+    note: 'A shower spikes humidity for minutes. Time-weighted scoring keeps this at Watch instead of tripping a threshold.' },
+  { label: 'Basement',     room: 'Basement',      index: 93, band: 'Act',   rh: 86, temp: 23, hours: 41, dew: -0.2,
+    note: 'Cold walls and sustained damp. Dew-point margin is negative, so condensation is already forming on surfaces.' },
+  { label: 'Living room',  room: 'Living room',   index: 31, band: 'Safe',  rh: 52, temp: 27, hours: 2,  dew: 4.1,
+    note: 'Conditions are comfortably outside the mold window. Nothing to do but keep watching.' },
+]

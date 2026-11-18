@@ -1,43 +1,40 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { ContactShadows, Environment, Html, useGLTF, AdaptiveDpr } from '@react-three/drei'
 import * as THREE from 'three'
-import type { HotspotId } from './DeviceViewer'
+import { PARTS, type PartId } from './parts'
 
-/* The model is the team's own SketchUp assembly, exported to glTF and
-   re-materialed for the site. Draco-compressed: 714 KB, 12 parts, 144k tris.
-   Proportions are untouched: 317 x 292 x 823 mm, base sitting on y = 0. */
+/* The model is the team's own SketchUp assembly: 12 semantic components,
+   144,486 tris, 795 KB Draco-compressed. It is authored Y-up with the control
+   head on top (verified from the file's node transforms: chassis 0.664–0.823,
+   peltier 0.000–0.799). Do NOT rotate or re-normalise it. */
 
-export const HOTSPOTS = [
-  { id: 'display', label: 'Status display',   copy: 'Reads out the current risk state and the automation rule that is running.', at: [-0.154, 0.739, 0.055] },
-  { id: 'sensors', label: 'Humidity / temperature', copy: 'DHT11 feeds relative humidity and temperature to the Mold Risk Index.', at: [-0.021, 0.820, 0.035] },
-  { id: 'tof',     label: 'Surface distance', copy: 'VL53L0X time-of-flight sensor: a proximity reading alongside humidity, temperature and VOC.', at: [0.002, 0.711, -0.001] },
-  { id: 'dry',     label: 'Thermoelectric stack', copy: 'Six Peltier modules on the 0.8 m column, with fan and heatsink. This is what pulls moisture out of the air.', at: [-0.126, 0.400, -0.075] },
-  { id: 'power',   label: 'Control & relay board', copy: 'ESP32, relay module and stereo amp: the electronics that decide when the dehumidifier runs.', at: [0.001, 0.744, -0.019] },
-] as const
+export type { PartId }
 
+export type ViewerMode = 'tour' | 'explode'
 
 type Props = {
-  resetKey: number
+  active: PartId | null
+  onSelect: (id: PartId | null) => void
+  mode: ViewerMode
   autoSpin: boolean
-  active: HotspotId | null
-  onHotspot: (id: HotspotId | null) => void
+  resetKey: number
   onLoaded: () => void
-  onError?: () => void
+  onHoverHotspot: () => void
+  zoom: number  // 1 = fit
 }
 
-function Rig({ autoSpin, resetKey, onLoaded }: Props) {
+function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
   const { camera, scene } = useThree()
   const { scene: model } = useGLTF('/moldguard.glb') as unknown as { scene: THREE.Group }
   const ready = useRef(false)
-  const spin = useRef(-0.55)  // open showing the display + sensor head
+  const settle = useRef(0)
+  const spin = useRef(-0.55)
   const drag = useRef({ down: false, x: 0, y: 0, yaw: 0, pitch: 0 })
-  // Framing is computed, not eyeballed: the device is 0.823 m tall and the
-  // vertical FOV governs, so the orbit radius must exceed h / (2 tan(fov/2)).
-  // Framing is derived from the model itself, so no hand-set radius can crop it.
-  const target = new THREE.Vector3(0, 0.41, 0)   // updated from the model's own bbox
   const fitR = useRef(1.9)
-  let settle = 0
+  const target = useRef(new THREE.Vector3(0, 0.41, 0))
+  const meshes = useRef<Record<string, THREE.Mesh>>({})
+  const basePos = useRef<Record<string, THREE.Vector3>>({})
 
   useEffect(() => {
     model.traverse((o) => {
@@ -45,63 +42,56 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
       if (!m.isMesh) return
       m.castShadow = true
       m.receiveShadow = true
-      // SketchUp exports panels double-sided; single side halves the fill cost.
       const mats = Array.isArray(m.material) ? m.material : [m.material]
       mats.forEach((x) => { if (x) (x as THREE.Material).side = THREE.FrontSide })
     })
-
-    // Normalise POSITION only — never rotation. The GLB is authored Y-up
-    // (verified: 0.317 x 0.823 x 0.292, base at y=0, no rotation nodes), so any
-    // rotation here fights the file. We only guarantee it is centred on x/z and
-    // sitting on y=0, then frame the camera from its measured box.
     model.updateWorldMatrix(true, true)
-    const box = new THREE.Box3().setFromObject(model)
-    model.position.x -= box.getCenter(new THREE.Vector3()).x
-    model.position.z -= box.getCenter(new THREE.Vector3()).z
-    model.position.y -= box.min.y
+    scene.add(model)
 
-    // Re-measure after the move and derive the orbit radius from the real extent,
-    // so the model always fills the stage regardless of the source file.
-    model.updateWorldMatrix(true, true)
+    model.traverse((o) => {
+      const m = o as THREE.Mesh
+      if (!m.isMesh) return
+      meshes.current[m.name] = m
+      basePos.current[m.name] = m.position.clone()
+      m.userData.baseEmissive = (m.material as THREE.MeshStandardMaterial)?.emissive?.clone?.()
+    })
+
+    // frame from the model's own measured extent (Y-up, head on top)
     const bb = new THREE.Box3().setFromObject(model)
     const sz = bb.getSize(new THREE.Vector3())
+    model.position.x -= bb.getCenter(new THREE.Vector3()).x
+    model.position.z -= bb.getCenter(new THREE.Vector3()).z
+    model.position.y -= bb.min.y
+    model.updateWorldMatrix(true, true)
+
     const cam = camera as THREE.PerspectiveCamera
     const halfFov = THREE.MathUtils.degToRad(cam.fov / 2)
-    // Frame the full column (0.823m) at 86% fill
     fitR.current = Math.max(
       (sz.y / (2 * Math.tan(halfFov))) / 0.86,
       (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.7,
     )
-    target.y = sz.y / 2   // head sits on top; frame the whole column
-
-    scene.add(model)
+    target.current.set(0, sz.y / 2, 0)
     ready.current = true
     onLoaded()
-  }, [model, scene, onLoaded])
+  }, [model, scene, onLoaded, camera])
 
   useEffect(() => {
     if (!ready.current) return
     drag.current.yaw = 0
     drag.current.pitch = 0
+    spin.current = -0.55
   }, [resetKey])
 
-  // Pointer drag on the canvas element itself (not window) so page scroll and
-  // keyboard focus elsewhere keep working.
+  // Pointer drag
   useEffect(() => {
     const dom = document.querySelector<HTMLElement>('[data-device-canvas]')
     if (!dom) return
-    const down = (e: PointerEvent) => {
-      drag.current.down = true
-      drag.current.x = e.clientX
-      drag.current.y = e.clientY
-    }
+    const down = (e: PointerEvent) => { drag.current.down = true; drag.current.x = e.clientX; drag.current.y = e.clientY }
     const move = (e: PointerEvent) => {
       if (!drag.current.down) return
       drag.current.yaw += (e.clientX - drag.current.x) * 0.0075
-      drag.current.pitch = THREE.MathUtils.clamp(
-        drag.current.pitch + (e.clientY - drag.current.y) * 0.0045, -0.42, 0.5)
-      drag.current.x = e.clientX
-      drag.current.y = e.clientY
+      drag.current.pitch = THREE.MathUtils.clamp(drag.current.pitch + (e.clientY - drag.current.y) * 0.0045, -0.42, 0.5)
+      drag.current.x = e.clientX; drag.current.y = e.clientY
     }
     const up = () => { drag.current.down = false }
     dom.addEventListener('pointerdown', down)
@@ -116,58 +106,71 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
     }
   }, [])
 
+  // Emissive highlight + exploded offsets, applied per frame so a mode change
+  // animates rather than snapping.
   useFrame((_, dt) => {
     if (!ready.current) return
-    // brief settle: the camera eases out from further back on first paint,
-    // so the product arrives rather than being simply there.
-    if (settle < 1) settle = Math.min(1, settle + dt * 0.9)
-    const ease = 1 - Math.pow(1 - settle, 3)
+    const k = Math.min(1, dt * 6)
+    for (const part of PARTS) {
+      const m = meshes.current[part.id]
+      if (!m) continue
+      const mat = m.material as THREE.MeshStandardMaterial
+      if (mat?.emissive) {
+        const selected = active === part.id
+        const want = selected ? 0.55 : 0
+        mat.emissiveIntensity += (want - mat.emissiveIntensity) * k
+        mat.emissive.set(selected ? '#2563eb' : '#000000')
+      }
+      // exploded view: push each part outward along its own offset from centre
+      const base = basePos.current[part.id]
+      if (base) {
+        const dir = new THREE.Vector3(part.at[0], part.at[1] - 0.41, part.at[2]).normalize()
+        const goal = mode === 'explode'
+          ? base.clone().add(dir.multiplyScalar(0.11))
+          : base.clone()
+        m.position.lerp(goal, k)
+      }
+    }
+  })
+
+  useFrame((_, dt) => {
+    if (!ready.current) return
+    if (settle.current < 1) settle.current = Math.min(1, settle.current + dt * 0.9)
+    const ease = 1 - Math.pow(1 - settle.current, 3)
     if (autoSpin && !drag.current.down) spin.current += dt * 0.2
     const yaw = spin.current + drag.current.yaw
     const pitch = drag.current.pitch
-    const r = fitR.current   // settle is applied to the camera below, not to r
-    const rs = r * (1 + (1 - ease) * 0.16)   // arrival: back off, ease in
+    const r = (fitR.current / zoom) * (1 + (1 - ease) * 0.16)
     camera.position.set(
-      rs * Math.sin(yaw) * Math.cos(pitch),
-      target.y + rs * Math.sin(pitch),
-      rs * Math.cos(yaw) * Math.cos(pitch),
+      r * Math.sin(yaw) * Math.cos(pitch),
+      target.current.y + r * Math.sin(pitch),
+      r * Math.cos(yaw) * Math.cos(pitch),
     )
-    camera.lookAt(target)
+    camera.lookAt(target.current)
   })
 
   return null
 }
 
-function Hotspot({ h, open, onEnter, onLeave }: {
-  h: (typeof HOTSPOTS)[number]; open: boolean; onEnter: () => void; onLeave: () => void
+function Hotspot({ part, open, onSelect, onHover }: {
+  part: (typeof PARTS)[number]; open: boolean; onSelect: () => void; onHover: (v: boolean) => void
 }) {
   return (
-    <group position={h.at as unknown as THREE.Vector3Tuple}>
+    <group position={part.at as unknown as THREE.Vector3Tuple}>
       <Html center zIndexRange={[20, 0]} style={{ pointerEvents: 'auto' }}>
         <button
           type="button"
-          onMouseEnter={onEnter}
-          onFocus={onEnter}
-          onMouseLeave={onLeave}
-          onBlur={onLeave}
-          aria-label={h.label}
-          className="group relative grid size-12 place-items-center"
-          style={{ width: 48, height: 48, padding: 6 }}
+          onClick={onSelect}
+          onPointerEnter={() => onHover(true)}
+          onPointerLeave={() => onHover(false)}
+          aria-label={part.name}
+          aria-pressed={open}
+          className="relative grid size-11 place-items-center"
         >
-          <span
-            className={`absolute size-[9px] rounded-full border transition-all duration-300 ${
-              open ? 'border-accent bg-accent shadow-[0_0_16px_2px_#2563ebaa]' : 'border-ink-3 bg-card hover:border-accent'
-            }`}
-          />
-          <span className={`absolute size-6 rounded-full border transition-all duration-300 ${
-            open ? 'scale-100 border-accent/45 opacity-100' : 'scale-75 border-line opacity-0'
+          <span className={`absolute size-[10px] rounded-full border-2 transition-all duration-300 ${
+            open ? 'border-accent bg-accent shadow-[0_0_18px_3px_#2563ebaa]' : 'border-white bg-deep/70 hover:border-accent hover:bg-accent'
           }`} />
-          <span className={`pointer-events-none absolute left-1/2 top-[calc(100%+2px)] w-max max-w-[190px] translate-x-[-50%] rounded-tight border border-line-hi bg-card px-2.5 py-2 text-left transition-all duration-200 ${
-            open ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-1 opacity-0'
-          }`}>
-            <span className="block text-[0.6562rem] font-semibold tracking-[0.12em] text-accent uppercase">{h.label}</span>
-            <span className="mt-1 block text-[0.6875rem] leading-snug text-ink-2">{h.copy}</span>
-          </span>
+          {open && <span className="absolute size-7 animate-pulse rounded-full border border-accent/50" />}
         </button>
       </Html>
     </group>
@@ -175,9 +178,6 @@ function Hotspot({ h, open, onEnter, onLeave }: {
 }
 
 export default function DeviceScene(props: Props) {
-  const [hover, setHover] = useState<HotspotId | null>(null)
-  const activeId = props.active ?? hover
-
   return (
     <Canvas
       data-device-canvas
@@ -187,28 +187,22 @@ export default function DeviceScene(props: Props) {
       camera={{ fov: 30, near: 0.05, far: 40, position: [-0.95, 0.47, 1.55] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
-        gl.toneMappingExposure = 0.9
+        gl.toneMappingExposure = 0.95
       }}
     >
       <AdaptiveDpr pixelated />
-      <ambientLight intensity={0.5} />
-      <directionalLight
-        position={[1.2, 1.9, 1.5]} intensity={2.2} color="#eaf2ff"
-        castShadow shadow-mapSize={[1024, 1024]}
-      />
-      <directionalLight position={[-1.8, 1.1, -0.7]} intensity={0.55} color="#eaf2fc" />
-      <pointLight position={[0.2, 0.5, 1.5]} intensity={0.7} color="#ffffff" />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[1.2, 1.9, 1.5]} intensity={2.4} color="#eaf2ff" castShadow shadow-mapSize={[1024, 1024]} />
+      <directionalLight position={[-1.8, 1.1, -0.7]} intensity={0.7} color="#cfe2ff" />
+      <pointLight position={[0.2, 0.5, 1.5]} intensity={0.8} color="#ffffff" />
       <Environment preset="studio" environmentIntensity={0.5} />
       <Rig {...props} />
-      <ContactShadows
-        position={[0, 0, 0]} opacity={0.62} scale={2.0} blur={1.6}
-        far={0.95} resolution={512} color="#465e7a"
-      />
-      {HOTSPOTS.map((h) => (
+      <ContactShadows position={[0, 0, 0]} opacity={0.42} scale={2.2} blur={2.2} far={0.95} resolution={512} color="#15385e" />
+      {PARTS.map((p) => (
         <Hotspot
-          key={h.id} h={h} open={activeId === h.id}
-          onEnter={() => setHover(h.id)}
-          onLeave={() => setHover(null)}
+          key={p.id} part={p} open={props.active === p.id}
+          onSelect={() => props.onSelect(p.id)}
+          onHover={(v) => { if (v) props.onHoverHotspot() }}
         />
       ))}
     </Canvas>

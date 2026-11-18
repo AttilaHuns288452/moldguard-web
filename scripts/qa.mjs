@@ -116,11 +116,24 @@ for (const vp of VIEWPORTS) {
   await page.goto(base + '/', { waitUntil: 'networkidle' })
   await page.evaluate(() => document.getElementById('meet').scrollIntoView())
   await page.waitForTimeout(900)
-  const det = page.locator('#meet details').first()
-  const closed = await det.evaluate((d) => d.open)
-  await page.locator('#meet details summary').first().click()
-  await page.waitForTimeout(300)
-  record('meet: data-flow toggles', (await det.evaluate((d) => d.open)) !== closed)
+  // product explorer: selecting a component changes the info panel
+  const title = () => page.locator('#meet h3').first().textContent()
+  const t0 = await title()
+  await page.locator('#meet li button').filter({ hasText: 'Relay' }).first().click()
+  await page.waitForTimeout(500)
+  record('explorer: component selection updates panel', (await title()) !== t0,
+    `${t0} -> ${await title()}`)
+  // guided tour moves forward
+  const t1 = await title()
+  await page.getByRole('button', { name: 'Next component' }).first().click()
+  await page.waitForTimeout(500)
+  record('explorer: guided tour advances', (await title()) !== t1)
+  // exploded view toggle
+  await page.getByRole('button', { name: 'Exploded' }).first().click()
+  await page.waitForTimeout(400)
+  record('explorer: exploded mode toggles',
+    (await page.getByRole('button', { name: 'Exploded' }).first().getAttribute('aria-pressed')) === 'true')
+  await page.getByRole('button', { name: 'Assembled' }).first().click()
   record('features: six items', (await page.locator('#features h3').count()) === 6)
 
   // /how-it-works — three stages
