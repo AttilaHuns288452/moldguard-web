@@ -5,7 +5,7 @@ import DataFlow from '../components/DataFlow'
 import { PARTS, PART_BY_ID, TOUR, type PartId } from '../components/parts'
 import { MEET } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
-import { splitTitle } from '../lib/motion'
+import { prefersReducedMotion, splitTitle } from '../lib/motion'
 
 /**
  * "Explore MoldGuard" — the signature section. A real component explorer:
@@ -19,7 +19,9 @@ export default function Meet() {
   // pre-lit one part, so the default view read as a disassembled product.
   const [active, setActive] = useState<PartId | null>(null)
   const [mode, setMode] = useState<'tour' | 'explode'>('tour')
-  const [autoSpin, setAutoSpin] = useState(true)
+  // Auto-rotate is motion; the rest of the site honours prefers-reduced-motion,
+  // so a 3D stage that spins regardless was the one place it was ignored.
+  const [autoSpin, setAutoSpin] = useState(() => !prefersReducedMotion())
   const [tourStep, setTourStep] = useState(0)
 
   const selected = active ? PART_BY_ID[active] : null
@@ -59,8 +61,8 @@ export default function Meet() {
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
-                onClick={() => setMode('tour')}
-                aria-pressed={mode === 'tour'}
+                onClick={() => { setMode('tour'); setActive(null) }}
+                aria-pressed={mode === 'tour' && active === null}
                 className={`inline-flex items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
                   mode === 'tour' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
                 }`}
@@ -69,7 +71,7 @@ export default function Meet() {
               </button>
               <button
                 type="button"
-                onClick={() => { setMode('explode'); setAutoSpin(false) }}
+                onClick={() => { setMode('explode'); setAutoSpin(false); setActive(null) }}
                 aria-pressed={mode === 'explode'}
                 className={`inline-flex items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
                   mode === 'explode' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'

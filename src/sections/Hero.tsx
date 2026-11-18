@@ -16,7 +16,7 @@ export default function Hero() {
       {/* Column split measured off the PDF: content 1120pt = text 36.3% ·
           19.4% gap · photo 41.8%. The photo is SQUARE (468x473pt), not the
           landscape panel a 50/50 split produces. */}
-      <div className="shell relative grid items-center gap-8 pt-10 pb-10 lg:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] lg:gap-[19%] lg:pt-[118px] lg:pb-[75px]">
+      <div className="shell relative grid items-center gap-8 pt-10 pb-10 [@media(min-width:1352px)]:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] [@media(min-width:1352px)]:gap-[19%] [@media(min-width:1352px)]:pt-[118px] [@media(min-width:1352px)]:pb-[75px]">
         {/* copy */}
         <div className="relative z-10">
           <p className="mb-4 text-[13px] text-ink-3">IoT mold risk prevention &amp; detection</p>

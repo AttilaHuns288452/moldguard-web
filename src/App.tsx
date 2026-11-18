@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Footer from './sections/Footer'
 import { ScrollProgress } from './components/ui'
-import { pageFromLocation, type Page } from './lib/route'
+import { applyHead, pageFromLocation, type Page } from './lib/route'
 
 // page 1 of the PDF
 import Hero from './sections/Hero'
@@ -11,6 +11,7 @@ import Meet from './sections/Meet'
 import Loop from './sections/Loop'
 import Capabilities from './sections/Capabilities'
 import RiskShowcase from './sections/RiskShowcase'
+import Comparison from './sections/Comparison'
 import WhatItDoes from './sections/WhatItDoes'
 // page 2
 import SenseScoreAct from './sections/SenseScoreAct'
@@ -45,6 +46,9 @@ import ClosingCta from './sections/ClosingCta'
 export default function App() {
   const [page, setPage] = useState<Page>(() => pageFromLocation())
 
+  // per-route title/description/canonical, applied on first paint and on change
+  useEffect(() => { applyHead(page) }, [page])
+
   useEffect(() => {
     const sync = () => setPage(pageFromLocation())
     window.addEventListener('popstate', sync)
@@ -75,11 +79,9 @@ export default function App() {
         {page === 'features' && (
           <>
             <Capabilities />
-            <Features />
-            <WhatItDoes />
+            <WhatItDoes asHeading="h2" />
             <RiskShowcase />
-            <SenseScoreAct />
-            <Placement />
+            <Comparison />
             <ClosingCta />
           </>
         )}
@@ -87,9 +89,6 @@ export default function App() {
           <>
             <Loop />
             <SenseScoreAct />
-            <Meet />
-            <RiskShowcase />
-            <Ownership />
             <Faq />
             <ClosingCta />
           </>

@@ -12,6 +12,7 @@ export default function GetApp() {
       <div className="shell grid items-center gap-10 md:grid-cols-[1fr_auto] md:gap-16">
         <div>
           <LineReveal
+            as="h1"
             lines={splitTitle('Get the MoldGuard app.')}
             className="max-w-[20ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
           />

@@ -26,8 +26,8 @@ const VIEWPORTS = [
 // silently passes a broken page.
 const ROUTE_SECTIONS = {
   '/': ['top', 'problem', 'meet', 'sense-score-act', 'features', 'ownership', 'placement', 'download'],
-  '/features': ['capabilities', 'features', 'what', 'risk', 'sense-score-act', 'placement'],
-  '/how-it-works': ['how', 'sense-score-act', 'meet', 'risk', 'ownership', 'faq'],
+  '/features': ['capabilities', 'what', 'risk', 'compare', 'download'],
+  '/how-it-works': ['how', 'sense-score-act', 'faq'],
   '/contact': ['contact', 'faq'],
   '/download': ['app'],
 }
@@ -157,12 +157,19 @@ for (const vp of VIEWPORTS) {
   await page.getByRole('button', { name: 'Assembled' }).first().click()
   record('features: six items', (await page.locator('#features h3').count()) === 6)
 
+  // /features — page 2 of the PDF: capabilities, comparison, closing
+  await open(page, base + '/features', 700)
+  await page.evaluate(() => document.getElementById('compare')?.scrollIntoView())
+  record('compare: three rows', (await page.locator('#compare tbody tr').count()) === 3)
+  record('compare: our row is marked', (await page.locator('#compare [class*="bg-[#2563eb"]').count()) >= 1)
+  record('compare: no duplicate page-1 features', (await page.locator('#features').count()) === 0)
+
   // /how-it-works — Sense. Score. Act. is three columns; the loop is four stages
   await open(page, base + '/how-it-works', 600)
   await page.evaluate(() => document.getElementById('sense-score-act').scrollIntoView())
   await page.waitForTimeout(600)
   record('how: three stages present', (await page.locator('#sense-score-act h3').count()) === 3)
-  record('how: loop has four stages', (await page.locator('#how li h3').count()) === 4)
+  record('how: loop has four stages', (await page.locator('#how li h2').count()) === 4)
 
   // /contact — real channels
   await open(page, base + '/contact', 600)

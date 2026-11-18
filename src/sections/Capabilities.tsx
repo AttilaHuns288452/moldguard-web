@@ -15,6 +15,7 @@ export default function Capabilities() {
       <div className="shell">
         <div className="max-w-[780px]">
           <LineReveal
+            as="h1"
             lines={splitTitle(CAPABILITIES.title)}
             className="max-w-[24ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] font-[650] text-deep"
           />
@@ -30,7 +31,7 @@ export default function Capabilities() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="measure text-[11px] tracking-[0.14em] text-accent">{engine.n}</span>
-                  <h3 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{engine.eyebrow}</h3>
+                  <h2 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{engine.eyebrow}</h2>
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="measure text-[2rem] leading-none font-semibold text-deep">{engine.index}</p>
@@ -45,7 +46,7 @@ export default function Capabilities() {
           <Reveal delay={80}>
             <article className="flex h-full flex-col rounded-soft border border-line bg-card p-6 md:p-7">
               <span className="measure text-[11px] tracking-[0.14em] text-accent">{voc.n}</span>
-              <h3 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{voc.eyebrow}</h3>
+              <h2 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{voc.eyebrow}</h2>
               <p className="mt-4 text-[14.5px] leading-relaxed text-ink-2">{voc.body}</p>
             </article>
           </Reveal>

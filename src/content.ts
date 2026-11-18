@@ -289,3 +289,31 @@ export const RISK_SCENARIOS = [
   { label: 'Living room', room: 'Living room', index: 31, band: 'Safe', rh: 52, temp: 27, hours: 2, dew: 4.1,
     note: 'Conditions sit outside the mold window. Nothing to do but keep watching.' },
 ]
+
+/** PDF page 2, "How it compares." Verbatim rows: option / what it does / cost model / drawbacks. */
+export const COMPARISON = {
+  title: 'How it compares.',
+  lede: 'Existing options were built for general comfort or simple humidity control, not mold-specific risk modeling.',
+  columns: ['Option', 'What it does', 'Cost model', 'Drawbacks'],
+  rows: [
+    {
+      option: 'Passive moisture absorbers',
+      does: 'Chemical moisture absorption, no sensors.',
+      cost: 'Low one-time cost.',
+      drawbacks: 'No monitoring, no data, no automation.',
+    },
+    {
+      option: 'Commercial dehumidifiers',
+      does: 'App-controlled humidity threshold triggers.',
+      cost: 'Mid-to-high retail hardware cost.',
+      drawbacks: 'No mold-specific modeling; locked to vendor app; no web dashboard.',
+    },
+    {
+      option: 'MoldGuard V1.0 (ours)',
+      does: 'Mold Risk Index (humidity + temperature + duration), supplementary VOC context, predictive weather integration, closed-loop auto-dehumidification, water-tank monitoring, web + mobile dashboard.',
+      cost: 'Fixed development fee.',
+      drawbacks: 'Requires dedicated power source; periodic water-tank emptying.',
+      ours: true,
+    },
+  ],
+}
