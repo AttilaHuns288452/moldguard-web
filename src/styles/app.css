@@ -80,7 +80,16 @@
 }
 
 /* ── text reveal: per-line mask lift, used on section headings ─────────────── */
-.lines > .line { display: block; overflow: hidden; }
+/* overflow:hidden is needed for the mask lift, but it also clips descenders:
+   at mobile sizes the "g" in "coming" was cut off. Give the line descender room
+   and pull the space back with a matching negative margin so layout is
+   unchanged. */
+.lines > .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
 .lines > .line > span {
   display: block;
   transform: translateY(105%) rotate(1.2deg);
