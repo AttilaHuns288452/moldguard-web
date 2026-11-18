@@ -78,4 +78,6 @@ export function applyHead(page: Page) {
   set('meta[property="og:url"]', 'content', url)
   set('meta[property="og:title"]', 'content', meta.title)
   set('meta[property="og:description"]', 'content', meta.description)
+  set('meta[name="twitter:title"]', 'content', meta.title)
+  set('meta[name="twitter:description"]', 'content', meta.description)
 }

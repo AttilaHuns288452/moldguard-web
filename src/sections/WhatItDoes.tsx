@@ -6,7 +6,10 @@ import { WHAT_IT_DOES, ALERTS, AUTOMATIONS } from '../content'
  * PDF page 2: "What MoldGuard does for you." The three capability blocks with
  * their real diagrams — the automatic loop, the sensor readout, and analytics.
  */
-export default function WhatItDoes({ asHeading = "h2" }: { asHeading?: "h1" | "h2" }) {
+export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h2' }) {
+  // sub-block headings must sit one level under whatever the section renders,
+  // or the outline flattens into a wall of same-level headings
+  const Sub = asHeading === 'h1' ? 'h2' : 'h3'
   const { title, lede, auto, sensors, analytics } = WHAT_IT_DOES
 
   return (
@@ -28,7 +31,7 @@ export default function WhatItDoes({ asHeading = "h2" }: { asHeading?: "h1" | "h
           <Reveal>
             <div>
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{auto.eyebrow}</p>
-              <h2 className="mt-2 text-[1.375rem] font-[650] text-deep">{auto.title}</h2>
+              <Sub className="mt-2 text-[1.375rem] font-[650] text-deep">{auto.title}</Sub>
               <p className="mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{auto.body}</p>
             </div>
           </Reveal>
@@ -50,7 +53,7 @@ export default function WhatItDoes({ asHeading = "h2" }: { asHeading?: "h1" | "h
           <Reveal>
             <div>
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{sensors.eyebrow}</p>
-              <h2 className="mt-2 text-[1.375rem] font-[650] text-deep">{sensors.title}</h2>
+              <Sub className="mt-2 text-[1.375rem] font-[650] text-deep">{sensors.title}</Sub>
               <p className="mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{sensors.body}</p>
             </div>
           </Reveal>
@@ -74,7 +77,7 @@ export default function WhatItDoes({ asHeading = "h2" }: { asHeading?: "h1" | "h
           <Reveal>
             <div>
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{analytics.eyebrow}</p>
-              <h2 className="mt-2 text-[1.375rem] font-[650] text-deep">{analytics.title}</h2>
+              <Sub className="mt-2 text-[1.375rem] font-[650] text-deep">{analytics.title}</Sub>
               <p className="mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{analytics.body}</p>
             </div>
           </Reveal>
@@ -104,14 +107,14 @@ export default function WhatItDoes({ asHeading = "h2" }: { asHeading?: "h1" | "h
           <Reveal>
             <div className="rounded-soft border border-line bg-card p-6">
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{ALERTS.eyebrow}</p>
-              <h2 className="mt-2 text-[1.125rem] font-[650] text-deep">{ALERTS.title}</h2>
+              <Sub className="mt-2 text-[1.125rem] font-[650] text-deep">{ALERTS.title}</Sub>
               <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{ALERTS.body}</p>
             </div>
           </Reveal>
           <Reveal delay={80}>
             <div className="rounded-soft border border-line bg-card p-6">
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{AUTOMATIONS.eyebrow}</p>
-              <h2 className="mt-2 text-[1.125rem] font-[650] text-deep">{AUTOMATIONS.title}</h2>
+              <Sub className="mt-2 text-[1.125rem] font-[650] text-deep">{AUTOMATIONS.title}</Sub>
               <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{AUTOMATIONS.body}</p>
               <p className="mt-3 rounded-tight border border-line-hi bg-paper-deep/50 px-3 py-2 measure text-[12.5px] text-deep">
                 {AUTOMATIONS.rule}
