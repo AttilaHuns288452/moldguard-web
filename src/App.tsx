@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Header from './components/Header'
 import Footer from './sections/Footer'
 import { ScrollProgress } from './components/ui'
@@ -46,8 +46,16 @@ import ClosingCta from './sections/ClosingCta'
 export default function App() {
   const [page, setPage] = useState<Page>(() => pageFromLocation())
 
-  // per-route title/description/canonical, applied on first paint and on change
-  useEffect(() => { applyHead(page) }, [page])
+  // per-route title/description/canonical, applied on first paint and on change.
+  // `main` already carries tabIndex={-1} for exactly this: without moving focus,
+  // a route change leaves a keyboard/screen-reader user on the old page's markup
+  // with no announcement that anything happened.
+  const first = useRef(true)
+  useEffect(() => {
+    applyHead(page)
+    if (first.current) { first.current = false; return }
+    document.getElementById('main')?.focus({ preventScroll: false })
+  }, [page])
 
   useEffect(() => {
     const sync = () => setPage(pageFromLocation())

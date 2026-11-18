@@ -227,16 +227,21 @@ for (const vp of VIEWPORTS) {
   await ctx.close()
 }
 
-// A failed 3D asset must never take the page down with it (it did: blocking
-// /moldguard.glb left document.body with zero text before the boundary).
-// Viewport-independent, so one check is enough.
+// A failed 3D asset must never take the page down with it, AND must degrade to
+// the fallback rather than a silent empty stage. Asserting only body length
+// would pass a page that quietly lost its 3D section.
 {
   const bp = await browser.newPage({ viewport: { width: 1440, height: 900 } })
   await bp.route('**/moldguard.glb', (r) => r.abort())
   await open(bp, URL, 2500)
   await bp.evaluate(() => document.getElementById('meet')?.scrollIntoView())
   await bp.waitForTimeout(3500)
-  record('page survives a failed GLB', (await bp.evaluate(() => (document.body.innerText || '').length)) > 800)
+  const survive = await bp.evaluate(() => (document.body.innerText || '').length)
+  const fallback = await bp.evaluate(() => /3D unavailable/i.test(document.body.innerText || ''))
+  const hero = await bp.evaluate(() => !!document.querySelector('#top h1'))
+  record('GLB blocked: page survives', survive > 800, `${survive} chars`)
+  record('GLB blocked: shows the fallback', fallback)
+  record('GLB blocked: hero still renders', hero)
   await bp.close()
 }
 
