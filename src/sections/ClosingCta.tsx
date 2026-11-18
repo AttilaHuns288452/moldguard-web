@@ -10,7 +10,7 @@ import { splitTitle } from '../lib/motion'
  */
 export default function ClosingCta() {
   return (
-    <section id="download" className="band-dark py-[72px] md:py-[80px]">
+    <section id="download" className="band-dark py-[72px] md:py-[128px]">
       <div className="shell">
         <Reveal>
           <div className="rounded-shell border border-[#eaf2fc33] px-7 py-8 md:px-10 md:py-9">
