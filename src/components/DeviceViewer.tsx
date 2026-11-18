@@ -1,8 +1,22 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { Component, Suspense, lazy, useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { RotateCcw, RefreshCw, Maximize2, ZoomIn, ZoomOut } from 'lucide-react'
 import type { PartId } from './parts'
 
 const Scene = lazy(() => import('./DeviceScene'))
+
+/**
+ * Without this, a rejected GLB fetch (offline demo, CDN blip, 404, blocked Draco
+ * decoder) propagates through Suspense and React unmounts the WHOLE page — the
+ * hero, the copy, every section. Verified: blocking /moldguard.glb left
+ * document.body with zero text. One boundary turns a dead site into a missing
+ * 3D stage.
+ */
+class SceneBoundary extends Component<{ children: ReactNode; onError: () => void }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() { return { failed: true } }
+  componentDidCatch() { this.props.onError() }
+  render() { return this.state.failed ? null : this.props.children }
+}
 
 type Props = {
   active: PartId | null
@@ -20,6 +34,11 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props
   const [resetKey, setResetKey] = useState(0)
   const [zoom, setZoom] = useState(1)
   const [hovering, setHovering] = useState(false)
+  // DeviceScene's setup effect depends on these, so an inline arrow re-ran the
+  // whole GLB import + material build on every zoom step and hover. Stable
+  // identities keep setup to once per model.
+  const handleLoaded = useCallback(() => setLoaded(true), [])
+  const handleHover = useCallback(() => setHovering(true), [])
 
   useEffect(() => {
     const el = hostRef.current
@@ -95,6 +114,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props
         aria-label="Interactive 3D model of the MoldGuard assembly. Drag to orbit, scroll to zoom, and select a component to read about it."
       >
         {mounted && !failed ? (
+          <SceneBoundary onError={() => setFailed(true)}>
           <Suspense fallback={null}>
             <Scene
               active={active}
@@ -103,10 +123,11 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props
               autoSpin={autoSpin && !hovering}
               resetKey={resetKey}
               zoom={zoom}
-              onLoaded={() => setLoaded(true)}
-              onHoverHotspot={() => setHovering(true)}
+              onLoaded={handleLoaded}
+              onHoverHotspot={handleHover}
             />
           </Suspense>
+          </SceneBoundary>
         ) : null}
 
         {!loaded && !failed && (

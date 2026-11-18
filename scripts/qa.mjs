@@ -220,9 +220,23 @@ for (const vp of VIEWPORTS) {
   await ctx.close()
 }
 
+// A failed 3D asset must never take the page down with it (it did: blocking
+// /moldguard.glb left document.body with zero text before the boundary).
+// Viewport-independent, so one check is enough.
+{
+  const bp = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+  await bp.route('**/moldguard.glb', (r) => r.abort())
+  await open(bp, URL, 2500)
+  await bp.evaluate(() => document.getElementById('meet')?.scrollIntoView())
+  await bp.waitForTimeout(3500)
+  record('page survives a failed GLB', (await bp.evaluate(() => (document.body.innerText || '').length)) > 800)
+  await bp.close()
+}
+
 await browser.close()
 
 // ── report ──
+
 const pass = results.filter((r) => r.ok).length
 console.log('')
 for (const r of results) {
