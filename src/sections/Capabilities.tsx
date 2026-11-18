@@ -28,17 +28,42 @@ export default function Capabilities() {
           {/* 01 — the risk engine, with its real reading */}
           <Reveal>
             <article className="flex h-full flex-col rounded-soft border border-line bg-card p-6 md:p-7">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <span className="measure text-[11px] tracking-[0.14em] text-accent">{engine.n}</span>
-                  <h2 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{engine.eyebrow}</h2>
+              <div>
+                <span className="measure text-[11px] tracking-[0.14em] text-accent">{engine.n}</span>
+                <h2 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{engine.eyebrow}</h2>
+              </div>
+
+              {/* The PDF draws this reading as an arc gauge with 38 centred and
+                  Low / Elevated / High on the arc. A bare "38" with "LOW" under
+                  it was a flattened copy of a real instrument and read as a
+                  decorative KPI.
+
+                  Fill = stroke-dasharray on the same path as the track, so it is
+                  exactly value% of the arc by construction (no sweep flags or
+                  hand-computed endpoints to get backwards).
+                  Semicircle arc length = pi * r = pi * 40 = 125.66. */}
+              <div className="mt-5">
+                <svg viewBox="0 0 96 56" className="block w-full" aria-hidden="true">
+                  <path d="M8 52a40 40 0 0 1 80 0" fill="none" stroke="var(--color-line)" strokeWidth="7" strokeLinecap="round" />
+                  <path
+                    d="M8 52a40 40 0 0 1 80 0"
+                    fill="none"
+                    stroke="var(--color-accent-ink)"
+                    strokeWidth="7"
+                    strokeLinecap="round"
+                    strokeDasharray={`${(125.66 * (engine.index ?? 0)) / 100} 125.66`}
+                  />
+                </svg>
+                <div className="-mt-[2.6rem] text-center">
+                  <p className="measure text-[1.85rem] leading-none font-semibold text-deep">{engine.index}</p>
+                  <p className="mt-0.5 text-[10px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
                 </div>
-                <div className="shrink-0 text-right">
-                  <p className="measure text-[2rem] leading-none font-semibold text-deep">{engine.index}</p>
-                  <p className="mt-0.5 text-[11px] tracking-[0.12em] text-ink-3 uppercase">{engine.band}</p>
+                <div className="mt-2 flex justify-between text-[10px] tracking-[0.1em] text-ink-3 uppercase">
+                  <span>Low</span><span>Watch</span><span>High</span>
                 </div>
               </div>
-              <p className="mt-4 text-[14.5px] leading-relaxed text-ink-2">{engine.body}</p>
+
+              <p className="mt-3 text-[14.5px] leading-relaxed text-ink-2">{engine.body}</p>
             </article>
           </Reveal>
 

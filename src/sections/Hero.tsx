@@ -44,14 +44,14 @@ export default function Hero() {
               src="/pod-hero.webp"
               alt="MoldGuard Pod on a wooden shelf in a bright living room"
               width={1024} height={1086}
-              className="aspect-[1/1.01] w-full rounded-[16px] object-cover"
+              className="aspect-[1/1.01] w-full rounded-soft object-cover"
               style={{ objectPosition: '42% 62%' }}
             />
           </figure>
 
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
               the photo's right edge into the white frame, as the PDF does. */}
-          <div className="absolute -right-1 bottom-8 w-[236px] rounded-[18px] border border-[#2b5c8f] bg-deep p-4 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)]">
+          <div className="absolute -right-1 bottom-8 w-[236px] rounded-shell border border-[#2b5c8f] bg-deep p-4 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)]">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
             <p className="mt-2.5 flex items-center justify-between gap-2 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">
               <span>Mold Risk Index</span>

@@ -134,7 +134,7 @@ export const CAPABILITIES = {
 
 export const WHAT_IT_DOES = {
   title: 'What MoldGuard does for you.',
-  lede: 'Six capabilities, one loop: each one exists so you never have to think about mold again.',
+  lede: 'Each one exists so you never have to think about mold again.',
   auto: {
     eyebrow: 'Automatic Dehumidification',
     title: 'It acts before you would.',

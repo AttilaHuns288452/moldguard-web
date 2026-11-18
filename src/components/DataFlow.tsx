@@ -54,7 +54,7 @@ export default function DataFlow() {
         <div className="flex justify-center">
           <Node>
             <span className="flex items-center gap-2.5">
-              <span className="grid size-7 place-items-center rounded-[7px] bg-accent-ink text-white" aria-hidden="true">
+              <span className="grid size-7 place-items-center rounded-tight bg-accent-ink text-white" aria-hidden="true">
                 <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8">
                   <rect x="6.5" y="3.5" width="11" height="17" rx="2.6" />
                   <path d="M10 8h4M10 11.5h4M10 15h4" />

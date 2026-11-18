@@ -132,14 +132,14 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props
 
         {!loaded && !failed && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-[6px] border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
+            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-tight border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
             <span className="text-[0.6875rem] font-semibold tracking-[0.14em] text-ink-3 uppercase">Loading model</span>
           </div>
         )}
 
         {failed && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
-            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-[6px] border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
+            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-tight border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
             <p className="max-w-xs text-[0.8125rem] leading-relaxed text-ink-3">
               3D unavailable on this device. Every component is listed beside the model.
             </p>
