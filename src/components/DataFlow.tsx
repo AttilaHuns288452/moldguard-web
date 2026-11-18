@@ -65,27 +65,38 @@ export default function DataFlow() {
           </Node>
         </div>
 
-        {/* fan-out to the three readings, on a real connector */}
-        <div className="relative mx-auto mt-3 h-5 w-2/3" aria-hidden="true">
-          <div className="absolute inset-x-0 top-0 h-px bg-line-hi" />
-          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-line-hi" />
-          <div className="absolute inset-x-0 top-0 flex justify-between">
-            <span className="h-2.5 w-px bg-line-hi" /><span className="h-2.5 w-px bg-line-hi" /><span className="h-2.5 w-px bg-line-hi" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-2">
-          {['Temperature', 'Humidity', 'Air quality'].map((k) => (
-            <div key={k} className="rounded-tight border border-line bg-surface px-2 py-2 text-center">
-              <p className="text-[11.5px] text-ink-2">{k}</p>
+        {/* fan-out: stem from the pod, a bar joining the three column centres,
+            then a drop into each reading. Drawn as a 3-column grid rather than
+            an SVG so the drops land on the column centres at any width. */}
+        <div className="grid grid-cols-3" aria-hidden="true">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="relative h-[22px]">
+              <span className="absolute bottom-0 left-1/2 h-[15px] w-px -translate-x-1/2 bg-line-hi" />
+              {i < 2 && <span className="absolute left-1/2 top-[7px] h-px w-1/2 bg-line-hi" />}
+              {i > 0 && <span className="absolute right-1/2 top-[7px] h-px w-1/2 bg-line-hi" />}
             </div>
           ))}
         </div>
 
-        {/* converge */}
-        <div className="relative mx-auto h-5 w-2/3" aria-hidden="true">
-          <div className="absolute inset-x-0 bottom-0 h-px bg-line-hi" />
-          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-line-hi" />
+        <div className="grid grid-cols-3">
+          {['Temperature', 'Humidity', 'Air quality'].map((k) => (
+            <div key={k} className="p-1">
+              <div className="rounded-tight border border-line bg-surface px-2 py-2 text-center">
+                <p className="text-[11.5px] text-ink-2">{k}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* converge: a drop from each reading, a bar, then the stem into analysis */}
+        <div className="grid grid-cols-3" aria-hidden="true">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="relative h-[22px]">
+              <span className="absolute top-0 left-1/2 h-[15px] w-px -translate-x-1/2 bg-line-hi" />
+              {i < 2 && <span className="absolute left-1/2 top-[14px] h-px w-1/2 bg-line-hi" />}
+              {i > 0 && <span className="absolute right-1/2 top-[14px] h-px w-1/2 bg-line-hi" />}
+            </div>
+          ))}
         </div>
 
         <div className="flex justify-center">
