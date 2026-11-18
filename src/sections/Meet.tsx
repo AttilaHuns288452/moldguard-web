@@ -14,7 +14,10 @@ import { splitTitle } from '../lib/motion'
  * -> relay -> dehumidifier). Every description is about the actual mesh.
  */
 export default function Meet() {
-  const [active, setActive] = useState<PartId | null>('enclosure')
+  // Start with nothing selected: a preset selection both ghosted the shell on
+  // first paint (ready-to-explode look while the toggle read "Assembled") and
+  // pre-lit one part, so the default view read as a disassembled product.
+  const [active, setActive] = useState<PartId | null>(null)
   const [mode, setMode] = useState<'tour' | 'explode'>('tour')
   const [autoSpin, setAutoSpin] = useState(true)
   const [tourStep, setTourStep] = useState(0)
@@ -29,7 +32,11 @@ export default function Meet() {
   }
 
   const step = (dir: 1 | -1) => {
-    const next = (tourStep + dir + TOUR.length) % TOUR.length
+    // With nothing selected yet, "next" must land on the first stage — not skip
+    // to stage 2 from the untouched counter.
+    const next = active === null
+      ? (dir === 1 ? 0 : TOUR.length - 1)
+      : (tourStep + dir + TOUR.length) % TOUR.length
     setTourStep(next)
     setActive(TOUR[next])
     setAutoSpin(false)
@@ -135,7 +142,7 @@ export default function Meet() {
                   <Play className="size-3" strokeWidth={2.5} /> How it works
                 </span>
                 <div className="flex items-center gap-1">
-                  <span className="measure mr-1.5 text-[11px] text-ink-3">{tourStep + 1} / {TOUR.length}</span>
+                  <span className="measure mr-1.5 text-[11px] text-ink-3">{active ? tourStep + 1 : 0} / {TOUR.length}</span>
                   <button type="button" onClick={() => step(-1)} aria-label="Previous component"
                     className="grid size-7 place-items-center rounded-full border border-line text-ink-2 transition-colors hover:border-line-hi hover:text-ink">
                     <ArrowLeft className="size-3.5" strokeWidth={2} />

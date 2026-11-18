@@ -56,7 +56,10 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
   const { scene: model } = useGLTF('/moldguard.glb') as unknown as { scene: THREE.Group }
   const ready = useRef(false)
   const settle = useRef(0)
-  const spin = useRef(-0.55)
+  // Initial yaw. Every `face: 'front'` part in parts.ts sits at +Z (the display,
+  // sensor, buzzer, audio amp), so the camera must start near yaw 0 to look at
+  // the product's front. 0.42 rad keeps a 3/4 angle so the depth reads too.
+  const spin = useRef(0.42)
   const drag = useRef({ down: false, x: 0, y: 0, yaw: 0, pitch: 0 })
   const fitR = useRef(1.9)
   const target = useRef(new THREE.Vector3(0, 0.41, 0))
@@ -144,7 +147,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     if (!ready.current) return
     drag.current.yaw = 0
     drag.current.pitch = 0
-    spin.current = -0.55
+    spin.current = 0.42
   }, [resetKey])
 
   // Pointer drag
