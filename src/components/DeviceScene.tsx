@@ -20,6 +20,7 @@ import { PARTS, type PartId } from './parts'
  *  usable environment map renders pure black, and the env map is not dependable
  *  here. Matte finishes plus roughness/hue variation read just as well. */
 const FINISH: Record<string, THREE.MeshStandardMaterialParameters> = {
+  skin: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
   enclosure: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
   misc: { color: 0x8ea6bf, roughness: 0.34, metalness: 0 },
   display: { color: 0x1a2a3e, roughness: 0.12, metalness: 0, emissive: new THREE.Color(0x1a6bff), emissiveIntensity: 0.9 },
@@ -91,6 +92,15 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       // body reads correctly regardless of which way a given polygon is wound.
       const f = FINISH[m.name] ?? FINISH._default
       m.material = new THREE.MeshStandardMaterial({ side: THREE.DoubleSide, ...f })
+      // The presentation skin is opaque in assembled view so the product reads
+      // as a real body, then fades in exploded/tour mode so the 11 real internal
+      // components are actually visible. Otherwise the shell hides everything
+      // the explorer exists to show.
+      if (m.name === 'skin' || m.name === 'misc' || m.name === 'enclosure') {
+        const mat = m.material as THREE.MeshStandardMaterial
+        mat.transparent = true
+        m.userData.isShell = true
+      }
     })
     model.updateWorldMatrix(true, true)
     scene.add(model)
@@ -195,6 +205,21 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
           : base.clone()
         m.position.lerp(goal, k)
       }
+    }
+  })
+
+  // Shell opacity is independent of PARTS: the presentation skin has no part
+  // entry, so it must be driven from the mesh map or it never fades.
+  useFrame((_, dt) => {
+    if (!ready.current) return
+    const k = Math.min(1, dt * 6)
+    const want = mode === 'explode' || active !== null ? 0.02 : 1
+    for (const mesh of Object.values(meshes.current)) {
+      if (!mesh.userData.isShell) continue
+      const mat = mesh.material as THREE.MeshStandardMaterial
+      mat.opacity += (want - mat.opacity) * k
+      mat.depthWrite = mat.opacity > 0.9
+      mat.visible = mat.opacity > 0.03
     }
   })
 
