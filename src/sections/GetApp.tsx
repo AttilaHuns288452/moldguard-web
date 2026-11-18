@@ -68,8 +68,14 @@ export default function GetApp() {
                 {/* group scaling: the frames are authored at 390x844 and must not
                     be re-laid-out, so they are zoomed as a whole */}
                 <figure className="overflow-hidden rounded-shell border border-line bg-white shadow-[0_1px_2px_rgba(21,56,94,.06),0_20px_44px_-30px_rgba(21,56,94,.5)]">
-                  <div className="origin-top-left scale-[0.78] [width:390px] [height:calc(844px*0.78)]">
-                    <Frame />
+                  {/* the frame is authored at 390x844 and must not be re-laid-out,
+                      so it is scaled as a whole. The wrapper must carry the SCALED
+                      footprint: transform does not affect layout, so leaving it at
+                      390px made the row claim 1628px and clip the 4th frame. */}
+                  <div className="h-[645px] w-[298px] overflow-hidden">
+                    <div className="origin-top-left scale-[0.764] [width:390px] [height:844px]">
+                      <Frame />
+                    </div>
                   </div>
                 </figure>
                 <figcaption className="mt-2.5 text-[12px] font-[650] tracking-[0.06em] text-ink-3 uppercase">
