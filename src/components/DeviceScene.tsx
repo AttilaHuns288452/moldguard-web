@@ -67,12 +67,12 @@ function Rig({ autoSpin, resetKey, onLoaded }: Props) {
     const sz = bb.getSize(new THREE.Vector3())
     const cam = camera as THREE.PerspectiveCamera
     const halfFov = THREE.MathUtils.degToRad(cam.fov / 2)
-    // Frame the head (0.16m) with room for the column to read, not the whole 0.82m
+    // Frame the full column (0.823m) at 86% fill
     fitR.current = Math.max(
-      (0.405 / (2 * Math.tan(halfFov))) / 0.86,
+      (sz.y / (2 * Math.tan(halfFov))) / 0.86,
       (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.7,
     )
-    target.y = 0.09   // the assembly's mass is the 160mm control head at the base
+    target.y = sz.y / 2   // head sits on top; frame the whole column
 
     scene.add(model)
     ready.current = true

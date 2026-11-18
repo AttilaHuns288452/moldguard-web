@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import { Logo } from './Marks'
 
-const NAV = [
+import { navigate, pathFor, type Page } from '../lib/route'
+
+const NAV: { id: Page; label: string }[] = [
+  { id: 'home', label: 'Home' },
   { id: 'features', label: 'Features' },
-  { id: 'how', label: 'How it works' },
+  { id: 'how-it-works', label: 'How it works' },
   { id: 'contact', label: 'Contact' },
 ]
 
-export default function Header() {
+export default function Header({ page }: { page: Page }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   // keep anchor jumps clear of the sticky header, whatever height it takes
   useEffect(() => {
@@ -29,7 +32,7 @@ export default function Header() {
 
       <header className="sticky top-0 z-40 border-b border-line bg-card">
         <nav aria-label="Main" className="shell flex flex-wrap items-center gap-x-4 gap-y-1 py-3 lg:flex-nowrap lg:gap-x-6 lg:gap-y-2 lg:py-[18px]">
-          <a href="#top" className="flex items-center gap-[11px]" aria-label="MoldGuard home">
+          <a href={pathFor('home')} onClick={(e) => { e.preventDefault(); navigate('home') }} className="flex items-center gap-[11px]" aria-label="MoldGuard home">
             <Logo className="size-[34px] text-accent" />
             <span className="font-display text-[1.22rem] font-bold tracking-[-0.02em] text-ink">MoldGuard</span>
           </a>
@@ -39,7 +42,9 @@ export default function Header() {
             {NAV.map((n) => (
               <a
                 key={n.id}
-                href={`#${n.id}`}
+                href={pathFor(n.id)}
+                onClick={(e) => { e.preventDefault(); navigate(n.id) }}
+                aria-current={page === n.id ? 'page' : undefined}
                 className="nav-grow flex min-h-11 flex-1 items-center justify-center py-2.5 text-center text-[11.5px] text-ink-2 transition-colors hover:text-ink lg:min-h-0 lg:flex-none lg:justify-start lg:py-1 lg:text-[14px] lg:text-left"
               >
                 {n.label}
@@ -48,7 +53,8 @@ export default function Header() {
           </div>
 
           <a
-            href="#download"
+            href={pathFor("download")}
+            onClick={(e) => { e.preventDefault(); navigate("download") }}
             className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-tight border border-line-hi px-[16px] py-2.5 text-[14px] font-[650] text-white bg-accent-ink border-accent-ink transition-colors duration-200 hover:bg-deep active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
           >
             Get Started
@@ -71,8 +77,8 @@ export default function Header() {
             {NAV.map((n) => (
               <a
                 key={n.id}
-                href={`#${n.id}`}
-                onClick={() => setMobileOpen(false)}
+                href={pathFor(n.id)}
+                onClick={(e) => { e.preventDefault(); setMobileOpen(false); navigate(n.id) }}
                 className="flex min-h-12 items-center justify-between border-b border-line text-[16px] text-ink-2 active:text-deep"
               >
                 {n.label}

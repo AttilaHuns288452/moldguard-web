@@ -18,8 +18,8 @@ export const HERO = {
   titleLines: ['Know mold is', 'coming before', 'it shows.'],
   lede:
     'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and activates a connected dehumidifier when conditions become unsafe.',
-  primary: { label: 'Get Started', href: '#contact' },
-  secondary: { label: 'See how it works', href: '#how' },
+  primary: { label: 'Get Started', href: '/contact' },
+  secondary: { label: 'See how it works', href: '/how-it-works' },
 }
 
 /** Hero app mock (approved values, illustrative). */
@@ -62,7 +62,7 @@ export const MEET = {
 
 export const SENSE_SCORE_ACT = {
   title: 'Sense. Score. Act.',
-  cta: { label: 'Full walkthrough', href: '#how' },
+  cta: { label: 'Full walkthrough', href: '/how-it-works' },
   steps: [
     { n: '01', title: 'Sense', items: ['Humidity', 'Temperature', 'Air quality'] },
     { n: '02', title: 'Score', items: ['Mold Risk Index', 'Exposure duration', 'Dew-point conditions'] },
@@ -72,7 +72,7 @@ export const SENSE_SCORE_ACT = {
 
 export const FEATURES = {
   title: 'Built for mold, not just moisture.',
-  cta: { label: 'Explore the features', href: '#features' },
+  cta: { label: 'Explore the features', href: '/features' },
   items: [
     { n: '1', title: 'Mold Risk Index Engine', body: 'Risk scoring based on humidity, temperature and exposure duration.' },
     { n: '2', title: 'Early Detection', body: 'VOC sensing helps identify developing microbial conditions before visible signs.' },
@@ -97,15 +97,15 @@ export const PLACEMENT = {
   title: 'Made for the rooms where mold actually starts.',
   lede:
     'Place MoldGuard in bathrooms, closets, and basements, near the humidity that feeds growth. It works on a tabletop or mounted on the wall.',
-  cta: { label: 'Placement & setup', href: '#how' },
+  cta: { label: 'Placement & setup', href: '/how-it-works' },
   photoAlt: 'MoldGuard Pod on a bathroom vanity, monitoring humidity near the shower',
 }
 
 export const CTA = {
   title: 'Protect your space before mold appears.',
   lede: 'Tell us about your rooms and we will come back with a hardware list and a price.',
-  primary: { label: 'Request a quotation', href: '#contact' },
-  secondary: { label: 'See how it works', href: '#how' },
+  primary: { label: 'Request a quotation', href: '/contact' },
+  secondary: { label: 'See how it works', href: '/how-it-works' },
 }
 
 export const TEAM = [
@@ -177,7 +177,7 @@ export const OFFER = {
     model: 'One-time cost',
     note: 'Fixed for the hardware you need. Quoted per installation, because the room count sets the hardware list, and that list is itemized before you commit.',
     promise: 'No monthly monitoring fee, ever.',
-    cta: { label: 'Request a quotation', href: '#contact' },
+    cta: { label: 'Request a quotation', href: '/contact' },
   },
 }
 

@@ -2,10 +2,10 @@ import { CONTACT } from '../content'
 import { Logo } from '../components/Marks'
 
 const LINKS = [
-  { href: '#features', label: 'Features' },
-  { href: '#how', label: 'How it works' },
-  { href: '#contact', label: 'Contact' },
-  { href: '#download', label: 'Get Started' },
+  { href: '/features', label: 'Features' },
+  { href: '/how-it-works', label: 'How it works' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/download', label: 'Get Started' },
 ]
 
 export default function Footer() {

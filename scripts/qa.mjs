@@ -21,7 +21,13 @@ const VIEWPORTS = [
   { name: '1920', w: 1920, h: 1080 },
 ]
 
-const SECTIONS = ['top', 'problem', 'meet', 'how', 'features', 'ownership', 'placement', 'offer', 'faq', 'contact', 'download']
+const ROUTE_SECTIONS = {
+  '/': ['top', 'problem', 'meet', 'features', 'ownership', 'placement'],
+  '/features': ['features', 'how'],
+  '/how-it-works': ['how', 'meet', 'ownership', 'offer', 'faq'],
+  '/contact': ['contact', 'faq'],
+  '/download': ['app', 'offer'],
+}
 
 const results = []
 const record = (name, ok, detail = '') => results.push({ name, ok, detail })
@@ -47,8 +53,17 @@ for (const vp of VIEWPORTS) {
   const scrollW = await page.evaluate(() => document.documentElement.scrollWidth)
   record(`${vp.name}: no horizontal overflow`, scrollW <= vp.w + 1, `${scrollW} vs ${vp.w}`)
 
-  // every section present + visible
-  for (const id of SECTIONS) {
+  // sections live on their own routes now
+  for (const [route, ids] of Object.entries(ROUTE_SECTIONS)) {
+    await page.goto(URL.replace(/\/$/, '') + (route === '/' ? '/' : route), { waitUntil: 'networkidle' })
+    await page.waitForTimeout(500)
+    for (const id of ids) {
+      const box = await page.locator(`#${id}`).first().boundingBox().catch(() => null)
+      record(`${route} #${id} rendered`, !!box && box.height > 40)
+    }
+    await page.goto(URL, { waitUntil: 'networkidle' })
+  }
+  for (const id of []) {
     const box = await page.locator(`#${id}`).first().boundingBox()
     record(`${vp.name}: #${id} rendered`, !!box && box.height > 40, box ? `${Math.round(box.width)}x${Math.round(box.height)}` : 'missing')
   }
@@ -86,50 +101,50 @@ for (const vp of VIEWPORTS) {
   const page = await ctx.newPage()
   await page.goto(URL, { waitUntil: 'networkidle' })
 
-  // nav links all jump to existing anchors
-  const navHrefs = await page.locator('header nav a[href^="#"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')))
-  record('nav: has links', navHrefs.length >= 5, navHrefs.join(' '))
-  for (const h of navHrefs) {
-    const exists = await page.locator(`#${h.slice(1)}`).count()
-    record(`nav: ${h} resolves`, exists > 0)
+  const base = URL.replace(/\/$/, '')
+  // nav links must be real routes that serve 200
+  const navHrefs = await page.locator('header nav a[href^="/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')))
+  record('nav: has links', navHrefs.length >= 3, navHrefs.join(' '))
+  for (const h of new Set(navHrefs)) {
+    const resp = await page.request.get(base + h)
+    record(`nav: ${h} resolves`, resp.ok())
   }
 
   // content below the fold is visibility:hidden until revealed, so scroll to it
+
+  // / — meet section's data-flow accordion
+  await page.goto(base + '/', { waitUntil: 'networkidle' })
   await page.evaluate(() => document.getElementById('meet').scrollIntoView())
   await page.waitForTimeout(900)
-  // data-flow accordion must actually open
   const det = page.locator('#meet details').first()
-  const closed = await det.evaluate(d => d.open)
+  const closed = await det.evaluate((d) => d.open)
   await page.locator('#meet details summary').first().click()
   await page.waitForTimeout(300)
-  record('meet: data-flow toggles', (await det.evaluate(d => d.open)) !== closed)
-
-  await page.evaluate(() => document.getElementById('how').scrollIntoView())
-  await page.waitForTimeout(600)
-  // three-step columns render all three stages
-  record('how: three stages present', (await page.locator('#how h3').count()) === 3)
-  await page.evaluate(() => document.getElementById('features').scrollIntoView())
-  await page.waitForTimeout(600)
-  // six features render
+  record('meet: data-flow toggles', (await det.evaluate((d) => d.open)) !== closed)
   record('features: six items', (await page.locator('#features h3').count()) === 6)
 
+  // /how-it-works — three stages
+  await page.goto(base + '/how-it-works', { waitUntil: 'networkidle' })
+  await page.evaluate(() => document.getElementById('how').scrollIntoView())
+  await page.waitForTimeout(600)
+  record('how: three stages present', (await page.locator('#how h3').count()) === 3)
+
+  // /contact — real channels
+  await page.goto(base + '/contact', { waitUntil: 'networkidle' })
   await page.evaluate(() => document.getElementById('contact').scrollIntoView())
   await page.waitForTimeout(700)
-  // contact channels are real links
   record('contact: mailto present', (await page.locator('#contact a[href^="mailto:"]').count()) > 0)
   record('contact: tel present', (await page.locator('#contact a[href^="tel:"]').count()) > 0)
 
-  // every CTA resolves
-  const ctas = await page.locator('a[href^="#"], a[href^="mailto:"], a[href^="tel:"]').evaluateAll((as) =>
+  // every internal link must resolve to a real route that returns 200
+  const hrefs = await page.locator('a[href^="/"]').evaluateAll((as) =>
     as.map((a) => a.getAttribute('href')).filter(Boolean))
   const bad = []
-  for (const c of new Set(ctas)) {
-    if (c.startsWith('#')) {
-      const n = await page.locator(c).count()
-      if (n === 0) bad.push(c)
-    }
+  for (const h of new Set(hrefs)) {
+    const resp = await page.request.get(URL.replace(/\/$/, '') + h)
+    if (!resp.ok()) bad.push(h)
   }
-  record('links: all hash targets exist', bad.length === 0, bad.join(' ') || 'ok')
+  record('links: all internal routes resolve', bad.length === 0, bad.join(' ') || `${new Set(hrefs).size} routes`)
 
   // keyboard: from a clean load, the first tab stop must be the skip link
   await page.goto(URL, { waitUntil: 'networkidle' })
@@ -138,7 +153,7 @@ for (const vp of VIEWPORTS) {
   record('a11y: first tab stop is skip link', /skip/i.test(focused), focused)
 
   // focus ring must be visible on the primary CTA
-  await page.locator('header a[href="#contact"]').first().focus()
+  await page.locator('header a[href="/contact"]').first().focus()
   const ring = await page.evaluate(() => {
     const s = getComputedStyle(document.activeElement)
     return s.outlineStyle + ' ' + s.outlineWidth
