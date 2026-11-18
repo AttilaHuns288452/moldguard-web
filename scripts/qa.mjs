@@ -43,13 +43,26 @@ const browser = await chromium.launch({
 const errors = []
 const failed = []
 
+/**
+ * Load a URL. `networkidle` never fires on production (Vercel keeps a beacon/
+ * font connection open), so a plain goto there times out 30s and kills the whole
+ * suite. Wait for 'load', then give the app a short settle window, and only try
+ * 'networkidle' best-effort when we are on localhost.
+ */
+async function open(page, url, settle = 700) {
+  await page.goto(url, { waitUntil: 'load', timeout: 45000 })
+  const idle = /localhost|127\.0\.0\.1/.test(url)
+  if (idle) await page.waitForLoadState?.('networkidle', { timeout: 8000 }).catch(() => {})
+  await page.waitForTimeout(settle)
+}
+
 for (const vp of VIEWPORTS) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, deviceScaleFactor: vp.w < 500 ? 2 : 1, reducedMotion: 'no-preference' })
   const page = await ctx.newPage()
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`[${vp.name}] ${m.text()}`) })
   page.on('requestfailed', (r) => failed.push(`[${vp.name}] ${r.url()} ${r.failure()?.errorText}`))
 
-  await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 })
+  await open(page, URL, 1200)
   await page.waitForTimeout(1200)
 
   // horizontal overflow
@@ -58,13 +71,12 @@ for (const vp of VIEWPORTS) {
 
   // sections live on their own routes now
   for (const [route, ids] of Object.entries(ROUTE_SECTIONS)) {
-    await page.goto(URL.replace(/\/$/, '') + (route === '/' ? '/' : route), { waitUntil: 'networkidle' })
-    await page.waitForTimeout(500)
+    await open(page, URL.replace(/\/$/, '') + (route === '/' ? '/' : route), 500)
     for (const id of ids) {
       const box = await page.locator(`#${id}`).first().boundingBox().catch(() => null)
       record(`${route} #${id} rendered`, !!box && box.height > 40)
     }
-    await page.goto(URL, { waitUntil: 'networkidle' })
+    await open(page, URL, 700)
   }
   for (const id of []) {
     const box = await page.locator(`#${id}`).first().boundingBox()
@@ -108,7 +120,7 @@ for (const vp of VIEWPORTS) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   const page = await ctx.newPage()
-  await page.goto(URL, { waitUntil: 'networkidle' })
+  await open(page, URL, 700)
 
   const base = URL.replace(/\/$/, '')
   // nav links must be real routes that serve 200
@@ -122,7 +134,7 @@ for (const vp of VIEWPORTS) {
   // content below the fold is visibility:hidden until revealed, so scroll to it
 
   // / — meet section's data-flow accordion
-  await page.goto(base + '/', { waitUntil: 'networkidle' })
+  await open(page, base + '/', 600)
   await page.evaluate(() => document.getElementById('meet').scrollIntoView())
   await page.waitForTimeout(900)
   // product explorer: selecting a component changes the info panel
@@ -146,14 +158,14 @@ for (const vp of VIEWPORTS) {
   record('features: six items', (await page.locator('#features h3').count()) === 6)
 
   // /how-it-works — Sense. Score. Act. is three columns; the loop is four stages
-  await page.goto(base + '/how-it-works', { waitUntil: 'networkidle' })
+  await open(page, base + '/how-it-works', 600)
   await page.evaluate(() => document.getElementById('sense-score-act').scrollIntoView())
   await page.waitForTimeout(600)
   record('how: three stages present', (await page.locator('#sense-score-act h3').count()) === 3)
   record('how: loop has four stages', (await page.locator('#how li h3').count()) === 4)
 
   // /contact — real channels
-  await page.goto(base + '/contact', { waitUntil: 'networkidle' })
+  await open(page, base + '/contact', 600)
   await page.evaluate(() => document.getElementById('contact').scrollIntoView())
   await page.waitForTimeout(700)
   record('contact: mailto present', (await page.locator('#contact a[href^="mailto:"]').count()) > 0)
@@ -170,7 +182,7 @@ for (const vp of VIEWPORTS) {
   record('links: all internal routes resolve', bad.length === 0, bad.join(' ') || `${new Set(hrefs).size} routes`)
 
   // keyboard: from a clean load, the first tab stop must be the skip link
-  await page.goto(URL, { waitUntil: 'networkidle' })
+  await open(page, URL, 700)
   await page.keyboard.press('Tab')
   const focused = await page.evaluate(() => document.activeElement?.textContent?.trim() ?? '')
   record('a11y: first tab stop is skip link', /skip/i.test(focused), focused)
@@ -190,7 +202,7 @@ for (const vp of VIEWPORTS) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })
   const page = await ctx.newPage()
-  await page.goto(URL, { waitUntil: 'networkidle' })
+  await open(page, URL, 700)
   await page.waitForTimeout(800)
   const visible = await page.evaluate(() => {
     const els = [...document.querySelectorAll('.reveal')]
