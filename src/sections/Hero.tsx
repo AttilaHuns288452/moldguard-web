@@ -53,7 +53,12 @@ export default function Hero() {
               the photo's right edge into the white frame, as the PDF does. */}
           <div className="absolute -right-1 bottom-8 w-[236px] rounded-[18px] border border-[#2b5c8f] bg-deep p-4 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)]">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
-            <p className="mt-2.5 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
+            <p className="mt-2.5 flex items-center justify-between gap-2 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">
+              <span>Mold Risk Index</span>
+              {/* the same disclosure Meet and the data-flow figure carry: this is
+                  demo data, not a live device reading */}
+              <span className="rounded-full border border-[#eaf2fc33] px-1.5 py-0.5 text-[9.5px] tracking-[0.08em]">Demo</span>
+            </p>
             <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">
               38<span className="text-[13px] text-on-dark-2">/100</span>
             </p>

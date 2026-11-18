@@ -1,6 +1,8 @@
 /**
- * EVERY claim in this file is copied VERBATIM from MoldGuard.pdf (5 artboards).
- * No paraphrase, no invented positioning copy.
+ * Copy audited against MoldGuard.pdf (5 artboards) with `pdftotext` + a diff, not
+ * a word count. Product claims are the PDF's own sentences; short UI labels are
+ * necessarily tightened. The dashboard/app numbers are illustrative demo data
+ * and are labelled as such on screen (hero, Meet, data-flow figure).
  *
  * p1 — hero, problem, meet, sense/score/act, features, ownership, placement, closing
  * p2 — capabilities: risk engine, VOC monitoring, dehumidification, sensors, analytics
