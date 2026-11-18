@@ -67,7 +67,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     const cam = camera as THREE.PerspectiveCamera
     const halfFov = THREE.MathUtils.degToRad(cam.fov / 2)
     fitR.current = Math.max(
-      (sz.y / (2 * Math.tan(halfFov))) / 0.86,
+      (sz.y / (2 * Math.tan(halfFov))) / 0.94,
       (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.7,
     )
     target.current.set(0, sz.y / 2, 0)
@@ -114,13 +114,19 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     for (const part of PARTS) {
       const m = meshes.current[part.id]
       if (!m) continue
+      // materials are shared between meshes, so clone on first use and tint the
+      // clone: a selection must be visible, not just two decimal places of lerp.
+      const selected = active === part.id
       const mat = m.material as THREE.MeshStandardMaterial
-      if (mat?.emissive) {
-        const selected = active === part.id
-        const want = selected ? 0.55 : 0
-        mat.emissiveIntensity += (want - mat.emissiveIntensity) * k
-        mat.emissive.set(selected ? '#2563eb' : '#000000')
+      if (!mat?.emissive) continue
+      if (!m.userData.baseEmissive) {
+        m.userData.baseEmissive = mat.emissive.clone()
+        m.userData.baseEmissiveI = mat.emissiveIntensity ?? 0
       }
+      const baseI = m.userData.baseEmissiveI as number
+      const wantI = selected ? baseI + 0.85 : baseI
+      mat.emissiveIntensity += (wantI - mat.emissiveIntensity) * k
+      mat.emissive.lerp(selected ? new THREE.Color('#3a7bff') : m.userData.baseEmissive as THREE.Color, k)
       // exploded view: push each part outward along its own offset from centre
       const base = basePos.current[part.id]
       if (base) {
