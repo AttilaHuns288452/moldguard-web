@@ -19,24 +19,7 @@ const AXE = require.resolve('axe-core/axe.min.js')
  * fall back to any chromium already in the playwright cache. PW_CHROMIUM still
  * wins if set.
  */
-function findChromium() {
-  if (process.env.PW_CHROMIUM) return process.env.PW_CHROMIUM
-  try {
-    const { chromium } = require('playwright')
-    const own = chromium.executablePath()
-    if (own && fs.existsSync(own)) return undefined // let playwright use its own
-  } catch { /* fall through */ }
-  const cache = path.join(process.env.HOME || '', '.cache/ms-playwright')
-  if (!fs.existsSync(cache)) return undefined
-  const candidates = fs.readdirSync(cache).filter((d) => /^chromium-\d+$/.test(d)).sort().reverse()
-  for (const d of candidates) {
-    for (const rel of ['chrome-linux64/chrome', 'chrome-linux/chrome']) {
-      const p = path.join(cache, d, rel)
-      if (fs.existsSync(p)) return p
-    }
-  }
-  return undefined
-}
+const { findChromium } = require('./find-chromium.cjs')
 
 ;(async () => {
   const b = await chromium.launch({

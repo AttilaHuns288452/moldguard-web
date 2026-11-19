@@ -4,9 +4,7 @@
  * Writes PNGs to .qa/ and prints a check table.
  */
 import { chromium } from 'playwright'
-import { mkdirSync, existsSync, readdirSync } from 'node:fs'
-import { homedir } from 'node:os'
-import { join } from 'node:path'
+import { mkdirSync } from 'node:fs'
 
 const URL = process.argv[2]?.startsWith('http') ? process.argv[2] : 'http://127.0.0.1:5199/'
 const FULL = process.argv.includes('--full')
@@ -49,33 +47,9 @@ const record = (name, ok, detail = '') => results.push({ name, ok, detail })
 }
 
 
-/**
- * Find a chromium to drive. Playwright pins a build version, and this box may
- * have a different one downloaded, in which case launch fails with "Executable
- * doesn't exist ... run npx playwright install". That failure was previously
- * hidden because PW_CHROMIUM was always exported by hand, so the suite only ever
- * worked in an agent shell, never for a teammate running `node scripts/qa.mjs`.
- * PW_CHROMIUM still wins; otherwise use playwright's own path if present, else
- * any chromium build already in the cache.
- */
-function findChromium() {
-  if (process.env.PW_CHROMIUM) return process.env.PW_CHROMIUM
-  try {
-    const own = chromium.executablePath()
-    if (own && existsSync(own)) return undefined
-  } catch { /* fall through to the cache scan */ }
-  const cache = join(homedir(), '.cache/ms-playwright')
-  if (existsSync(cache)) {
-    const builds = readdirSync(cache).filter((d) => /^chromium-\d+$/.test(d)).sort().reverse()
-    for (const d of builds) {
-      for (const rel of ['chrome-linux64/chrome', 'chrome-linux/chrome']) {
-        const p = join(cache, d, rel)
-        if (existsSync(p)) return p
-      }
-    }
-  }
-  return undefined
-}
+import { createRequire } from 'node:module'
+const require_ = createRequire(import.meta.url)
+const { findChromium } = require_('./find-chromium.cjs')
 
 const browser = await chromium.launch({
   executablePath: findChromium(),
