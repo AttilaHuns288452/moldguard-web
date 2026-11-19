@@ -30,20 +30,6 @@ export type Part = {
 
 export const PARTS: Part[] = [
   {
-    id: 'enclosure', name: 'Enclosure panels',
-    what: 'The front and rear panels that form the body, with the vents and the mounting points.',
-    role: 'Holds every other part in place. Tabletop or wall-mounted, it is the shell the whole loop lives inside.',
-    at: [-0.0625, 0.1125, -0.2259], size: [0.3153, 0.255, 0.1588],
-    face: 'front',
-  },
-  {
-    id: 'display', name: 'Status display',
-    what: 'The unit\u2019s own readout on the front face.',
-    role: 'Shows the current risk state and the automation rule on the device itself, not only in the app.',
-    at: [-0.2178, 0.2172, -0.2307], size: [0.0094, 0.0301, 0.0853],
-    face: 'front',
-  },
-  {
     id: 'sensor', name: 'Humidity & temperature sensor',
     what: 'DHT11 relative-humidity and temperature sensor, with the VL53L0X time-of-flight sensor beside it.',
     role: 'Two of the four Mold Risk Index inputs. Humidity and temperature are the core of the score, not a side reading.',
@@ -86,6 +72,13 @@ export const PARTS: Part[] = [
     face: 'side',
   },
   {
+    id: 'display', name: 'Status display',
+    what: 'The unit\u2019s own readout on the front face.',
+    role: 'Shows the current risk state and the automation rule on the device itself, not only in the app.',
+    at: [-0.2178, 0.2172, -0.2307], size: [0.0094, 0.0301, 0.0853],
+    face: 'front',
+  },
+  {
     id: 'buzzer', name: 'Buzzer',
     what: 'A small piezo buzzer on the board.',
     role: 'Gives the unit a local audible alert, so a risk event is noticeable in the room without the app.',
@@ -111,6 +104,13 @@ export const PARTS: Part[] = [
     what: 'Brackets, standoffs, jumpers and the remaining structural hardware.',
     role: 'Holds the stack together and keeps the electronics seated.',
     at: [-0.0607, 0.0957, -0.2246], size: [0.3035, 0.2207, 0.1453],
+    face: 'front',
+  },
+  {
+    id: 'enclosure', name: 'Enclosure panels',
+    what: 'The front and rear panels that form the body, with the vents and the mounting points.',
+    role: 'Holds every other part in place. Tabletop or wall-mounted, it is the shell the whole loop lives inside.',
+    at: [-0.0625, 0.1125, -0.2259], size: [0.3153, 0.255, 0.1588],
     face: 'front',
   },
 ]

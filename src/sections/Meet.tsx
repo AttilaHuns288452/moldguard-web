@@ -160,7 +160,6 @@ export default function Meet() {
               <ul className="flex-1 divide-y divide-line overflow-y-auto">
                 {PARTS.map((p) => {
                   const on = active === p.id
-                  const inTour = TOUR.indexOf(p.id)
                   return (
                     <li key={p.id}>
                       <button
@@ -171,8 +170,11 @@ export default function Meet() {
                           on ? 'bg-[#2563eb0a]' : 'hover:bg-paper-deep/60'
                         }`}
                       >
+                        {/* the list number is the part's own index in the documented
+                            order, not its tour position: the tour only covers 8 of
+                            the 12 parts, so the rest read as em dashes */}
                         <span className={`measure w-4 shrink-0 text-[11px] ${on ? 'text-accent' : 'text-ink-3'}`}>
-                          {inTour >= 0 ? String(inTour + 1).padStart(2, '0') : '—'}
+                          {String(PARTS.indexOf(p) + 1).padStart(2, '0')}
                         </span>
                         <span className={`flex-1 text-[13px] ${on ? 'font-[650] text-deep' : 'text-ink-2'}`}>
                           {p.name}
