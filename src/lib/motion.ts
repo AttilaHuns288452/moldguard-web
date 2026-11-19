@@ -19,7 +19,22 @@ export function useInView<T extends Element>(margin = '0px 0px 18% 0px') {
       { rootMargin: margin, threshold: 0.01 },
     )
     io.observe(el)
-    return () => io.disconnect()
+
+    // Safety net: IntersectionObserver fires for elements ABOVE the viewport too,
+    // but a fast scroll (or an element already scrolled past before this effect
+    // attached) can leave one unobserved. The reveal CSS sets visibility:hidden,
+    // so an unobserved element is permanently invisible - to sighted users AND to
+    // screen readers, which then report an empty heading. Reveal anything that is
+    // already at or above the fold shortly after mount.
+    const revealIfNear = () => {
+      const r = el.getBoundingClientRect()
+      if (r.top < window.innerHeight * 1.2) setInView(true)
+    }
+    const t = window.setTimeout(revealIfNear, 1200)
+    // and once more on any scroll, so dragging the scrollbar fast cannot strand
+    // an element mid-page in the invisible state
+    window.addEventListener('scroll', revealIfNear, { passive: true, once: true })
+    return () => { window.clearTimeout(t); window.removeEventListener('scroll', revealIfNear); io.disconnect() }
   }, [margin])
   return [ref, inView] as const
 }
