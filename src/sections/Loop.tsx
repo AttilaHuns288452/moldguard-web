@@ -11,7 +11,7 @@ import { LOOP, SETUP } from '../content'
 export default function Loop() {
 
   return (
-    <section id="how" className="section section-alt">
+    <section id="how" className="section band-white">
       <div className="shell">
         <div className="max-w-[760px]">
           <LineReveal
@@ -20,7 +20,7 @@ export default function Loop() {
             className="max-w-[26ch] text-[clamp(2.2rem,4.4vw,3.5rem)] leading-[1.08] font-[650] text-deep"
           />
           <Reveal delay={70}>
-            <p className="mt-3 max-w-[62ch] text-[1rem] leading-relaxed text-ink-2">{LOOP.lede}</p>
+            <p className="lede mt-3 max-w-[62ch]">{LOOP.lede}</p>
           </Reveal>
           <Reveal delay={120}>
             <p className="mt-5 text-[12.5px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{LOOP.label}</p>

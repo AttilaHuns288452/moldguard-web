@@ -89,7 +89,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="section">
+    <section id="contact" className="section band-white">
       <div className="shell">
         <div className="max-w-[720px]">
           <LineReveal
@@ -114,7 +114,7 @@ export default function Contact() {
                 <button
                   type="button"
                   onClick={() => setState('idle')}
-                  className="mt-5 inline-flex min-h-11 items-center rounded-[10px] border border-line-hi bg-card px-5 py-2.5 text-[14px] font-semibold text-ink transition-colors hover:border-ink-3"
+                  className="mt-5 inline-flex min-h-11 items-center rounded-btn border border-line-hi bg-card px-5 py-2.5 text-[14px] font-semibold text-ink transition-colors hover:border-ink-3"
                 >
                   Send another message
                 </button>
@@ -168,7 +168,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={!valid || state === 'sending'}
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#3f5670] disabled:opacity-100"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-btn bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#3f5670] disabled:opacity-100"
               >
                 {state === 'sending' ? 'Sending...' : 'Send message'}
                 <ArrowRight className="size-4" strokeWidth={2} />
@@ -283,10 +283,10 @@ export default function Contact() {
               <p className="mt-1.5 text-[1rem] text-ink-2">One message starts the conversation.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="#contact" className="inline-flex items-center rounded-[10px] bg-accent-ink px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-deep">
+              <a href="#contact" className="inline-flex items-center rounded-btn bg-accent-ink px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-deep">
                 {CONTACT_PAGE.closing.primary}
               </a>
-              <a href={`mailto:${CONTACT.email}`} className="inline-flex items-center rounded-[10px] border border-line-hi bg-card px-6 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3">
+              <a href={`mailto:${CONTACT.email}`} className="inline-flex items-center rounded-btn border border-line-hi bg-card px-6 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3">
                 {CONTACT_PAGE.closing.secondary}
               </a>
             </div>

@@ -11,7 +11,7 @@ export default function Capabilities() {
   const [engine, voc] = CAPABILITIES.blocks
 
   return (
-    <section id="capabilities" className="section">
+    <section id="capabilities" className="section band-white">
       <div className="shell">
         {/* PDF page 2 opens with a two-column hero: the copy on the left and a
             photo on the right carrying the caption banner
@@ -25,7 +25,7 @@ export default function Capabilities() {
               className="max-w-[24ch] text-[clamp(2.2rem,4.4vw,3.5rem)] leading-[1.08] font-[650] text-deep"
             />
             <Reveal delay={70}>
-              <p className="mt-3 max-w-[66ch] text-[1rem] leading-relaxed text-ink-2">{CAPABILITIES.lede}</p>
+              <p className="lede mt-3 max-w-[66ch]">{CAPABILITIES.lede}</p>
             </Reveal>
           </div>
 

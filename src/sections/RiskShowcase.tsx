@@ -31,7 +31,7 @@ export default function RiskShowcase() {
   const R = 78, SWEEP = 250, C = 2 * Math.PI * R
 
   return (
-    <section id="risk" className="section">
+    <section id="risk" className="section band-white">
       <div className="shell">
         <div className="grid gap-9 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
           <div>

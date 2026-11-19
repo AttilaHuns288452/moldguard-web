@@ -17,7 +17,7 @@ export default function Ownership() {
               lines={splitTitle(OWN.title)}
               className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-white"
             />
-            <p className="mt-3 max-w-[560px] text-[1.05rem] leading-relaxed text-on-dark-2">{OWN.lede}</p>
+            <p className="lede mt-3 max-w-[560px] text-on-dark-2">{OWN.lede}</p>
 
             {/* Cost teaser. Figures are the feasibility study's own, including its
                 caveat — the study states plainly that production is not yet

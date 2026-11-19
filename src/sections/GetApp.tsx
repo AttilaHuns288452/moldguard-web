@@ -36,7 +36,7 @@ export default function GetApp() {
     return () => ro.disconnect()
   }, [])
   return (
-    <section id="app" className="section section-alt">
+    <section id="app" className="section band-white">
       <div className="shell">
         <div className="grid items-center gap-10 md:grid-cols-[1fr_auto] md:gap-16">
           <div>
@@ -46,7 +46,7 @@ export default function GetApp() {
               className="max-w-[20ch] text-[clamp(2.2rem,4.4vw,3.5rem)] leading-[1.1] font-[650] text-deep"
             />
             <Reveal delay={80}>
-              <p className="mt-3 text-[1.05rem] leading-relaxed text-ink-2">
+              <p className="lede mt-3">
                 Monitor your home from anywhere.
               </p>
             </Reveal>

@@ -32,6 +32,10 @@
   --font-mono: "Spline Sans Mono", ui-monospace, monospace;
 
   --radius-tight: 9px;
+  /* Buttons are a slightly softer square than cards: 10px against 9px, which is
+     deliberate and was the only value every CTA already agreed on. Naming it
+     stops the next button from picking 8px or 12px. */
+  --radius-btn: 10px;
   --radius-soft: 12px;
   --radius-shell: 20px;
 }
@@ -153,6 +157,7 @@
     outline-color: #ffffff;
     box-shadow: 0 0 0 5px rgba(21, 56, 94, .85);
   }
-  /* kept for the secondary pages, which have no sampled band map of their own */
-  .section-alt  { background: var(--color-paper); }
+  /* There is no `.section-alt` alias: it was the same colour as `.band-pale`, and
+     two names for one band is how a palette drifts. Every section uses a band-*
+     token now, so the band vocabulary is exactly: white / pale / dark. */
 }

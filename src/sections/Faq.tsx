@@ -13,7 +13,7 @@ export default function Faq() {
   const items = FAQ.items
 
   return (
-    <section id="faq" className="section section-alt">
+    <section id="faq" className="section band-pale">
       <div className="shell">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)] lg:items-start lg:gap-16">
           <div className="lg:sticky lg:top-28 lg:self-start">

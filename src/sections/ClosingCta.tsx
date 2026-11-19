@@ -24,17 +24,17 @@ export default function ClosingCta({ onDownloadPage = false }: { onDownloadPage?
               lines={splitTitle(CTA.title)}
               className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-white"
             />
-            <p className="mt-2 max-w-[560px] text-[1.05rem] leading-relaxed text-on-dark-2">{CTA.lede}</p>
+            <p className="lede mt-2 max-w-[560px] text-on-dark-2">{CTA.lede}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
                 href={primary.href}
-                className="inline-flex items-center rounded-[10px] bg-accent-ink px-[28px] py-[14px] text-[16px] font-semibold text-white transition-colors hover:bg-[#1d4ed8]"
+                className="inline-flex items-center rounded-btn bg-accent-ink px-[28px] py-[14px] text-[16px] font-semibold text-white transition-colors hover:bg-[#1d4ed8]"
               >
                 {primary.label}
               </a>
               <a
                 href={CTA.secondary.href}
-                className="inline-flex items-center rounded-[10px] bg-on-dark px-[28px] py-[14px] text-[16px] font-semibold text-deeper transition-colors hover:bg-white"
+                className="inline-flex items-center rounded-btn bg-on-dark px-[28px] py-[14px] text-[16px] font-semibold text-deeper transition-colors hover:bg-white"
               >
                 {CTA.secondary.label}
               </a>

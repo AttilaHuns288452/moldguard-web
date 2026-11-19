@@ -58,7 +58,7 @@ export default function Meet() {
               className="max-w-[24ch] text-[clamp(1.9rem,3.4vw,2.9rem)] leading-[1.08] font-[650] text-deep"
             />
             <Reveal delay={70}>
-              <p className="mt-3 text-[1.05rem] leading-relaxed text-ink-2">{MEET.lede}</p>
+              <p className="lede mt-3">{MEET.lede}</p>
             </Reveal>
           </div>
           <Reveal delay={110}>

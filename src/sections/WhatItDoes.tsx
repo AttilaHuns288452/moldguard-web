@@ -13,7 +13,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
   const { title, lede, auto, sensors, analytics } = WHAT_IT_DOES
 
   return (
-    <section id="what" className="section">
+    <section id="what" className="section band-white">
       <div className="shell">
         <div className="max-w-[720px]">
           <LineReveal
@@ -22,7 +22,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
             className="max-w-[24ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] font-[650] text-deep"
           />
           <Reveal delay={70}>
-            <p className="mt-3 max-w-[60ch] text-[1rem] leading-relaxed text-ink-2">{lede}</p>
+            <p className="lede mt-3 max-w-[60ch]">{lede}</p>
           </Reveal>
         </div>
 

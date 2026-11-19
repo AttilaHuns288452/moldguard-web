@@ -22,14 +22,14 @@ export default function NotFound() {
         <button
           type="button"
           onClick={() => navigate('home')}
-          className="inline-flex min-h-11 items-center rounded-[10px] bg-accent-ink px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-deep"
+          className="inline-flex min-h-11 items-center rounded-btn bg-accent-ink px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-deep"
         >
           Back to home
         </button>
         <button
           type="button"
           onClick={() => navigate('download')}
-          className="inline-flex min-h-11 items-center rounded-[10px] border border-line-hi bg-card px-6 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3"
+          className="inline-flex min-h-11 items-center rounded-btn border border-line-hi bg-card px-6 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3"
         >
           Get the app
         </button>

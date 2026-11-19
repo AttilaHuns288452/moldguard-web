@@ -11,8 +11,11 @@ import { splitTitle } from '../lib/motion'
  * Six equal cells are the approved composition.
  */
 export default function Features() {
+  // White on both pages. PDF page 2 is one continuous white canvas, and on page 1
+  // this has to be white because the section that used to separate it from `meet`
+  // was removed - without that, two pale blocks merged into one wash.
   return (
-    <section id="features" className="section band-pale">
+    <section id="features" className="section band-white">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div className="max-w-[720px]">
