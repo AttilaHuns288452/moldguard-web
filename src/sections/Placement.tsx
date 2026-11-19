@@ -13,10 +13,10 @@ export default function Placement() {
             <p className="lede mt-2">{PLACEMENT.lede}</p>
             <a
               href={PLACEMENT.cta.href}
-              className="mt-5 inline-flex items-center gap-2.5 rounded-tight border border-line-hi bg-card px-5 py-2.5 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3"
+              className="mt-5 inline-flex items-center gap-2.5 rounded-btn border border-line-hi bg-card px-5 py-2.5 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3"
             >
               {PLACEMENT.cta.label}
-              <ArrowRight className="size-[15px]" strokeWidth={2} />
+              <ArrowRight className="size-3.5" strokeWidth={2} />
             </a>
           </div>
         </Reveal>
