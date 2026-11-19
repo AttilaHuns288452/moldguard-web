@@ -19,6 +19,10 @@ class SceneBoundary extends Component<{ children: ReactNode; onError: () => void
 }
 
 type Props = {
+  /** hero mode hides the viewer chrome so the product is the only thing on show */
+  chrome?: boolean
+  /** show the interactive component dots (explorer) - off in the hero */
+  hotspots?: boolean
   active: PartId | null
   onSelect: (id: PartId | null) => void
   autoSpin: boolean
@@ -26,7 +30,7 @@ type Props = {
 }
 
 /** 3D stage: lazy WebGL, real zoom, selection, graceful fallback. */
-export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props) {
+export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome = true, hotspots = true }: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   const [loaded, setLoaded] = useState(false)
@@ -125,6 +129,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props
               zoom={zoom}
               onLoaded={handleLoaded}
               onHoverHotspot={handleHover}
+              hotspots={hotspots}
             />
           </Suspense>
           </SceneBoundary>
@@ -147,7 +152,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode }: Props
         )}
       </div>
 
-      {!failed && (
+      {!failed && chrome && (
         <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-2 pb-1">
           <span className="text-[11px] text-ink-3">Drag to orbit · scroll to zoom</span>
           <div className="flex items-center gap-0.5">

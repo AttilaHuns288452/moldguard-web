@@ -48,6 +48,8 @@ type Props = {
   onLoaded: () => void
   onHoverHotspot: () => void
   zoom: number  // 1 = fit
+  /** the hero shows the product alone; hotspot dots belong to the explorer */
+  hotspots?: boolean
 }
 
 function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
@@ -134,8 +136,8 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     // Frame the full height with headroom, and the width against the panel's
     // own aspect so a narrow viewport does not crop the body.
     fitR.current = Math.max(
-      (sz.y / (2 * Math.tan(halfFov))) / 0.86,
-      (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.78,
+      (sz.y / (2 * Math.tan(halfFov))) / 0.98,
+      (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.92,
     )
     target.current.set(0, sz.y * 0.5, 0)
     ready.current = true
@@ -313,7 +315,7 @@ export default function DeviceScene(props: Props) {
         <planeGeometry args={[0.62, 0.46]} />
         <meshBasicMaterial transparent depthWrite={false} map={shadowBlob()} />
       </mesh>
-      {PARTS.map((p) => (
+      {props.hotspots !== false && PARTS.map((p) => (
         <Hotspot
           key={p.id} part={p} open={props.active === p.id}
           onSelect={() => props.onSelect(p.id)}

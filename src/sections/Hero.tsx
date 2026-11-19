@@ -1,16 +1,21 @@
+import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { HERO } from '../content'
 import { LineReveal, MagButton } from '../components/ui'
+import DeviceViewer from '../components/DeviceViewer'
 
 /**
- * Hero: the product itself, in 3D. Nothing competes with it — no card chrome,
- * no mockup. The model sits on its own lit stage and is the first thing the eye
- * lands on after the headline.
+ * Hero: THE PRODUCT ITSELF, IN 3D. The owner's direction (2026-11-19) is
+ * explicit: the 3D model is the hero, not a photo. So the live viewer sits in
+ * the primary slot, showing the real SketchUp assembly rather than a render of
+ * a device that does not exist. The risk readout card overlays it as before.
  *
  * Background is the PDF's flat #f7fbff hero band (sampled 105..750pt of page 1),
  * NOT a gradient: an authored gradient is a different design direction.
  */
 export default function Hero() {
+  // the hero stage is a live model: no part selected, assembled, slowly turning
+  const [active, setActive] = useState<Parameters<typeof DeviceViewer>[0]['active']>(null)
   return (
     <section id="top" className="relative overflow-hidden bg-[#f7fbff]">
       {/* Column split measured off the PDF: content 1120pt = text 36.3% ·
@@ -39,19 +44,25 @@ export default function Hero() {
 
         {/* the artboard's hero visual: lifestyle photo + dark app card overlay */}
         <div className="relative">
-          <figure className="relative overflow-hidden rounded-shell border border-line bg-white p-2.5 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]">
-            <img
-              src="/pod-hero.webp"
-              alt="MoldGuard Pod on a wooden shelf in a bright living room"
-              width={1024} height={1086}
-              className="aspect-[1/1.01] w-full rounded-soft object-cover"
-              style={{ objectPosition: '42% 62%' }}
-            />
-          </figure>
+          <div
+            className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
+            style={{ aspectRatio: '1 / 1.01' }}
+          >
+            <div className="h-full w-full overflow-hidden rounded-soft bg-[#eef2f8]">
+              <DeviceViewer
+                active={active}
+                onSelect={setActive}
+                autoSpin
+                mode="tour"
+                chrome={false}
+                hotspots={false}
+              />
+            </div>
+          </div>
 
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
               the photo's right edge into the white frame, as the PDF does. */}
-          <div className="absolute -right-1 bottom-8 w-[236px] rounded-shell border border-[#2b5c8f] bg-deep p-4 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)]">
+          <div className="absolute -right-3 -bottom-5 w-[210px] rounded-shell border border-[#2b5c8f] bg-deep p-4 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)] sm:-right-5">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
             <p className="mt-2.5 flex items-center justify-between gap-2 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">
               <span>Mold Risk Index</span>
