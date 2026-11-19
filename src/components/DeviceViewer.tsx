@@ -38,6 +38,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
   const [resetKey, setResetKey] = useState(0)
   const [zoom, setZoom] = useState(1)
   const [hovering, setHovering] = useState(false)
+  const [armed, setArmed] = useState(false)
   // DeviceScene's setup effect depends on these, so an inline arrow re-ran the
   // whole GLB import + material build on every zoom step and hover. Stable
   // identities keep setup to once per model.
@@ -75,37 +76,49 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
     return () => clearTimeout(t)
   }, [hovering])
 
-  // Wheel + pinch zoom on the stage (the button labels used to promise this).
+  // Zoom. Clicking the stage "arms" it first so the page scroll is never
+  // hijacked: before activation the wheel is ignored entirely and a two-finger
+  // gesture does not swallow vertical panning. Escape or a click outside disarms.
   useEffect(() => {
     const el = hostRef.current
     if (!el) return
     const clamp = (z: number) => Math.min(2.4, Math.max(0.55, z))
     const onWheel = (e: WheelEvent) => {
+      if (!armed) return
       if (!e.ctrlKey && Math.abs(e.deltaY) < 2) return
       e.preventDefault()
       setZoom((z) => clamp(z - e.deltaY * 0.0016))
     }
     let pinchStart: number | null = null
     const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 2) pinchStart = Math.hypot(
+      if (!armed || e.touches.length !== 2) return
+      pinchStart = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY)
     }
     const onTouchMove = (e: TouchEvent) => {
-      if (e.touches.length !== 2 || pinchStart === null) return
+      if (!armed || e.touches.length !== 2 || pinchStart === null) return
       const d = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY)
       setZoom((z) => clamp(z * (d / pinchStart!)))
       pinchStart = d
     }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setArmed(false) }
+    const onDocDown = (e: PointerEvent) => {
+      if (armed && !el.contains(e.target as Node)) setArmed(false)
+    }
     el.addEventListener('wheel', onWheel, { passive: false })
     el.addEventListener('touchstart', onTouchStart, { passive: true })
     el.addEventListener('touchmove', onTouchMove, { passive: true })
+    window.addEventListener('keydown', onKey)
+    document.addEventListener('pointerdown', onDocDown)
     return () => {
       el.removeEventListener('wheel', onWheel)
       el.removeEventListener('touchstart', onTouchStart)
       el.removeEventListener('touchmove', onTouchMove)
+      window.removeEventListener('keydown', onKey)
+      document.removeEventListener('pointerdown', onDocDown)
     }
   }, [])
 
@@ -113,7 +126,8 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
     <div className="relative h-full w-full">
       <div
         ref={hostRef}
-        className="relative h-full w-full touch-none"
+        className={`relative h-full w-full ${armed ? 'touch-none' : 'touch-pan-y'}`}
+        onClick={() => { if (!armed) setArmed(true) }}
         role="application"
         aria-label="Interactive 3D model of the MoldGuard assembly. Drag to orbit, scroll to zoom, and select a component to read about it."
       >
@@ -152,27 +166,38 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
         )}
       </div>
 
+      {/* the activation hint is not chrome: without it the stage looks static */}
+      {!failed && !armed && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
+          <span className="rounded-full border border-line bg-card/90 px-3 py-1 text-[11px] text-ink-2 shadow-sm">
+            Click to interact
+          </span>
+        </div>
+      )}
+
       {!failed && chrome && (
         <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-2 pb-1">
-          <span className="text-[11px] text-ink-3">Drag to orbit · scroll to zoom</span>
+          <span className="text-[11px] text-ink-3">
+            {armed ? 'Drag to orbit · scroll to zoom · Esc to release' : 'Click to interact'}
+          </span>
           <div className="flex items-center gap-0.5">
             <button type="button" onClick={() => setZoom((z) => Math.min(2.4, z + 0.18))}
-              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              className="grid size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
               aria-label="Zoom in">
               <ZoomIn className="size-4" strokeWidth={1.9} />
             </button>
             <button type="button" onClick={() => setZoom((z) => Math.max(0.55, z - 0.18))}
-              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              className="grid size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
               aria-label="Zoom out">
               <ZoomOut className="size-4" strokeWidth={1.9} />
             </button>
             <button type="button" onClick={() => { setZoom(1); setResetKey((k) => k + 1) }}
-              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              className="grid size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
               aria-label="Reset the view">
               <RotateCcw className="size-3.5" strokeWidth={1.9} />
             </button>
             <button type="button" onClick={() => setResetKey((k) => k + 1)}
-              className="grid size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink md:hidden"
+              className="grid size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink md:hidden"
               aria-label="Recentre">
               <RefreshCw className="size-3.5" strokeWidth={1.9} />
             </button>
