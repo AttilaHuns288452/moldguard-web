@@ -58,7 +58,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
             </div>
           </Reveal>
           <Reveal delay={80}>
-            <div className="rounded-soft border border-line bg-card p-4">
+            <div className="card-lift rounded-soft border border-line bg-card p-4">
               <p className="text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{sensors.pod}</p>
               <dl className="mt-2 divide-y divide-line">
                 {sensors.readings.map((r) => (
@@ -82,12 +82,12 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
             </div>
           </Reveal>
           <Reveal delay={80}>
-            <div className="rounded-soft border border-line bg-card p-4">
+            <div className="card-lift rounded-soft border border-line bg-card p-4">
               <div className="flex items-center justify-between gap-3">
                 <span className="text-[11px] font-[650] text-ink-3 uppercase">{analytics.sample}</span>
                 <div className="flex gap-1">
                   {analytics.ranges.map((r, i) => (
-                    <span key={r} className={`rounded-tight px-2 py-0.5 text-[10.5px] ${i === 2 ? 'bg-[#2563eb0f] font-[650] text-deep' : 'text-ink-3'}`}>
+                    <span key={r} className={`rounded-tight px-2 py-0.5 text-[10.5px] transition-colors ${i === 2 ? 'bg-[#2563eb0f] font-[650] text-deep' : 'text-ink-3'}`}>
                       {r}
                     </span>
                   ))}
@@ -105,14 +105,14 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
         {/* 4 + 5: alerts and automations, PDF page 2 */}
         <div className="mt-12 grid gap-6 border-t border-line pt-10 md:grid-cols-2">
           <Reveal>
-            <div className="rounded-soft border border-line bg-card p-6">
+            <div className="card-lift h-full rounded-soft border border-line bg-card p-6">
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{ALERTS.eyebrow}</p>
               <Sub className="mt-2 text-[1.25rem] font-[650] text-deep">{ALERTS.title}</Sub>
               <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{ALERTS.body}</p>
             </div>
           </Reveal>
           <Reveal delay={80}>
-            <div className="rounded-soft border border-line bg-card p-6">
+            <div className="card-lift h-full rounded-soft border border-line bg-card p-6">
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{AUTOMATIONS.eyebrow}</p>
               <Sub className="mt-2 text-[1.25rem] font-[650] text-deep">{AUTOMATIONS.title}</Sub>
               <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{AUTOMATIONS.body}</p>

@@ -70,10 +70,14 @@
 
 /* ============================================================================
    MOTION SYSTEM — one language, documented once.
-   Durations: 180ms (micro) · 420ms (reveal) · 700ms (media). Distances: 16px.
+   Durations: 180ms micro  (EVERY state change: hover, press, tabs, accordion)
+              420ms reveal (staggered rows / flow stages)
+              700ms media  (section + line entrances)
+             1100ms instrument (arc gauges filling)
+   Stagger:   80ms between siblings in one sequence.
    Easing: cubic-bezier(.22,1,.36,1) for entrances (decelerating, no bounce),
            cubic-bezier(.4,0,.2,1) for state changes.
-   Only transform/opacity animate. Nothing animates layout.
+   Only transform/opacity/stroke-dasharray/colour animate. Nothing animates layout.
    ========================================================================= */
 :root {
   --ease-out: cubic-bezier(.22,1,.36,1);
@@ -81,6 +85,30 @@
   --dur-micro: 180ms;
   --dur-reveal: 420ms;
   --dur-media: 700ms;
+  --dur-instrument: 1100ms;
+  --stagger: 80ms;
+}
+
+/* ── the one state-change transition for every control ────────────────────── */
+/* Buttons, tabs (aria-pressed), accordions (aria-expanded / <details>), field
+   focus and card chrome all use this: one duration, one curve, no `duration-*`
+   utilities scattered through the JSX. */
+.state {
+  transition-property: color, background-color, border-color, box-shadow, transform, rotate, scale, opacity;
+  transition-duration: var(--dur-micro);
+  transition-timing-function: var(--ease-state);
+}
+
+/* ── controls: every state change uses the same duration and curve ────────── */
+/* Buttons, tabs (<button aria-pressed>) and accordions (<button aria-expanded>,
+   <summary>) previously restated Tailwind's 150/200/300ms defaults at each call
+   site. These rules are UNLAYERED, so they beat Tailwind's @layer utilities
+   without !important — a stray `duration-300` copied in later cannot drift the
+   system back out of sync. transition-property is left to each element, so a
+   control that only wants colour still only transitions colour. */
+button, summary, a[href] {
+  transition-duration: var(--dur-micro);
+  transition-timing-function: var(--ease-state);
 }
 
 /* ── text reveal: per-line mask lift, used on section headings ─────────────── */
@@ -124,7 +152,10 @@
 }
 .btn-mag:hover .ico { transform: translateX(3px) translateY(-1px) scale(1.06); }
 
-/* ── card depth: rises and warms on hover, no layout shift ────────────────── */
+/* ── card depth: rises, warms, and the hairline border turns cobalt ─────────
+   Three channels move together (translate + shadow + border) so the card reads
+   as one object being picked up, not three separate tweens. Duration is the
+   shared state token: a hover that lags the button next to it feels broken. */
 .card-lift {
   transition: transform var(--dur-micro) var(--ease-state),
               box-shadow var(--dur-micro) var(--ease-state),
@@ -132,10 +163,14 @@
   will-change: transform;
 }
 .card-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 1px 3px rgba(30,54,128,.07), 0 18px 40px -26px rgba(30,54,128,.42);
-  border-color: var(--color-line-hi);
+  transform: translateY(-3px);
+  box-shadow: 0 1px 3px rgba(30,54,128,.07), 0 20px 44px -26px rgba(30,54,128,.5);
+  border-color: var(--color-accent);
 }
+/* flat rule-separated rows (Features index, Problem) have only a bottom border;
+   the same border-color change gives them a visible hover edge with no layout
+   shift and no extra rule */
+
 
 /* ── photo: slow scale on the image only, so the frame stays put ──────────── */
 .ph-zoom { overflow: hidden; }
@@ -164,14 +199,51 @@
   pointer-events: none;
 }
 
-/* ── gauge needle + count: dial feels live when it enters view ────────────── */
-.dial-fill {
-  transition: stroke-dasharray 1100ms var(--ease-out);
+/* ── instrument: arc gauge fills from zero on viewport entry ──────────────── */
+/* The dasharray target lives in an inline custom property (--to) so the CSS
+   owns the start state and the transition; the component only states its
+   value. Reduced motion still lands on the correct arc — just without the
+   travel. `pathLength=100` on the element makes --to a percentage of the arc,
+   so no component has to know the geometry (pi*r) to fill it. */
+.gauge-arc {
+  stroke-dasharray: 0 100;
+  transition: stroke-dasharray var(--dur-instrument) var(--ease-out);
+}
+.gauge-arc.is-in { stroke-dasharray: var(--to, 0) 100; }
+
+/* ── staged sequence: children enter one after another, viewport-driven ───── */
+/* The group carries one IntersectionObserver; each direct child gets its delay
+   from its position, so a call site never passes a per-row index. The delay is
+   set on the child (not the group) because transition-delay is not inherited.
+   Unrevealed children keep their space (opacity, not display) — the same
+   contract .reveal documents, so a screen shot or Ctrl+F never sees a hole. */
+.seq > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--dur-reveal) var(--ease-out),
+              transform var(--dur-reveal) var(--ease-out);
+  transition-delay: calc(var(--n, 0) * var(--stagger) + var(--d, 0ms));
+}
+.seq > :nth-child(1) { --n: 0; }
+.seq > :nth-child(2) { --n: 1; }
+.seq > :nth-child(3) { --n: 2; }
+.seq > :nth-child(4) { --n: 3; }
+.seq > :nth-child(5) { --n: 4; }
+.seq > :nth-child(6) { --n: 5; }
+.seq > :nth-child(7) { --n: 6; }
+.seq > :nth-child(n+8) { --n: 7; }   /* cap: a long list must not end in a 2s wait */
+/* table rows are not reliably transformable; they fade in place instead */
+.seq > tr { transform: none; }
+.seq.is-in > * { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gauge-arc { transition: none; stroke-dasharray: var(--to, 0) 100; }
+  .seq > * { opacity: 1; transform: none; transition: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .lines > .line > span { transform: none; opacity: 1; visibility: visible; transition: none; }
   .btn-mag, .btn-mag .ico, .card-lift, .ph-zoom img, .nav-grow::after,
-  .scroll-progress, .dial-fill { transition: none !important; }
+  .scroll-progress, .dial-fill, .state { transition: none !important; }
   .btn-mag:hover, .card-lift:hover, .ph-zoom:hover img { transform: none; }
 }

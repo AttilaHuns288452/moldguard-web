@@ -45,6 +45,53 @@ export function LineReveal({
   )
 }
 
+/** Semicircle risk gauge. The arc fills from 0 to `value` (percent of the arc)
+ *  when the gauge scrolls into view — viewport-driven like every other entrance
+ *  on the page, so it does not burn its one animation off-screen.
+ *
+ *  pathLength=100 lets the CSS express the target as a percentage of the arc
+ *  (see .gauge-arc) instead of every caller hardcoding pi*r. */
+export function Gauge({ value, className = 'block w-full' }: { value: number; className?: string }) {
+  const [ref, inView] = useInView<SVGSVGElement>()
+  const to = Math.max(0, Math.min(100, value))
+  const d = 'M8 52a40 40 0 0 1 80 0'
+  return (
+    <svg ref={ref} viewBox="0 0 96 56" className={className} aria-hidden="true">
+      <path d={d} fill="none" stroke="var(--color-line)" strokeWidth="7" strokeLinecap="round" />
+      <path
+        d={d}
+        fill="none"
+        stroke="var(--color-accent-ink)"
+        strokeWidth="7"
+        strokeLinecap="round"
+        pathLength={100}
+        className={`gauge-arc ${inView ? 'is-in' : ''}`}
+        style={{ '--to': to } as React.CSSProperties}
+      />
+    </svg>
+  )
+}
+
+/** Staggered sequence: each direct child enters after the previous one.
+ *  One IntersectionObserver for the whole group — a per-row Reveal would spawn
+ *  N observers, and a <tr> cannot be wrapped in the <div> a Reveal renders, so
+ *  the group itself can be a tbody/ul.
+ *  The child index is read by :nth-child in app.css, so no call site passes it. */
+export function Seq({
+  children, className = '', delay = 0, as: Tag = 'div',
+}: { children: ReactNode; className?: string; delay?: number; as?: 'div' | 'tbody' | 'ul' }) {
+  const [ref, inView] = useInView<HTMLElement>()
+  return (
+    <Tag
+      ref={ref as never}
+      className={`seq ${inView ? 'is-in' : ''} ${className}`}
+      style={{ '--d': `${delay}ms` } as React.CSSProperties}
+    >
+      {children}
+    </Tag>
+  )
+}
+
 /** Magnetic CTA: physical press, travelling icon in its own circular island. */
 export function MagButton({
   href, children, variant = 'solid', icon,

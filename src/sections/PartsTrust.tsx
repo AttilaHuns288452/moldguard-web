@@ -37,7 +37,7 @@ export default function PartsTrust() {
                   {/* the PDF's circular plus, rotated to a minus when open */}
                   <span
                     aria-hidden="true"
-                    className="grid size-7 shrink-0 place-items-center rounded-full border border-line text-ink-2 transition-transform duration-300 group-open:rotate-45"
+                    className="state grid size-7 shrink-0 place-items-center rounded-full border border-line text-ink-2 transition-transform group-open:rotate-45"
                   >
                     <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="1.6">
                       <path d="M6 1v10M1 6h10" />

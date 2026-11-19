@@ -1,5 +1,5 @@
 import { COMPARISON } from '../content'
-import { Reveal, LineReveal } from '../components/ui'
+import { Reveal, LineReveal, Seq } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 
 /**
@@ -23,7 +23,11 @@ export default function Comparison() {
         </Reveal>
 
         {/* desktop: a real table. Mobile: the same rows stacked, because four
-            columns cannot be read at 360px without shrinking the type. */}
+            columns cannot be read at 360px without shrinking the type.
+
+            Both are one Seq host, so the rows stagger off a single observer.
+            A <tr> is not reliably transformable, so rows fade in place
+            (.seq > tr) — the stagger is still per-row and still viewport-driven. */}
         <Reveal delay={90}>
           <div className="mt-9 overflow-hidden rounded-soft border border-line bg-card">
             <table className="hidden w-full border-collapse text-left md:table">
@@ -36,9 +40,12 @@ export default function Comparison() {
                   ))}
                 </tr>
               </thead>
-              <tbody>
+              <Seq as="tbody">
                 {COMPARISON.rows.map((r) => (
-                  <tr key={r.option} className={`border-b border-line last:border-0 ${r.ours ? 'bg-[#2563eb0f]' : ''}`}>
+                  <tr
+                    key={r.option}
+                    className={`border-b border-line transition-colors last:border-0 hover:bg-paper-deep/70 ${r.ours ? 'bg-[#2563eb0f] hover:bg-[#2563eb1a]' : ''}`}
+                  >
                     <th scope="row" className={`px-5 py-5 align-top text-[15px] font-[650] ${r.ours ? 'text-accent-ink' : 'text-deep'}`}>
                       {r.option}
                       {r.ours && (
@@ -52,13 +59,13 @@ export default function Comparison() {
                     <td className="px-5 py-5 align-top text-[14.5px] leading-relaxed text-ink-2">{r.drawbacks}</td>
                   </tr>
                 ))}
-              </tbody>
+              </Seq>
             </table>
 
             {/* stacked */}
-            <ul className="divide-y divide-line md:hidden">
+            <Seq as="ul" className="divide-y divide-line md:hidden">
               {COMPARISON.rows.map((r) => (
-                <li key={r.option} className={`px-5 py-5 ${r.ours ? 'bg-[#2563eb08]' : ''}`}>
+                <li key={r.option} className={`px-5 py-5 transition-colors hover:bg-paper-deep/70 ${r.ours ? 'bg-[#2563eb08] hover:bg-[#2563eb1a]' : ''}`}>
                   <p className={`text-[14.5px] font-[650] ${r.ours ? 'text-accent-ink' : 'text-deep'}`}>{r.option}</p>
                   <dl className="mt-2 grid gap-1.5">
                     {[['What it does', r.does], ['Cost model', r.cost], ['Drawbacks', r.drawbacks]].map(([k, v]) => (
@@ -70,7 +77,7 @@ export default function Comparison() {
                   </dl>
                 </li>
               ))}
-            </ul>
+            </Seq>
           </div>
         </Reveal>
       </div>

@@ -45,14 +45,14 @@ export default function Faq() {
                       aria-controls={`faq-${i}`}
                       className="group flex w-full items-start justify-between gap-5 py-5 text-left"
                     >
-                      <span className={`text-[15.5px] leading-snug transition-colors duration-200 ${
+                      <span className={`text-[15.5px] leading-snug transition-colors ${
                         isOpen ? 'font-[650] text-deep' : 'text-ink-2 group-hover:text-deep'
                       }`}>
                         {item.q}
                       </span>
                       <span
                         aria-hidden="true"
-                        className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border text-[13px] transition-all duration-300 ${
+                        className={`state mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border text-[13px] transition-all ${
                           isOpen
                             ? 'rotate-45 border-accent-ink bg-accent-ink text-white'
                             : 'border-[#b9cde4] text-ink-2 group-hover:border-ink-3 group-hover:text-ink'

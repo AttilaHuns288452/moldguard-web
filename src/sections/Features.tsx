@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { FEATURES } from '../content'
-import { Reveal, LineReveal, MagButton } from '../components/ui'
+import { Reveal, LineReveal, MagButton, Gauge, Seq } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 
 /**
@@ -46,27 +46,23 @@ export default function Features() {
             </div>
             {/* same arc gauge the Capabilities card uses, so the index is shown
                 the same way everywhere it appears */}
-            <svg viewBox="0 0 96 56" className="w-[150px] shrink-0" aria-hidden="true">
-              <path d="M8 52a40 40 0 0 1 80 0" fill="none" stroke="var(--color-line)" strokeWidth="7" strokeLinecap="round" />
-              <path d="M8 52a40 40 0 0 1 80 0" fill="none" stroke="var(--color-accent-ink)" strokeWidth="7" strokeLinecap="round"
-                strokeDasharray={`${125.66 * 0.38} 125.66`} />
-            </svg>
+            <Gauge value={38} className="w-[150px] shrink-0" />
           </article>
         </Reveal>
 
-        <div className="mt-6 grid gap-x-14 border-t-2 border-deep sm:grid-cols-2">
-          {FEATURES.items.slice(1).map((f, i) => (
-            <Reveal key={f.n} delay={i * 55}>
-              <div className="card-lift flex gap-5 border-b border-line py-5">
-                <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>
-                <div>
-                  <h3 className="text-[1.05rem] font-[650] text-deep">{f.title}</h3>
-                  <p className="mt-1 text-[14.5px] leading-relaxed text-ink-2">{f.body}</p>
-                </div>
+        {/* one observer for the whole index, children stagger off their own
+            position (see .seq) rather than five independent Reveals */}
+        <Seq className="mt-6 grid gap-x-14 border-t-2 border-deep sm:grid-cols-2">
+          {FEATURES.items.slice(1).map((f) => (
+            <div key={f.n} className="card-lift flex gap-5 border-b border-line py-5">
+              <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>
+              <div>
+                <h3 className="text-[1.05rem] font-[650] text-deep">{f.title}</h3>
+                <p className="mt-1 text-[14.5px] leading-relaxed text-ink-2">{f.body}</p>
               </div>
-            </Reveal>
+            </div>
           ))}
-        </div>
+        </Seq>
       </div>
     </section>
   )
