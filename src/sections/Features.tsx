@@ -28,8 +28,34 @@ export default function Features() {
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-x-14 border-t-2 border-deep sm:grid-cols-2">
-          {FEATURES.items.map((f, i) => (
+        {/* Six equal-weight rows give the reader six equal claims, i.e. none.
+            The Mold Risk Index is the differentiator, so it gets a wide card and
+            the other five stay as a compact grid. */}
+        <Reveal delay={60}>
+          <article className="card-lift mt-10 grid items-center gap-6 rounded-shell border border-line bg-card p-6 md:grid-cols-[minmax(0,1fr)_auto] md:p-8">
+            <div>
+              <span className="measure text-[0.6875rem] tracking-[0.16em] text-accent-ink">
+                {FEATURES.items[0].n}
+              </span>
+              <h3 className="mt-2 text-[clamp(1.25rem,2.2vw,1.5rem)] font-[650] text-deep">
+                {FEATURES.items[0].title}
+              </h3>
+              <p className="mt-2 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">
+                {FEATURES.items[0].body}
+              </p>
+            </div>
+            {/* same arc gauge the Capabilities card uses, so the index is shown
+                the same way everywhere it appears */}
+            <svg viewBox="0 0 96 56" className="w-[150px] shrink-0" aria-hidden="true">
+              <path d="M8 52a40 40 0 0 1 80 0" fill="none" stroke="var(--color-line)" strokeWidth="7" strokeLinecap="round" />
+              <path d="M8 52a40 40 0 0 1 80 0" fill="none" stroke="var(--color-accent-ink)" strokeWidth="7" strokeLinecap="round"
+                strokeDasharray={`${125.66 * 0.38} 125.66`} />
+            </svg>
+          </article>
+        </Reveal>
+
+        <div className="mt-6 grid gap-x-14 border-t-2 border-deep sm:grid-cols-2">
+          {FEATURES.items.slice(1).map((f, i) => (
             <Reveal key={f.n} delay={i * 55}>
               <div className="card-lift flex gap-5 border-b border-line py-5">
                 <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>

@@ -24,7 +24,7 @@ export default function Hero() {
       {/* Column split measured off the PDF: content 1120pt = text 36.3% ·
           19.4% gap · photo 41.8%. The photo is SQUARE (468x473pt), not the
           landscape panel a 50/50 split produces. */}
-      <div className="shell relative grid items-center gap-8 pt-10 pb-10 [@media(min-width:1352px)]:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] [@media(min-width:1352px)]:gap-[19%] [@media(min-width:1352px)]:pt-[118px] [@media(min-width:1352px)]:pb-[75px]">
+      <div className="shell relative grid items-center gap-8 pt-10 pb-10 [@media(min-width:1352px)]:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] [@media(min-width:1352px)]:gap-[19%] [@media(min-width:1352px)]:pt-[118px] [@media(min-width:1352px)]:pb-[52px]">
         {/* copy */}
         <div className="relative z-10">
           <p className="mb-4 text-[13px] text-ink-3">IoT mold risk prevention &amp; detection</p>
@@ -43,9 +43,19 @@ export default function Hero() {
               {HERO.secondary.label}
             </MagButton>
           </div>
+
+          {/* the hero is tall enough that the fold can read as the end of the page;
+              one quiet cue down to the next section fixes that */}
+          <a
+            href="#problem"
+            className="mt-8 inline-flex items-center gap-1.5 text-[13px] text-ink-3 transition-colors hover:text-ink"
+          >
+            See how it works
+            <span aria-hidden="true">&darr;</span>
+          </a>
         </div>
 
-        {/* the artboard's hero visual: lifestyle photo + dark app card overlay */}
+        {/* the artboard's hero visual: visitor-facing 3D stage + readout overlay */}
         <div className="relative">
           <div
             className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"

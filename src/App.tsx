@@ -86,6 +86,7 @@ export default function App() {
         {page === 'features' && (
           <>
             <Capabilities />
+            <Features />
             <WhatItDoes asHeading="h2" />
             <RiskShowcase />
             <Comparison />

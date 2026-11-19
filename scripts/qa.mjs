@@ -177,7 +177,15 @@ for (const vp of VIEWPORTS) {
   await page.evaluate(() => document.getElementById('compare')?.scrollIntoView())
   record('compare: three rows', (await page.locator('#compare tbody tr').count()) === 3)
   record('compare: our row is marked', (await page.locator('#compare [class*="bg-[#2563eb"]').count()) >= 1)
-  record('compare: no duplicate page-1 features', (await page.locator('#features').count()) === 0)
+  // This used to assert the OPPOSITE (no #features on /features), because the
+  // route once duplicated the home grid wholesale. The duplication was the six
+  // identical equal-weight claims; the fix is one dominant card + five support,
+  // and a route called /features must contain the features. Guard the grid's
+  // presence and its 6 headings instead of its absence.
+  await page.evaluate(() => document.getElementById('features')?.scrollIntoView())
+  record('features: grid present on /features', (await page.locator('#features').count()) === 1)
+  record('features: six headings', (await page.locator('#features h3').count()) === 6)
+  record('features: one dominant card', (await page.locator('#features article').count()) === 1)
   record('features: parts accordion has six rows', (await page.locator('#parts details').count()) === 6)
   record('features: hero caption banner present', await page.locator('#capabilities figcaption').first().textContent().then((t) => /cold stone/i.test(t)))
 
