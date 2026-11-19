@@ -2,7 +2,23 @@ import { useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { AdaptiveDpr, Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import { PARTS, type PartId } from './parts'
+
+/**
+ * The shipped GLB is meshopt-compressed (EXT_meshopt_compression, 2.3 MB instead
+ * of 5.7 MB). Without a decoder registered on the loader, three.js silently loads
+ * NO geometry: no error, no warning, just an empty stage. Measured on the
+ * committed file - mid-frame ink 0.01%, i.e. blank - which is how the broken hero
+ * shipped.
+ *
+ * drei does register three-stdlib's decoder, but that copy did not decode this
+ * file, so the decoder three ships alongside the loader is registered below and
+ * wired into useGLTF through its extendLoader hook.
+ */
+const extendLoader = (loader: { setMeshoptDecoder?: (d: unknown) => void }) => {
+  loader.setMeshoptDecoder?.(MeshoptDecoder)
+}
 
 /* The model is the team's own SketchUp assembly, rebuilt by
    ~/.hermes/cache/scratch/rebuild_real.py: 12 semantic components, 246 x 150 x
@@ -54,7 +70,7 @@ type Props = {
 
 function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
   const { camera, scene } = useThree()
-  const { scene: model } = useGLTF('/moldguard.glb') as unknown as { scene: THREE.Group }
+  const { scene: model } = useGLTF('/moldguard.glb', true, true, extendLoader) as unknown as { scene: THREE.Group }
   const ready = useRef(false)
   const settle = useRef(0)
   // Initial yaw. Every `face: 'front'` part in parts.ts sits at +Z (the display,
@@ -96,6 +112,18 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
           mat.roughness = Math.min(Math.max(mat.roughness ?? 0.8, 0.55), 0.95)
         }
       }
+      // Three nested shells occupy the IDENTICAL volume (Y -15..239,
+      // Z -305..-146): mesh_1 (200_217_230_ds), mesh_5 (198_198_198_ss) and
+      // mesh_3 (200_217_230_ss). Rendering all three makes the box read as
+      // several separate slabs - a front door swung open - which is exactly how
+      // the hero was reported broken. The SKP contains no door components and no
+      // rotations, so one outer shell is the whole product: keep the largest
+      // (mesh_3) and hide the nested duplicates.
+      if (/^mesh_(1|5)_ROOT_Layer0_/i.test(m.name || '')) {
+        m.visible = false
+        return
+      }
+
       // The body shell in the real export is the root `Layer0` meshes (the
       // enclosure panels). Those are what must fade to reveal the internals;
       // the old names ('skin'/'misc'/'enclosure') came from the deleted
@@ -332,5 +360,5 @@ export default function DeviceScene(props: Props) {
 }
 
 export function preloadModel() {
-  useGLTF.preload('/moldguard.glb')
+  useGLTF.preload('/moldguard.glb', true, true, extendLoader)
 }
