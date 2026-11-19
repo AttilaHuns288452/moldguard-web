@@ -167,7 +167,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
       </div>
 
       {/* the activation hint is not chrome: without it the stage looks static */}
-      {!failed && !armed && (
+      {!failed && loaded && !armed && (
         <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
           <span className="rounded-full border border-line bg-card/90 px-3 py-1 text-[11px] text-ink-2 shadow-sm">
             Click to interact
@@ -178,7 +178,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
       {!failed && chrome && (
         <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-2 pb-1">
           <span className="text-[11px] text-ink-3">
-            {armed ? 'Drag to orbit · scroll to zoom · Esc to release' : 'Click to interact'}
+            {armed ? 'Drag to orbit · scroll to zoom · Esc to release' : loaded ? 'Click to interact' : 'Loading model'}
           </span>
           <div className="flex items-center gap-0.5">
             <button type="button" onClick={() => setZoom((z) => Math.min(2.4, z + 0.18))}
