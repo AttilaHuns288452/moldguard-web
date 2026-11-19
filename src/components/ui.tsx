@@ -23,13 +23,22 @@ export function LineReveal({
   lines, className = '', delay = 0, as: Tag = 'h2',
 }: { lines: string[]; className?: string; delay?: number; as?: 'h1' | 'h2' }) {
   const [ref, inView] = useInView<HTMLHeadingElement>()
+  // The visual lines live in spans that are visibility:hidden until they animate
+  // in. That is fine for sighted users and fatal for screen readers: an
+  // un-scrolled heading is reported as EMPTY (axe: "empty-heading"), because
+  // hidden text contributes no accessible name. So the heading carries the real
+  // name in aria-label and the animated spans are hidden from the a11y tree.
+  const label = lines.join(' ')
   return (
-    <Tag ref={ref} className={`lines ${inView ? 'is-in' : ''} ${className}`} style={{ '--d': `${delay}ms` } as React.CSSProperties}>
+    <Tag
+      ref={ref}
+      aria-label={label}
+      className={`lines ${inView ? 'is-in' : ''} ${className}`}
+      style={{ '--d': `${delay}ms` } as React.CSSProperties}
+    >
       {lines.map((l, i) => (
-        <span className="line" key={l}>
+        <span className="line" key={l} aria-hidden="true">
           <span style={{ '--i': i } as React.CSSProperties}>{l}</span>
-          {/* keeps the accessible name word-separated: spans concatenate with no space */}
-          <span className="sr-only"> </span>
         </span>
       ))}
     </Tag>
