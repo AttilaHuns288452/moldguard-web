@@ -108,7 +108,7 @@ for (const vp of VIEWPORTS) {
     // instead of trusting one fixed wait (a 2.5s sleep flakes under load).
     let canvasBox = null
     for (let i = 0; i < 24; i++) {
-      await page.waitForTimeout(500)
+      await page.waitForTimeout(250)
       canvasBox = await page.locator('[data-device-canvas] canvas').first().boundingBox().catch(() => null)
       if (canvasBox) break
     }
