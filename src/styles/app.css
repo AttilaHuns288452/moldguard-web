@@ -14,9 +14,12 @@
   opacity: 0;
   pointer-events: none;
   transform: translateY(14px);
+  /* Was a hard-coded 0.72s while .seq used var(--dur-reveal) = 0.42s, so two
+     entrance animations ran at different speeds on the same page. Entrance is
+     one role, so it gets one duration. */
   transition:
-    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms),
-    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms);
+    opacity var(--dur-reveal) var(--ease-out) var(--d, 0ms),
+    transform var(--dur-reveal) var(--ease-out) var(--d, 0ms);
   will-change: opacity, transform;
 }
 .reveal.is-in { opacity: 1; pointer-events: auto; transform: none; }
