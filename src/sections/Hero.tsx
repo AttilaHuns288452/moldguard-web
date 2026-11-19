@@ -77,7 +77,7 @@ export default function Hero() {
               <p className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-full bg-deep/90 px-3 py-1 text-[11px] font-[650] tracking-[0.12em] text-on-dark uppercase backdrop-blur-sm">
                 Open view &middot; inside the unit
               </p>
-              <p className="pointer-events-none absolute inset-x-3 bottom-2 rounded-tight bg-card/92 px-2.5 py-1.5 text-center text-[10.5px] leading-snug text-ink-2 backdrop-blur-sm sm:inset-x-4 sm:bottom-4 sm:px-3 sm:py-2 sm:text-[11.5px]">
+              <p className="mt-2 px-1 text-center text-[11px] leading-snug text-ink-3 sm:pointer-events-none sm:absolute sm:inset-x-4 sm:bottom-4 sm:mt-0 sm:rounded-tight sm:bg-card/92 sm:px-3 sm:py-2 sm:text-[11.5px] sm:text-ink-2 sm:backdrop-blur-sm">
                 {HERO.stageNote}
               </p>
             </div>

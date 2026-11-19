@@ -77,7 +77,9 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
   // sensor, buzzer, audio amp), so the camera must start near yaw 0 to look at
   // the product's front. 0.42 rad keeps a 3/4 angle so the depth reads too.
   const spin = useRef(0.42)
-  const drag = useRef({ down: false, x: 0, y: 0, yaw: 0, pitch: 0 })
+  // Seed a 3/4 view: dead-on front puts the detached near-side panel between
+  // the camera and the interior, so the cutaway reads as grey blocks.
+  const drag = useRef({ down: false, x: 0, y: 0, yaw: -0.62, pitch: 0.06 })
   const fitR = useRef(1.9)
   const target = useRef(new THREE.Vector3(0, 0.41, 0))
   const meshes = useRef<Record<string, THREE.Mesh>>({})
@@ -181,7 +183,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
 
   useEffect(() => {
     if (!ready.current) return
-    drag.current.yaw = 0
+    drag.current.yaw = -0.62
     drag.current.pitch = 0
     spin.current = 0.42
   }, [resetKey])
