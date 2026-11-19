@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ArrowLeft, ArrowRight, Boxes, Eye, Layers, Play } from 'lucide-react'
 import DeviceViewer from '../components/DeviceViewer'
 import DataFlow from '../components/DataFlow'
-import { PARTS, PART_BY_ID, TOUR, type PartId } from '../components/parts'
+import { PARTS, PART_BY_ID, TOUR, MODEL_SIZE, type PartId } from '../components/parts'
 import { MEET } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
 import { prefersReducedMotion, splitTitle } from '../lib/motion'
@@ -13,6 +13,10 @@ import { prefersReducedMotion, splitTitle } from '../lib/motion'
  * in the loop. The guided tour walks the documented order (sensor -> controller
  * -> relay -> dehumidifier). Every description is about the actual mesh.
  */
+// the caption must come from the model, not a hand-typed number: the previous
+// hardcoded "317 x 159 x 254" contradicted the measured 317.7 x 255 x 159
+const mm = (m: number) => Math.round(m * 1000)
+
 export default function Meet() {
   // Start with nothing selected: a preset selection both ghosted the shell on
   // first paint (ready-to-explode look while the toggle read "Assembled") and
@@ -89,7 +93,7 @@ export default function Meet() {
             <div className="relative overflow-hidden rounded-soft border border-line bg-card">
               <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
                 <span className="text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{MEET.caption}</span>
-                <span className="measure text-[11px] text-ink-3">overall 317 &times; 159 &times; 254 mm</span>
+                <span className="measure text-[11px] text-ink-3">overall {mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[2])} &times; {mm(MODEL_SIZE[1])} mm</span>
               </div>
               <div className="relative h-[clamp(400px,58vh,560px)] w-full bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
                 <DeviceViewer active={active} onSelect={(id) => { if (id) pick(id) }} autoSpin={autoSpin} mode={mode} />

@@ -148,7 +148,7 @@ export default function Contact() {
         {/* ── From message to quote in three steps ── */}
         <div className="mt-14 border-t border-line pt-10">
           <Reveal>
-            <h2 className="max-w-[22ch] text-[clamp(1.4rem,2.6vw,1.9rem)] font-[650] text-deep">
+            <h2 className="max-w-[22ch] text-[clamp(1.5rem,2.8vw,2.1rem)] font-[650] text-deep">
               {CONTACT_PAGE.steps.title}
             </h2>
           </Reveal>
@@ -168,7 +168,7 @@ export default function Contact() {
         {/* ── Eight students. One loop. ── */}
         <div className="mt-14 border-t border-line pt-10">
           <Reveal>
-            <h2 className="max-w-[24ch] text-[clamp(1.4rem,2.6vw,1.9rem)] font-[650] text-deep">
+            <h2 className="max-w-[24ch] text-[clamp(1.5rem,2.8vw,2.1rem)] font-[650] text-deep">
               {CONTACT_PAGE.teamTitle}
             </h2>
             <p className="mt-2 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2">{CONTACT_PAGE.teamLede}</p>
@@ -197,7 +197,7 @@ export default function Contact() {
         <Reveal>
           <div className="mt-14 flex flex-wrap items-center justify-between gap-6 rounded-shell border border-line bg-paper-deep px-7 py-8 md:px-10">
             <div>
-              <h2 className="text-[clamp(1.4rem,2.6vw,1.9rem)] font-[650] text-deep">{CONTACT_PAGE.closing.title}</h2>
+              <h2 className="text-[clamp(1.5rem,2.8vw,2.1rem)] font-[650] text-deep">{CONTACT_PAGE.closing.title}</h2>
               <p className="mt-1.5 text-[1rem] text-ink-2">One message starts the conversation.</p>
             </div>
             <div className="flex flex-wrap gap-3">
