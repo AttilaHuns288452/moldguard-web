@@ -280,10 +280,12 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
     if (settle.current < 1) settle.current = Math.min(1, settle.current + dt * 0.9)
     const ease = 1 - Math.pow(1 - settle.current, 3)
     if (autoSpin && !drag.current.down) spin.current += dt * 0.32
-    // Oscillate, do not orbit: a full 360 turns the unit's own white panels toward
-    // the camera, where a white body on a pale stage vanishes. +-0.42 rad around
-    // the 3/4 seed keeps the open view facing the viewer at every instant.
-    const swing = Math.sin(spin.current) * 0.42
+    // Oscillate, do not orbit. A full 360 turns the unit's own white panels toward
+    // the camera and a white body on a pale stage dissolves; but so does swinging
+    // too far the other way - at yaw ~ -0.2 the camera is nearly dead-on at the
+    // flat FRONT face, which measured 28% footprint and read as blank. Keep every
+    // frame on the open 3/4 side: -0.82 .. -0.42.
+    const swing = -0.62 + Math.sin(spin.current) * 0.20
     const yaw = swing + drag.current.yaw
     const pitch = drag.current.pitch
     // pull back a little in exploded view so the separated parts stay in frame
