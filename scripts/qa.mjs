@@ -26,7 +26,7 @@ const VIEWPORTS = [
 // silently passes a broken page.
 const ROUTE_SECTIONS = {
   '/': ['top', 'problem', 'meet', 'sense-score-act', 'features', 'ownership', 'placement', 'download'],
-  '/features': ['capabilities', 'what', 'risk', 'compare', 'download'],
+  '/features': ['capabilities', 'what', 'risk', 'compare', 'parts', 'download'],
   '/how-it-works': ['how', 'sense-score-act', 'faq'],
   '/contact': ['contact', 'faq'],
   '/download': ['app'],
@@ -163,6 +163,8 @@ for (const vp of VIEWPORTS) {
   record('compare: three rows', (await page.locator('#compare tbody tr').count()) === 3)
   record('compare: our row is marked', (await page.locator('#compare [class*="bg-[#2563eb"]').count()) >= 1)
   record('compare: no duplicate page-1 features', (await page.locator('#features').count()) === 0)
+  record('features: parts accordion has six rows', (await page.locator('#parts details').count()) === 6)
+  record('features: hero caption banner present', await page.locator('#capabilities figcaption').first().textContent().then((t) => /cold stone/i.test(t)))
 
   // /how-it-works — Sense. Score. Act. is three columns; the loop is four stages
   await open(page, base + '/how-it-works', 600)
