@@ -40,3 +40,20 @@ export function splitTitle(title: string): string[] {
   const mid = Math.floor(title.lastIndexOf(' ', title.length * 0.58))
   return mid > 8 ? [title.slice(0, mid), title.slice(mid + 1)] : [title]
 }
+
+/**
+ * Live `prefers-reduced-motion` subscription. Reading the media query once at
+ * mount is wrong: the user can flip the OS setting while the page is open, and a
+ * model that keeps spinning after they asked it to stop is a real accessibility
+ * failure, not a cosmetic one.
+ */
+export function useReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(() => prefersReducedMotion())
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const on = () => setReduced(mq.matches)
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+  return reduced
+}
