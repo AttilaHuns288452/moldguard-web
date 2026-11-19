@@ -15,29 +15,6 @@ import { PARTS, type PartId } from './parts'
    DeviceScene does not re-normalise the model. It only lifts it so the base
    sits on y = 0 and frames the camera from the measured extent. */
 
-/** Product finishes, authored in the scene. Anything not listed gets _default.
- *  metalness is pinned to 0 on purpose: a metallic MeshStandardMaterial with no
- *  usable environment map renders pure black, and the env map is not dependable
- *  here. Matte finishes plus roughness/hue variation read just as well. */
-// Finishes. The shell colours are sampled from the approved product photography
-// (public/pod-hero.webp body = #fef9ef lit, i.e. a warm ivory albedo) — the old
-// blue-grey #8ea6bf read as an untextured CAD part next to those photos.
-const FINISH: Record<string, THREE.MeshStandardMaterialParameters> = {
-  skin: { color: 0xe9e1d4, roughness: 0.55, metalness: 0 },
-  enclosure: { color: 0xe9e1d4, roughness: 0.55, metalness: 0 },
-  misc: { color: 0xded5c6, roughness: 0.6, metalness: 0 },
-  display: { color: 0x1a2a3e, roughness: 0.12, metalness: 0, emissive: new THREE.Color(0x1a6bff), emissiveIntensity: 0.9 },
-  controller: { color: 0x2b3a4a, roughness: 0.55, metalness: 0 },
-  sensor: { color: 0x2f4a6b, roughness: 0.5, metalness: 0 },
-  peltier: { color: 0x40515f, roughness: 0.3, metalness: 0 },
-  heatsink: { color: 0x93a9bd, roughness: 0.26, metalness: 0 },
-  fan: { color: 0x2a3744, roughness: 0.7, metalness: 0 },
-  relay: { color: 0x314152, roughness: 0.55, metalness: 0 },
-  buzzer: { color: 0x263340, roughness: 0.65, metalness: 0 },
-  audio: { color: 0x2d3d4c, roughness: 0.6, metalness: 0 },
-  usb: { color: 0xb8c4cf, roughness: 0.3, metalness: 0 },
-  _default: { color: 0xd6cdbe, roughness: 0.55, metalness: 0 },
-}
 
 export type { PartId }
 
@@ -98,30 +75,30 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       // shadow is not worth a black product, so the mesh does not cast.
       m.castShadow = false
       m.receiveShadow = false
-      // The SketchUp export mixes winding orders: forcing FrontSide made the
-      // enclosure render as its own dark interior (a pure black silhouette).
-      // DoubleSide renders the surface that is actually there.
-      // The GLB's own materials render black in three.js (a SketchUp -> Draco
-      // export artefact: the same lights with a default MeshStandardMaterial
-      // give 0.9% black vs 36% with the file's materials). So the product
-      // finishes are authored here instead of trusted from the exporter.
-      // side: DoubleSide is REQUIRED, not cosmetic. The joined SketchUp meshes
-      // carry mixed winding, so FrontSide culls roughly half the faces and the
-      // body renders as sparse wireframe fragments. Setting it on the material
-      // being replaced does nothing.
-      // The SketchUp shell has ~40% inward-facing polygons (verified: only 60%
-      // of enclosure face normals point away from the body centre). With
-      // DoubleSide those back faces are lit from behind and render pure black,
-      // which is what turned the whole product into a silhouette. Emissive at a
-      // fraction of the albedo makes every face carry its own colour, so the
-      // body reads correctly regardless of which way a given polygon is wound.
-      const f = FINISH[m.name] ?? FINISH._default
-      m.material = new THREE.MeshStandardMaterial({ side: THREE.DoubleSide, ...f })
-      // The presentation skin is opaque in assembled view so the product reads
-      // as a real body, then fades in exploded/tour mode so the 11 real internal
-      // components are actually visible. Otherwise the shell hides everything
-      // the explorer exists to show.
-      if (m.name === 'skin' || m.name === 'misc' || m.name === 'enclosure') {
+      // KEEP the exported materials. The previous code threw them away and
+      // repainted every mesh from a 13-entry lookup keyed on component names,
+      // but the real assembly has 278 meshes and 93 exported materials,
+      // including the green LCD and the four status LEDs. Replacing them with
+      // one flat finish is precisely what made the product read as a plain box.
+      //
+      // side: DoubleSide is still REQUIRED, not cosmetic: the joined SketchUp
+      // meshes carry mixed winding, so FrontSide culls roughly half the faces.
+      const mat = m.material as THREE.MeshStandardMaterial
+      if (mat) {
+        mat.side = THREE.DoubleSide
+        mat.shadowSide = THREE.DoubleSide
+        if (mat.emissive && mat.emissiveIntensity !== undefined) {
+          // Blend unconditionally: metallic PBR renders black without an
+          // environment map, and several of these materials carry metalness.
+          mat.metalness = Math.min(mat.metalness ?? 0, 0.2)
+          mat.roughness = Math.min(Math.max(mat.roughness ?? 0.8, 0.55), 0.95)
+        }
+      }
+      // The body shell in the real export is the root `Layer0` meshes (the
+      // enclosure panels). Those are what must fade to reveal the internals;
+      // the old names ('skin'/'misc'/'enclosure') came from the deleted
+      // synthetic model and matched nothing.
+      if (/^mesh_\d+_ROOT_Layer0/i.test(m.name || '')) {
         const mat = m.material as THREE.MeshStandardMaterial
         mat.transparent = true
         m.userData.isShell = true
