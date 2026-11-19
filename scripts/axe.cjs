@@ -15,7 +15,9 @@ const AXE = require.resolve('axe-core/axe.min.js')
 
 ;(async () => {
   const b = await chromium.launch({
-    executablePath: process.env.PW_CHROMIUM,
+    // PW_CHROMIUM lets this run without `npx playwright install`; unset, playwright
+    // resolves its own browser (same fallback qa.mjs uses).
+    executablePath: process.env.PW_CHROMIUM || undefined,
     args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
   })
   const report = {}
