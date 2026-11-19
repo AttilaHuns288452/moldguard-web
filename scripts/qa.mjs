@@ -57,6 +57,7 @@ const browser = await chromium.launch({
 })
 const errors = []
 const failed = []
+const thirdPartyFailed = []
 
 /**
  * Load a URL. `networkidle` never fires on production (Vercel keeps a beacon/
@@ -75,7 +76,15 @@ for (const vp of VIEWPORTS) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, deviceScaleFactor: vp.w < 500 ? 2 : 1, reducedMotion: 'no-preference' })
   const page = await ctx.newPage()
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`[${vp.name}] ${m.text()}`) })
-  page.on('requestfailed', (r) => failed.push(`[${vp.name}] ${r.url()} ${r.failure()?.errorText}`))
+  page.on('requestfailed', (r) => {
+    const u = r.url()
+    const thirdParty = !u.startsWith(URL) && !u.startsWith('/') && !/^https?:\/\/(localhost|127\.0\.0\.1|moldguard-web\.vercel\.app)/.test(u)
+    const line = `[${vp.name}] ${u} ${r.failure()?.errorText}`
+    // A flaky font CDN is not a defect in this site, and letting it fail the suite
+    // made a 170-check run look like a regression. Report it, do not gate on it.
+    if (thirdParty) thirdPartyFailed.push(line)
+    else failed.push(line)
+  })
 
   await open(page, URL, 1200)
   await page.waitForTimeout(1200)
@@ -283,8 +292,12 @@ if (errors.length) {
   console.log(`\n  console errors (${errors.length}):`)
   errors.slice(0, 12).forEach((e) => console.log('   ', e))
 }
+if (thirdPartyFailed.length) {
+  console.log(`\n  third-party requests that did not answer (${thirdPartyFailed.length}) — not gating:`)
+  thirdPartyFailed.slice(0, 6).forEach((f) => console.log('   ', f))
+}
 if (failed.length) {
   console.log(`\n  failed requests (${failed.length}):`)
   failed.slice(0, 12).forEach((e) => console.log('   ', e))
 }
-process.exit(pass === results.length && errors.length === 0 ? 0 : 1)
+process.exit(pass === results.length && errors.length === 0 && failed.length === 0 ? 0 : 1)
