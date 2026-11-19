@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { AdaptiveDpr, Html, useGLTF } from '@react-three/drei'
+import { Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import { PARTS, PART_NO, type PartId } from './parts'
@@ -66,9 +66,11 @@ type Props = {
   zoom: number  // 1 = fit
   /** the hero shows the product alone; hotspot dots belong to the explorer */
   hotspots?: boolean
+  /** shift the framed centre left/right in model units (hero clears its readout card) */
+  nudgeX?: number
 }
 
-function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
+function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: Props) {
   const { camera, scene } = useThree()
   const { scene: model } = useGLTF('/moldguard.glb', true, true, extendLoader) as unknown as { scene: THREE.Group }
   const ready = useRef(false)
@@ -81,6 +83,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
   // the camera and the interior, so the cutaway reads as grey blocks.
   const drag = useRef({ down: false, x: 0, y: 0, yaw: -0.62, pitch: 0.06 })
   const fitR = useRef(1.9)
+  const halfExtent = useRef(new THREE.Vector3(0.15, 0.12, 0.08))
   const target = useRef(new THREE.Vector3(0, 0.41, 0))
   const meshes = useRef<Record<string, THREE.Mesh>>({})
   const basePos = useRef<Record<string, THREE.Vector3>>({})
@@ -168,15 +171,14 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     // centre instead, so pins and geometry share one space.
     model.updateWorldMatrix(true, true)
 
-    const cam = camera as THREE.PerspectiveCamera
-    const halfFov = THREE.MathUtils.degToRad(cam.fov / 2)
-    // Frame the full height with headroom, and the width against the panel's
-    // own aspect so a narrow viewport does not crop the body.
-    fitR.current = Math.max(
-      (sz.y / (2 * Math.tan(halfFov))) / 0.98,
-      (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.92,
-    )
+    // Keep the measured HALF-EXTENTS, not a pre-solved distance: cam.aspect is not
+    // settled when this effect first runs and it differs between runs, so any
+    // distance solved here goes stale. The frame loop solves it against the
+    // canvas's current aspect instead, so the unit is framed identically on first
+    // paint and after a scroll away and back.
+    halfExtent.current.set(sz.x / 2, sz.y / 2, sz.z / 2)
     target.current.set(ctr.x, bb.min.y + sz.y * 0.5, ctr.z)
+    target.current.x += nudgeX
     ready.current = true
     onLoaded()
   }, [model, scene, onLoaded, camera])
@@ -277,11 +279,25 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     if (!ready.current) return
     if (settle.current < 1) settle.current = Math.min(1, settle.current + dt * 0.9)
     const ease = 1 - Math.pow(1 - settle.current, 3)
-    if (autoSpin && !drag.current.down) spin.current += dt * 0.2
-    const yaw = spin.current + drag.current.yaw
+    if (autoSpin && !drag.current.down) spin.current += dt * 0.32
+    // Oscillate, do not orbit: a full 360 turns the unit's own white panels toward
+    // the camera, where a white body on a pale stage vanishes. +-0.42 rad around
+    // the 3/4 seed keeps the open view facing the viewer at every instant.
+    const swing = Math.sin(spin.current) * 0.42
+    const yaw = swing + drag.current.yaw
     const pitch = drag.current.pitch
     // pull back a little in exploded view so the separated parts stay in frame
     const explodePad = mode === 'explode' ? 1.28 : 1
+    // Frame the full height with headroom and the width against the panel's own
+    // aspect, using the CURRENT aspect - never a cached one.
+    const cam = camera as THREE.PerspectiveCamera
+    const halfFov = THREE.MathUtils.degToRad(cam.fov / 2)
+    const hx = halfExtent.current.x
+    const hy = halfExtent.current.y
+    fitR.current = Math.max(
+      hy / Math.tan(halfFov) / 0.98,
+      hx / (Math.tan(halfFov) * cam.aspect) / 0.92,
+    )
     const r = (fitR.current / zoom) * explodePad * (1 + (1 - ease) * 0.16)
     camera.position.set(
       r * Math.sin(yaw) * Math.cos(pitch),
@@ -333,7 +349,7 @@ export default function DeviceScene(props: Props) {
   return (
     <Canvas
       data-device-canvas
-      dpr={[1, 1.75]}
+      dpr={Math.min(window.devicePixelRatio || 1, 1.75)}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
@@ -341,7 +357,6 @@ export default function DeviceScene(props: Props) {
       }}
       camera={{ fov: 32, near: 0.02, far: 20, position: [-0.42, 0.30, 0.72] }}
     >
-      <AdaptiveDpr pixelated />
       {/* Warm key + warm fill, not the old blue-grey rig. The approved product
           photos are a warm room (#fef9ef body, ~3000K light); a blue fill
           neutralised the ivory albedo to #d7d4cf and the model read as bare

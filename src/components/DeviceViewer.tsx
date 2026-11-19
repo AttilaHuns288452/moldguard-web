@@ -27,10 +27,12 @@ type Props = {
   onSelect: (id: PartId | null) => void
   autoSpin: boolean
   mode: 'tour' | 'explode'
+  /** shift the framed centre in model units so the hero clears its readout card */
+  nudgeX?: number
 }
 
 /** 3D stage: lazy WebGL, real zoom, selection, graceful fallback. */
-export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome = true, hotspots = true }: Props) {
+export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome = true, hotspots = true, nudgeX }: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   const [loaded, setLoaded] = useState(false)
@@ -144,6 +146,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
               onLoaded={handleLoaded}
               onHoverHotspot={handleHover}
               hotspots={hotspots}
+              nudgeX={nudgeX}
             />
           </Suspense>
           </SceneBoundary>
