@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { HERO } from '../content'
 import { LineReveal, MagButton } from '../components/ui'
 import DeviceViewer from '../components/DeviceViewer'
+import { prefersReducedMotion } from '../lib/motion'
 
 /**
  * Hero: THE PRODUCT ITSELF, IN 3D. The owner's direction (2026-11-19) is
@@ -16,6 +17,10 @@ import DeviceViewer from '../components/DeviceViewer'
 export default function Hero() {
   // the hero stage is a live model: no part selected, assembled, slowly turning
   const [active, setActive] = useState<Parameters<typeof DeviceViewer>[0]['active']>(null)
+  // the hero is the first thing rendered: a model that spins against a
+  // reduced-motion preference is the one place the site ignored it
+  const [spin, setSpin] = useState(() => !prefersReducedMotion())
+  void setSpin
   return (
     <section id="top" className="relative overflow-hidden bg-[#f7fbff]">
       {/* Column split measured off the PDF: content 1120pt = text 36.3% ·
@@ -52,7 +57,7 @@ export default function Hero() {
               <DeviceViewer
                 active={active}
                 onSelect={setActive}
-                autoSpin
+                autoSpin={spin}
                 mode="tour"
                 chrome={false}
                 hotspots={false}
