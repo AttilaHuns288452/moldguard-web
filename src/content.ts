@@ -80,7 +80,7 @@ export const FEATURES = {
   cta: { label: 'Explore the features', href: '/features' },
   items: [
     { n: '1', title: 'Mold Risk Index Engine', body: 'Risk scoring based on humidity, temperature and exposure duration.' },
-    { n: '2', title: 'Early Detection', body: 'VOC sensing helps identify developing microbial conditions before visible signs.' },
+    { n: '2', title: 'Early detection', body: 'Humidity, temperature and sustained exposure catch the risky window before mould becomes visible. VOC sensing adds context alongside them, never a verdict on its own.' },
     { n: '3', title: 'Auto-Dehumidification', body: 'Responds automatically when risk rises.' },
     { n: '4', title: 'Dashboard & Analytics', body: 'Historical trends and multi-room visibility.' },
     { n: '5', title: 'Mobile Alerts & Control', body: 'Know when something changes and act remotely.' },
