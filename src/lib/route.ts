@@ -5,6 +5,8 @@
  */
 export const PAGES = ['home', 'features', 'how-it-works', 'contact', 'download'] as const
 export type Page = (typeof PAGES)[number]
+/** Not a route: a URL that matches nothing. Rendered as a real 404. */
+export type Location_ = Page | 'not-found'
 
 const PATHS: Record<Page, string> = {
   home: '/',
@@ -18,10 +20,13 @@ export function pathFor(page: Page): string {
   return PATHS[page]
 }
 
-export function pageFromLocation(): Page {
+export function pageFromLocation(): Location_ {
   const p = window.location.pathname.replace(/\/+$/, '') || '/'
   const hit = (Object.entries(PATHS) as [Page, string][]).find(([, v]) => v === p)
-  return hit ? hit[0] : 'home'
+  // 'not-found', NOT 'home': falling back to the home page served every mistyped
+  // URL with HTTP 200 and the home content, so a broken link looked fine to both
+  // the visitor and to a crawler.
+  return hit ? hit[0] : 'not-found'
 }
 
 export function navigate(page: Page) {
@@ -38,7 +43,7 @@ export function navigate(page: Page) {
  * and canonical, and four of the five pages started at h2 — invisible to search
  * engines and awkward for a screen reader, which had no page heading to announce.
  */
-const HEAD: Record<Page, { title: string; description: string }> = {
+const HEAD: Record<Location_, { title: string; description: string }> = {
   home: {
     title: 'MoldGuard - know mold is coming before it shows',
     description:
@@ -63,9 +68,13 @@ const HEAD: Record<Page, { title: string; description: string }> = {
     title: 'Get the app - MoldGuard',
     description: 'Scan to get the MoldGuard app and monitor your home from anywhere.',
   },
+  'not-found': {
+    title: 'Page not found - MoldGuard',
+    description: 'That page does not exist. Head back to the MoldGuard home page.',
+  },
 }
 
-export function applyHead(page: Page) {
+export function applyHead(page: Location_) {
   const meta = HEAD[page]
   document.title = meta.title
   const set = (sel: string, attr: string, value: string) => {
@@ -73,9 +82,15 @@ export function applyHead(page: Page) {
     if (el) el.setAttribute(attr, value)
   }
   set('meta[name="description"]', 'content', meta.description)
-  const url = `https://moldguard-web.vercel.app${pathFor(page)}`
-  set('link[rel="canonical"]', 'href', url)
-  set('meta[property="og:url"]', 'content', url)
+  // No canonical for a URL that does not exist: pointing it at '/' would tell a
+  // crawler the wrong page is canonical.
+  const url = page === 'not-found' ? null : `https://moldguard-web.vercel.app${pathFor(page)}`
+  if (url) {
+    set('link[rel="canonical"]', 'href', url)
+    set('meta[property="og:url"]', 'content', url)
+  } else {
+    document.querySelector('link[rel="canonical"]')?.removeAttribute('href')
+  }
   set('meta[property="og:title"]', 'content', meta.title)
   set('meta[property="og:description"]', 'content', meta.description)
   set('meta[name="twitter:title"]', 'content', meta.title)

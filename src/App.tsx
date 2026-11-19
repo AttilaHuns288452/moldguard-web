@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Header from './components/Header'
 import Footer from './sections/Footer'
 import { ScrollProgress } from './components/ui'
-import { applyHead, pageFromLocation, type Page } from './lib/route'
+import { applyHead, pageFromLocation, type Location_ } from './lib/route'
 
 // page 1 of the PDF
 import Hero from './sections/Hero'
@@ -24,6 +24,7 @@ import Faq from './sections/Faq'
 import Contact from './sections/Contact'
 import GetApp from './sections/GetApp'
 import ClosingCta from './sections/ClosingCta'
+import NotFound from './sections/NotFound'
 
 /**
  * Page 1 of the PDF, in the PDF's own order and with the PDF's own bands.
@@ -44,7 +45,7 @@ import ClosingCta from './sections/ClosingCta'
  *   /download    — page 5: get the app
  */
 export default function App() {
-  const [page, setPage] = useState<Page>(() => pageFromLocation())
+  const [page, setPage] = useState<Location_>(() => pageFromLocation())
 
   // per-route title/description/canonical, applied on first paint and on change.
   // `main` already carries tabIndex={-1} for exactly this: without moving focus,
@@ -113,6 +114,7 @@ export default function App() {
             <ClosingCta />
           </>
         )}
+        {page === 'not-found' && <NotFound />}
       </main>
       <Footer />
     </>

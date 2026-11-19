@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import { Logo } from './Marks'
 
-import { navigate, pathFor, type Page } from '../lib/route'
+import { navigate, pathFor, type Page, type Location_ } from '../lib/route'
 
 const NAV: { id: Page; label: string }[] = [
   { id: 'features', label: 'Features' },
@@ -10,7 +10,7 @@ const NAV: { id: Page; label: string }[] = [
   { id: 'contact', label: 'Contact' },
 ]
 
-export default function Header({ page }: { page: Page }) {
+export default function Header({ page }: { page: Location_ }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   // keep anchor jumps clear of the sticky header, whatever height it takes
   useEffect(() => {
