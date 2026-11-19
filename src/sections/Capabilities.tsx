@@ -13,14 +13,36 @@ export default function Capabilities() {
   return (
     <section id="capabilities" className="section">
       <div className="shell">
-        <div className="max-w-[780px]">
-          <LineReveal
-            as="h1"
-            lines={splitTitle(CAPABILITIES.title)}
-            className="max-w-[24ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] font-[650] text-deep"
-          />
-          <Reveal delay={70}>
-            <p className="mt-3 max-w-[66ch] text-[1rem] leading-relaxed text-ink-2">{CAPABILITIES.lede}</p>
+        {/* PDF page 2 opens with a two-column hero: the copy on the left and a
+            photo on the right carrying the caption banner
+            "WARM AIR MEETS COLD STONE - AND CONDENSATION WANTS TO FORM."
+            The site had the copy alone, which is why the page felt like text. */}
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
+          <div className="max-w-[780px]">
+            <LineReveal
+              as="h1"
+              lines={splitTitle(CAPABILITIES.title)}
+              className="max-w-[24ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] font-[650] text-deep"
+            />
+            <Reveal delay={70}>
+              <p className="mt-3 max-w-[66ch] text-[1rem] leading-relaxed text-ink-2">{CAPABILITIES.lede}</p>
+            </Reveal>
+          </div>
+
+          <Reveal delay={110}>
+            <figure className="overflow-hidden rounded-shell border border-line bg-card shadow-[0_1px_2px_rgba(21,56,94,.05),0_20px_44px_-30px_rgba(21,56,94,.45)]">
+              <img
+                src="/condensation.webp"
+                alt="Warm air meeting a cold stone bath, where condensation forms"
+                width={1100}
+                height={733}
+                className="aspect-[3/2] w-full object-cover"
+                style={{ height: 'auto' }}
+              />
+              <figcaption className="bg-deep px-5 py-3.5 text-[11px] font-[650] tracking-[0.1em] text-on-dark uppercase">
+                Warm air meets cold stone &mdash; and condensation wants to form.
+              </figcaption>
+            </figure>
           </Reveal>
         </div>
 
