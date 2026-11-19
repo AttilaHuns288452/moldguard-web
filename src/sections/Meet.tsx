@@ -102,7 +102,7 @@ export default function Meet() {
                   type="button"
                   onClick={() => setAutoSpin((v) => !v)}
                   aria-pressed={autoSpin}
-                  className={`rounded-tight border px-2.5 py-1 text-[11px] transition-colors ${
+                  className={`rounded-tight border px-3 py-2 text-[11px] transition-colors ${
                     autoSpin ? 'border-accent-ink bg-[#2563eb0f] text-deep' : 'border-line text-ink-3 hover:border-line-hi'
                   }`}
                 >
@@ -144,13 +144,13 @@ export default function Meet() {
                   <Play className="size-3" strokeWidth={2.5} /> How it works
                 </span>
                 <div className="flex items-center gap-1">
-                  <span className="measure mr-1.5 text-[11px] text-ink-3">{active ? tourStep + 1 : 0} / {TOUR.length}</span>
+                  <span className="measure mr-1.5 text-[11px] text-ink-3">{active ? `Step ${tourStep + 1} of ${TOUR.length}` : `${TOUR.length}-step tour`}</span>
                   <button type="button" onClick={() => step(-1)} aria-label="Previous component"
-                    className="grid size-7 place-items-center rounded-full border border-line text-ink-2 transition-colors hover:border-line-hi hover:text-ink">
+                    className="grid size-10 place-items-center rounded-full border border-line text-ink-2 transition-colors hover:border-line-hi hover:text-ink">
                     <ArrowLeft className="size-3.5" strokeWidth={2} />
                   </button>
                   <button type="button" onClick={() => step(1)} aria-label="Next component"
-                    className="grid size-7 place-items-center rounded-full border border-line text-ink-2 transition-colors hover:border-line-hi hover:text-ink">
+                    className="grid size-10 place-items-center rounded-full border border-line text-ink-2 transition-colors hover:border-line-hi hover:text-ink">
                     <ArrowRight className="size-3.5" strokeWidth={2} />
                   </button>
                 </div>
@@ -194,18 +194,21 @@ export default function Meet() {
           </Reveal>
         </div>
 
-        {/* PDF page 1: the four stages, verbatim */}
-        <ol className="mt-10 grid gap-px overflow-hidden rounded-soft border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {MEET.stages.map((st, i) => (
-            <Reveal as="li" key={st.n} delay={i * 60}>
-              <div className="h-full bg-card px-5 py-4">
-                <span className="measure text-[11px] tracking-[0.14em] text-accent">{st.n}</span>
-                <h3 className="mt-1.5 text-[14.5px] font-[650] text-deep">{st.title}</h3>
-                <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{st.body}</p>
-              </div>
-            </Reveal>
-          ))}
-        </ol>
+        {/* The four stage cards that used to sit here said the same thing as the
+            data-flow figure directly below them (and as Sense/Score/Act and the
+            viewer's own "How it works" panel). On the home page the flow is now
+            stated ONCE, as the diagram, with a link to the full walkthrough. */}
+        <Reveal delay={60}>
+          <p className="mt-8 text-[14px] text-ink-2">
+            The loop in full, stage by stage:{' '}
+            <a
+              href="/how-it-works"
+              className="inline-flex min-h-11 items-center font-[650] text-accent-ink underline-offset-2 hover:underline"
+            >
+              how it works
+            </a>
+          </p>
+        </Reveal>
 
         {/* PDF page 1: "See the full data flow" — the band that makes this the
             largest section of the artboard. */}

@@ -15,7 +15,6 @@ import Comparison from './sections/Comparison'
 import PartsTrust from './sections/PartsTrust'
 import WhatItDoes from './sections/WhatItDoes'
 // page 2
-import SenseScoreAct from './sections/SenseScoreAct'
 // page 3 (how it works)
 import Features from './sections/Features'
 import Ownership from './sections/Ownership'
@@ -78,7 +77,6 @@ export default function App() {
             <Hero />
             <Problem />
             <Meet />
-            <SenseScoreAct />
             <Features />
             <Ownership />
             <Placement />
@@ -98,7 +96,6 @@ export default function App() {
         {page === 'how-it-works' && (
           <>
             <Loop />
-            <SenseScoreAct />
             <Faq />
             <ClosingCta />
           </>
