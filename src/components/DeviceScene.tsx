@@ -303,7 +303,7 @@ function Hotspot({ part, open, onSelect, onHover }: {
           onClick={onSelect}
           onPointerEnter={() => onHover(true)}
           onPointerLeave={() => onHover(false)}
-          aria-label={part.name}
+          aria-label={`Part ${PART_NO[part.id]}: ${part.name}`}
           aria-pressed={open}
           className="relative grid size-11 place-items-center"
         >

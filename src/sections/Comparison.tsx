@@ -49,7 +49,7 @@ export default function Comparison() {
                     <th scope="row" className={`px-5 py-5 align-top text-[15px] font-[650] ${r.ours ? 'text-accent-ink' : 'text-deep'}`}>
                       {r.option}
                       {r.ours && (
-                        <span className="mt-1.5 inline-flex items-center rounded-full bg-accent-ink px-2 py-0.5 text-[10px] font-[650] tracking-[0.06em] text-white uppercase">
+                        <span className="mt-1.5 inline-flex items-center rounded-full bg-accent-ink px-2 py-0.5 text-[11.5px] font-[650] tracking-[0.06em] text-white uppercase">
                           Recommended
                         </span>
                       )}
@@ -70,7 +70,7 @@ export default function Comparison() {
                   <dl className="mt-2 grid gap-1.5">
                     {[['What it does', r.does], ['Cost model', r.cost], ['Drawbacks', r.drawbacks]].map(([k, v]) => (
                       <div key={k} className="grid grid-cols-[86px_1fr] gap-2">
-                        <dt className="text-[10.5px] font-[650] tracking-[0.08em] text-ink-3 uppercase">{k}</dt>
+                        <dt className="text-[11.5px] font-[650] tracking-[0.08em] text-ink-3 uppercase">{k}</dt>
                         <dd className="text-[13.5px] leading-relaxed text-ink-2">{v}</dd>
                       </div>
                     ))}

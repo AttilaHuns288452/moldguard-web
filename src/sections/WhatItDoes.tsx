@@ -87,7 +87,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
                 <span className="text-[11px] font-[650] text-ink-3 uppercase">{analytics.sample}</span>
                 <div className="flex gap-1">
                   {analytics.ranges.map((r, i) => (
-                    <span key={r} className={`rounded-tight px-2 py-0.5 text-[10.5px] transition-colors ${i === 2 ? 'bg-[#2563eb0f] font-[650] text-deep' : 'text-ink-3'}`}>
+                    <span key={r} className={`rounded-tight px-2 py-0.5 text-[11.5px] transition-colors ${i === 2 ? 'bg-[#2563eb0f] font-[650] text-deep' : 'text-ink-3'}`}>
                       {r}
                     </span>
                   ))}
@@ -97,7 +97,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
                 <polyline points="0,58 40,50 80,44 120,26 160,38 200,54 240,62 280,60 320,58" fill="none" stroke="#15385e" strokeWidth="2" />
                 <polyline points="0,66 40,62 80,58 120,50 160,56 200,64 240,68 280,66 320,64" fill="none" stroke="#2563eb" strokeWidth="1.5" strokeDasharray="4 3" />
               </svg>
-              <p className="mt-1 text-[10.5px] text-ink-3">Illustrative demo data.</p>
+              <p className="mt-1 text-[11.5px] text-ink-3">Illustrative demo data.</p>
             </div>
           </Reveal>
         </div>

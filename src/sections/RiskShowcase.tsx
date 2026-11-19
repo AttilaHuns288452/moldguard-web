@@ -72,7 +72,7 @@ export default function RiskShowcase() {
             <div className="rounded-shell border border-line bg-card p-6 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-28px_rgba(21,56,94,.35)]">
               <div className="flex items-center justify-between border-b border-line pb-3">
                 <span className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Mold Risk Index</span>
-                <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 text-[10px] font-[650] tracking-[0.1em] text-ink-3 uppercase">
+                <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 text-[11.5px] font-[650] tracking-[0.1em] text-ink-3 uppercase">
                   Illustrative
                 </span>
               </div>
@@ -111,7 +111,7 @@ export default function RiskShowcase() {
                     <li key={label as string}>
                       <div className="flex items-baseline justify-between">
                         <span className="text-[11.5px] text-ink-2">{label}</span>
-                        <span className="measure text-[11.5px] font-[650] text-deep">{v}<span className="ml-0.5 text-[10px] text-ink-3">{unit}</span></span>
+                        <span className="measure text-[11.5px] font-[650] text-deep">{v}<span className="ml-0.5 text-[11.5px] text-ink-3">{unit}</span></span>
                       </div>
                       <div className="mt-1 h-[3px] w-full rounded-full bg-line">
                         <div className="h-[3px] rounded-full bg-accent-ink transition-[width] duration-700"
@@ -126,7 +126,7 @@ export default function RiskShowcase() {
                 <span className="text-[11.5px] text-ink-3">{sc.room}</span>
                 <span className="measure text-[11.5px] text-ink-3">{sc.hours}h sustained</span>
               </div>
-              <div className="mt-3 flex items-center gap-3 text-[10.5px] text-ink-3">
+              <div className="mt-3 flex items-center gap-3 text-[11.5px] text-ink-3">
                 {[['Safe', 0, 40], ['Watch', 40, 70], ['Act', 70, 100]].map(([n, lo, hi]) => (
                   <span key={n as string} className="flex items-center gap-1.5">
                     <span className="h-[3px] w-4 rounded-full" style={{ background: n === 'Act' ? '#1d4ed8' : n === 'Watch' ? '#5b7591' : '#465e7a' }} />

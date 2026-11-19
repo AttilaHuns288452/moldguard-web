@@ -68,9 +68,9 @@ export default function Capabilities() {
                 <Gauge value={engine.index ?? 0} className="block w-full" />
                 <div className="-mt-[2.6rem] text-center">
                   <p className="measure text-[1.85rem] leading-none font-semibold text-deep">{engine.index}</p>
-                  <p className="mt-0.5 text-[10px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
+                  <p className="mt-0.5 text-[11.5px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
                 </div>
-                <div className="mt-2 flex justify-between text-[10px] tracking-[0.1em] text-ink-3 uppercase">
+                <div className="mt-2 flex justify-between text-[11.5px] tracking-[0.1em] text-ink-3 uppercase">
                   <span>Low</span><span>Watch</span><span>High</span>
                 </div>
               </div>

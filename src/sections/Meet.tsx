@@ -191,7 +191,7 @@ export default function Meet() {
               </ul>
 
               <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5">
-                <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 text-[10.5px] font-[650] tracking-[0.1em] text-ink-3 uppercase">Illustrative readouts</span>
+                <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 text-[11.5px] font-[650] tracking-[0.1em] text-ink-3 uppercase">Illustrative readouts</span>
                 <span className="text-[11px] text-ink-3">
                   {PARTS.length} components · real SketchUp geometry
                 </span>

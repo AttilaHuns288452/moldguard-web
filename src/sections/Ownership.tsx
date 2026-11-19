@@ -23,7 +23,7 @@ export default function Ownership() {
                 caveat — the study states plainly that production is not yet
                 profitable, so quoting only the build cost would mislead. */}
             <div className="mt-6 rounded-soft border border-[#eaf2fc26] bg-[#eaf2fc08] p-4">
-              <p className="text-[10.5px] font-[650] tracking-[0.12em] text-on-dark-2 uppercase">{OWN.cost.label}</p>
+              <p className="text-[11.5px] font-[650] tracking-[0.12em] text-on-dark-2 uppercase">{OWN.cost.label}</p>
               <p className="measure mt-1 text-[1.6rem] leading-none font-semibold text-white">{OWN.cost.figure}</p>
               <p className="mt-1 text-[12.5px] text-on-dark-2">{OWN.cost.note}</p>
               <p className="mt-3 border-t border-[#eaf2fc26] pt-3 text-[13px] leading-relaxed text-on-dark">{OWN.cost.caveat}</p>

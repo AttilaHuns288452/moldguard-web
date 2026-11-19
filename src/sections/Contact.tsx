@@ -114,7 +114,7 @@ export default function Contact() {
                 <li className="py-4">
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Email</p>
                   <a href={`mailto:${CONTACT.email}`}
-                    className="mt-1 block text-[15px] font-[650] text-deep underline-offset-2 hover:underline">
+                    className="mt-1 inline-flex min-h-11 items-center text-[15px] font-[650] text-deep underline-offset-2 hover:underline">
                     {CONTACT.email}
                   </a>
                   <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{CONTACT_PAGE.directNotes[0]}</p>
@@ -122,7 +122,7 @@ export default function Contact() {
                 <li className="py-4">
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Phone</p>
                   <a href={`tel:${CONTACT.phoneHref}`}
-                    className="mt-1 block text-[15px] font-[650] text-deep underline-offset-2 hover:underline">
+                    className="mt-1 inline-flex min-h-11 items-center text-[15px] font-[650] text-deep underline-offset-2 hover:underline">
                     {CONTACT.phone}
                   </a>
                   <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{CONTACT_PAGE.directNotes[1]}</p>
@@ -135,7 +135,7 @@ export default function Contact() {
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">App</p>
                   <p className="mt-1 text-[13px] leading-relaxed text-ink-2">
                     {CONTACT_PAGE.app.kicker} {CONTACT_PAGE.app.body}{' '}
-                    <a href="/download" className="font-[650] text-accent-ink underline-offset-2 hover:underline">
+                    <a href="/download" className="inline-flex min-h-11 items-center font-[650] text-accent-ink underline-offset-2 hover:underline">
                       {CONTACT_PAGE.app.cta}
                     </a>
                   </p>

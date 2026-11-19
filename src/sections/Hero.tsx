@@ -48,7 +48,7 @@ export default function Hero() {
               one quiet cue down to the next section fixes that */}
           <a
             href="#problem"
-            className="mt-8 inline-flex items-center gap-1.5 text-[13px] text-ink-3 transition-colors hover:text-ink"
+            className="mt-8 inline-flex min-h-11 items-center gap-1.5 text-[13px] text-ink-3 transition-colors hover:text-ink"
           >
             See how it works
             <span aria-hidden="true">&darr;</span>
@@ -74,7 +74,7 @@ export default function Hero() {
                   in the SketchUp file, and the interior IS the product argument
                   (thermoelectric stack, heatsink, fan, tank). Saying so turns a
                   "broken front door" into a cutaway. */}
-              <p className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-full bg-deep/90 px-3 py-1 text-[10.5px] font-[650] tracking-[0.12em] text-on-dark uppercase backdrop-blur-sm">
+              <p className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-full bg-deep/90 px-3 py-1 text-[11px] font-[650] tracking-[0.12em] text-on-dark uppercase backdrop-blur-sm">
                 Open view &middot; inside the unit
               </p>
               <p className="pointer-events-none absolute inset-x-4 bottom-4 rounded-tight bg-card/92 px-3 py-2 text-center text-[11.5px] leading-snug text-ink-2 backdrop-blur-sm">
@@ -91,7 +91,7 @@ export default function Hero() {
               <span>Mold Risk Index</span>
               {/* the same disclosure Meet and the data-flow figure carry: this is
                   demo data, not a live device reading */}
-              <span className="rounded-full border border-[#eaf2fc33] px-1.5 py-0.5 text-[9.5px] tracking-[0.08em]">Demo</span>
+              <span className="rounded-full border border-[#eaf2fc33] px-1.5 py-0.5 text-[10.5px] tracking-[0.08em]">Demo</span>
             </p>
             <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">
               38<span className="text-[13px] text-on-dark-2">/100</span>
