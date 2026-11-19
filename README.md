@@ -62,10 +62,10 @@ python3 -c "import json,struct;d=open('public/moldguard.glb','rb').read();cl,_=s
 
 - The hero risk readout (`38`, `82% RH`, `26h`) and every dashboard/app value is
   **demo data**, labelled as such on screen. The page is not connected to a device.
-- The contact form posts to a **Google Form** when one is configured in
-  `.env.local`/Vercel env (setup: `docs/google-form-setup.md`). With no form
-  configured it falls back to composing a `mailto:` to the team address, and the
-  disclosure under the button changes to match. Nothing is stored by this site.
+- The contact form posts to a **live Google Form** (`docs/google-form-setup.md`),
+  verified end to end. With no form configured it falls back to composing a
+  `mailto:` to the team address, and the disclosure under the button changes to
+  match. Nothing is stored by this site.
 - Everything else (product capabilities, hardware, placement, team, FAQ) is from
   the PDF.
 

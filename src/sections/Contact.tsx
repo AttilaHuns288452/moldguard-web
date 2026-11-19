@@ -34,13 +34,22 @@ export default function Contact() {
   // URL; the entry.* field ids map this form's inputs onto that form's questions.
   // When it is not configured we fall back to a mailto: so the page never
   // silently does nothing. Same pattern as the animewaifu feedback form.
-  const FORM_ACTION = import.meta.env.VITE_GOOGLE_FORM_ACTION as string | undefined
+  // The MoldGuard form, verified live 2026-11-19 by submitting it and reading the
+  // real POST body. These ids are PUBLIC - a form id and entry ids are not secrets,
+  // and anyone can read them off the rendered form - so they ship as defaults and
+  // `VITE_*` only overrides them. Keeping them here means production works without
+  // a build-time env dance, and the fallback is decided by real configuration
+  // rather than by whichever deploy happened to have the variables set.
+  const FORM_ACTION =
+    (import.meta.env.VITE_GOOGLE_FORM_ACTION as string | undefined) ??
+    'https://docs.google.com/forms/d/e/1FAIpQLSf4Vruzlbu0oIySPNBW33dVq05tpY9ytPglLXfUCvEMlsTyEg/formResponse'
   const ENTRY = {
-    name: import.meta.env.VITE_GOOGLE_FORM_ENTRY_NAME as string | undefined,
-    email: import.meta.env.VITE_GOOGLE_FORM_ENTRY_EMAIL as string | undefined,
-    phone: import.meta.env.VITE_GOOGLE_FORM_ENTRY_PHONE as string | undefined,
+    name: (import.meta.env.VITE_GOOGLE_FORM_ENTRY_NAME as string | undefined) ?? 'entry.273512640',
+    // `emailAddress` is Google's built-in email collector, NOT an entry id.
+    email: (import.meta.env.VITE_GOOGLE_FORM_ENTRY_EMAIL as string | undefined) ?? 'emailAddress',
+    phone: (import.meta.env.VITE_GOOGLE_FORM_ENTRY_PHONE as string | undefined) ?? 'entry.1363306184',
     role: import.meta.env.VITE_GOOGLE_FORM_ENTRY_ROLE as string | undefined,
-    about: import.meta.env.VITE_GOOGLE_FORM_ENTRY_MESSAGE as string | undefined,
+    about: (import.meta.env.VITE_GOOGLE_FORM_ENTRY_MESSAGE as string | undefined) ?? 'entry.1184808363',
   }
   const useForm = Boolean(FORM_ACTION && ENTRY.about)
 

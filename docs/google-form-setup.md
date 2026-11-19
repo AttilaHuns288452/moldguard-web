@@ -1,63 +1,50 @@
-# Contact form → Google Forms
+# Contact form → Google Form
 
-The `/contact` enquiry form posts to a Google Form when one is configured, and
-falls back to opening the visitor's own mail app (`mailto:`) when it is not.
-Nothing breaks either way, and the disclosure under the button changes to match
-whichever path is live.
+**Status: LIVE.** The form is created, published, and wired into the site.
 
-## Why it needs a form from you
+| | |
+|---|---|
+| Form (fill in) | https://docs.google.com/forms/d/e/1FAIpQLSf4Vruzlbu0oIySPNBW33dVq05tpY9ytPglLXfUCvEMlsTyEg/viewform |
+| Form (edit) | https://docs.google.com/forms/d/1JghZUdTwB6b0Q-Jfyuos6iSKadY-dJtfdkFRw30OgOI/edit |
+| Owner | attilasabiniano@gmail.com |
 
-The Anime Waifu quiz's `entry.*` ids belong to *that* form. Reusing them would
-send MoldGuard enquiries into the quiz's feedback spreadsheet, so the MoldGuard
-form has to be its own.
+Submissions land in the form's **Responses** tab (2 test responses recorded
+2026-11-19, both accepted with "Your response has been recorded").
 
-## Set up (about 2 minutes)
+## Field mapping
 
-1. Go to <https://forms.new> and create a form with these five questions, in this
-   order and with these exact types:
-   - **Name** — Short answer, required
-   - **Email** — Short answer, required
-   - **Phone** — Short answer, optional
-   - **I am a** — Short answer (not multiple choice; the site sends the label)
-   - **Message** — Paragraph, required
-2. Top right → **Send** → the **link** tab (not the embed tab).
-3. Open <https://forms.new> preview in a new tab → open the live form → click
-   **Get pre-filled link**, fill anything, click **Get link**, copy it.
-   The URL looks like:
-   ```
-   https://docs.google.com/forms/d/e/1FAIpQL.../viewform?usp=pp_url&entry.111=Name&entry.222=Email
-   ```
-   The `1FAIpQL...` part is the form id, and each `entry.NNN` is a question's id.
-4. Put them in `.env.local` (gitignored, already stubbed with these keys):
+Verified by submitting the live form and reading the real POST body — not by
+guessing the ids:
 
 ```dotenv
-VITE_GOOGLE_FORM_ACTION=https://docs.google.com/forms/d/e/<FORM_ID>/formResponse
-VITE_GOOGLE_FORM_ENTRY_NAME=entry.NNN
-VITE_GOOGLE_FORM_ENTRY_EMAIL=entry.NNN
-VITE_GOOGLE_FORM_ENTRY_PHONE=entry.NNN
-VITE_GOOGLE_FORM_ENTRY_ROLE=entry.NNN
-VITE_GOOGLE_FORM_ENTRY_MESSAGE=entry.NNN
+VITE_GOOGLE_FORM_ACTION=https://docs.google.com/forms/d/e/1FAIpQLSf4Vruzlbu0oIySPNBW33dVq05tpY9ytPglLXfUCvEMlsTyEg/formResponse
+VITE_GOOGLE_FORM_ENTRY_NAME=entry.273512640
+VITE_GOOGLE_FORM_ENTRY_EMAIL=emailAddress
+VITE_GOOGLE_FORM_ENTRY_PHONE=entry.1363306184
+VITE_GOOGLE_FORM_ENTRY_ROLE=
+VITE_GOOGLE_FORM_ENTRY_MESSAGE=entry.1184808363
 ```
 
-5. `npm run build` and redeploy. Vite inlines `VITE_*` at build time, so the
-   values must be present **during the build**, including a Vercel build — add
-   them under Project → Settings → Environment Variables.
+Two things worth knowing:
 
-## Verify
+- **Email is `emailAddress`, not `entry.NNN`.** Google's built-in email collector
+  posts under its own key, so it is not an entry id like the others.
+- **"I am a" has no id** (`VITE_GOOGLE_FORM_ENTRY_ROLE` is empty) so the role is
+  simply not sent. Add a short-answer "I am a" question in the form, read its new
+  entry id from a fresh pre-filled link, and set it here — no code change needed.
 
-```bash
-# answers go straight to the form's Responses tab
-npm run dev   # then submit the /contact form once
-```
+## Vercel
 
-A green "Thank you — your message is on its way." panel means the POST left.
-`mode: 'no-cors'` gives an opaque response, so success can only mean the request
-was sent, not that the sheet accepted it — the Responses tab is the real check.
+Vite inlines `VITE_*` at **build** time, so these six must also exist in
+Vercel → Project → Settings → Environment Variables. `.env.local` is gitignored.
 
-## How it works
+## Behaviour
 
-`src/sections/Contact.tsx` builds a `URLSearchParams` body and POSTs it with
-`mode: 'no-cors'` and `Content-Type: application/x-www-form-urlencoded`, plus
-the three fields Google requires (`fvv`, `pageHistory`, `fbzx`). If
-`VITE_GOOGLE_FORM_ACTION` or the message entry id is missing, `useForm` is false
-and the submit handler sets `window.location.href` to the mailto instead.
+`src/sections/Contact.tsx` posts a `URLSearchParams` body with
+`mode: 'no-cors'` + `Content-Type: application/x-www-form-urlencoded`, plus the
+`fvv` / `pageHistory` / `fbzx` fields Google requires. On success the form is
+replaced by a thank-you panel; on failure a `role="alert"` tells the visitor to
+email directly. If `VITE_GOOGLE_FORM_ACTION` or the message id is missing,
+`useForm` is false and submit falls back to `mailto:` — and the disclosure under
+the button changes to match, so it never claims "no backend" while posting to
+Forms.
