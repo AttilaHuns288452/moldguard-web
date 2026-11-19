@@ -295,7 +295,7 @@ export const AUTOMATIONS = {
 /** Illustrative scenarios. The only invented numbers, labelled as demo data,
  *  anchored to the PDF's own sample readings. */
 export const RISK_SCENARIOS = [
-  { label: 'Closet', room: 'Closet', index: 87, band: 'Act', rh: 79, temp: 29, hours: 26, dew: 0.4,
+  { label: 'Closet', room: 'Closet', index: 87, band: 'Act', rh: 79, temp: 29, hours: 26, dew: -0.4,
     note: 'The PDF sample: closet 82% RH, 26h sustained, dew point margin −0.4°C. The loop has already switched the dehumidifier on.' },
   { label: 'Bathroom', room: 'Bathroom', index: 58, band: 'Watch', rh: 71, temp: 29, hours: 9, dew: 1.6,
     note: 'A shower spikes humidity for minutes. Time-weighted scoring keeps this at Watch instead of tripping a threshold.' },
@@ -357,7 +357,7 @@ export const PARTS_TRUST = {
     {
       n: '03',
       title: 'Dehumidification unit',
-      body: 'Thermoelectric TEC-12706 Peltier cooling stack between heat exchangers, with an 80 mm fan moving room air across the heatsink. Two units move roughly a litre of condensate a day.',
+      body: 'Thermoelectric TEC-12706 Peltier cooling stack between heat exchangers, with an 80 mm fan moving room air across the heatsink. Condensate is collected in a removable reservoir, with capacity tracked by a time-of-flight sensor.',
     },
     {
       n: '04',

@@ -31,7 +31,7 @@ export type Part = {
 export const PARTS: Part[] = [
   {
     id: 'sensor', name: 'Humidity & temperature sensor',
-    what: 'DHT11 relative-humidity and temperature sensor, with the VL53L0X time-of-flight sensor beside it.',
+    what: 'SHT41 relative-humidity and temperature sensor, with the VL53L0X time-of-flight sensor beside it.',
     role: 'Two of the four Mold Risk Index inputs. Humidity and temperature are the core of the score, not a side reading.',
     at: [-0.0752, 0.154, -0.204], size: [0.0315, 0.0477, 0.1151],
     face: 'front',
