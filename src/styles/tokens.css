@@ -130,6 +130,9 @@
   }
 
   .section      { padding: 108px 0; }
+  /* 108px top AND bottom is 216px of dead air between blocks on a 390px screen.
+     Measured off the mobile screenshots: it reads as gaps, not rhythm. */
+  @media (max-width: 900px) { .section { padding: 64px 0; } }
   .section-tight{ padding: 72px 0; }
 
   /* ── page-1 band map, sampled from the PDF at the page edge (1280pt canvas)
