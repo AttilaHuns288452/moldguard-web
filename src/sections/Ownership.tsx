@@ -26,8 +26,8 @@ export default function Ownership() {
               <p className="text-[10.5px] font-[650] tracking-[0.12em] text-on-dark-2 uppercase">{OWN.cost.label}</p>
               <p className="measure mt-1 text-[1.6rem] leading-none font-semibold text-white">{OWN.cost.figure}</p>
               <p className="mt-1 text-[12.5px] text-on-dark-2">{OWN.cost.note}</p>
-              <p className="mt-3 border-t border-[#eaf2fc1f] pt-3 text-[11.5px] leading-relaxed text-on-dark-2">{OWN.cost.caveat}</p>
-              <p className="mt-2 text-[10.5px] text-[#8fa8c4]">{OWN.cost.source}</p>
+              <p className="mt-3 border-t border-[#eaf2fc26] pt-3 text-[13px] leading-relaxed text-on-dark">{OWN.cost.caveat}</p>
+              <p className="mt-2 text-[11.5px] text-on-dark-2">{OWN.cost.source}</p>
             </div>
           </div>
         </Reveal>
