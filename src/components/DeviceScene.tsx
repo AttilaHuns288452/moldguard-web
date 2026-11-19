@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { AdaptiveDpr, Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
-import { PARTS, type PartId } from './parts'
+import { PARTS, PART_NO, type PartId } from './parts'
 
 /**
  * The shipped GLB is meshopt-compressed (EXT_meshopt_compression, 2.3 MB instead
@@ -160,9 +160,10 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
     const bb = new THREE.Box3().setFromObject(model)
     const sz = bb.getSize(new THREE.Vector3())
     const ctr = bb.getCenter(new THREE.Vector3())
-    model.position.x -= ctr.x
-    model.position.z -= ctr.z
-    model.position.y -= bb.min.y
+    // Do NOT re-centre the model: PARTS.at and the hotspot positions are in the
+    // model's own coordinates. Shifting the model left every hotspot behind
+    // (measured 950px on a stage ending at 792). The camera aims at the real
+    // centre instead, so pins and geometry share one space.
     model.updateWorldMatrix(true, true)
 
     const cam = camera as THREE.PerspectiveCamera
@@ -173,7 +174,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       (sz.y / (2 * Math.tan(halfFov))) / 0.98,
       (sz.x / (2 * Math.tan(halfFov) * cam.aspect)) / 0.92,
     )
-    target.current.set(0, sz.y * 0.5, 0)
+    target.current.set(ctr.x, bb.min.y + sz.y * 0.5, ctr.z)
     ready.current = true
     onLoaded()
   }, [model, scene, onLoaded, camera])
@@ -306,10 +307,20 @@ function Hotspot({ part, open, onSelect, onHover }: {
           aria-pressed={open}
           className="relative grid size-11 place-items-center"
         >
-          <span className={`absolute size-[10px] rounded-full border-2 transition-all duration-300 ${
-            open ? 'border-accent bg-accent shadow-[0_0_18px_3px_#2563ebaa]' : 'border-white bg-deep/70 hover:border-accent hover:bg-accent'
-          }`} />
-          {open && <span className="absolute size-7 animate-pulse rounded-full border border-accent/50" />}
+          {/* A numbered pin, not a bare dot. A dot gives no way to tell the parts
+              apart, which is exactly what makes a cutaway look like an accident
+              rather than an explanation. The number matches the legend beside
+              the stage. */}
+          <span
+            className={`grid size-6 place-items-center rounded-full border-2 text-[10px] font-bold tabular-nums transition-all duration-300 ${
+              open
+                ? 'border-accent bg-accent text-white shadow-[0_0_18px_3px_#2563ebaa]'
+                : 'border-white bg-deep/85 text-white hover:border-accent hover:bg-accent'
+            }`}
+          >
+            {PART_NO[part.id]}
+          </span>
+          {open && <span className="absolute size-9 animate-pulse rounded-full border border-accent/50" />}
         </button>
       </Html>
     </group>

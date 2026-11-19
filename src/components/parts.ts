@@ -117,6 +117,14 @@ export const PARTS: Part[] = [
 
 export const PART_BY_ID = Object.fromEntries(PARTS.map((p) => [p.id, p])) as Record<PartId, Part>
 
+/**
+ * Display numbers, derived from position in PARTS so the pins on the model and
+ * the legend can never disagree with the list. Zero-padded to match the list.
+ */
+export const PART_NO: Record<PartId, string> = Object.fromEntries(
+  PARTS.map((p, i) => [p.id, String(i + 1).padStart(2, '0')]),
+) as Record<PartId, string>
+
 /** Cross-validated overall size, metres: width x height x depth. */
 export const MODEL_SIZE: [number, number, number] = [0.3177, 0.255, 0.159]
 
