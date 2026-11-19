@@ -61,7 +61,7 @@ export default function GetApp() {
             Inside the app
           </p>
         </Reveal>
-        <ul className="mt-4 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 [scrollbar-width:thin]">
+        <ul tabIndex={0} aria-label="MoldGuard app screens, scrollable" className="mt-4 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">
           {FRAMES.map(({ el: Frame, label }) => (
             <li key={label} className="snap-start">
               <Reveal>

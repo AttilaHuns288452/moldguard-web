@@ -98,7 +98,7 @@ export function FrameHome() {
         <div className="pod-grid">
           <div className="pod-card">
             <div className="pod-top">
-              <div className="risk-tag sub-safe"><span className="dot9" style={{ background: '#26a69a' }} />42% • Safe</div>
+              <div className="risk-tag sub-safe"><span className="dot9" style={{ background: 'var(--safe)' }} />42% • Safe</div>
               <div className="pw"><I d={P.bolt} s={15} /></div>
             </div>
             <div className="readout">28°C · 55% RH</div>
@@ -145,7 +145,7 @@ export function FrameDetail() {
         <div className="icon-btn"><I d={P.back} s={19} /></div>
         <div className="flex1">
           <div className="t" style={{ fontSize: 16 }}>Master Bedroom Pod</div>
-          <div className="s"><span style={{ width: 7, height: 7, borderRadius: '50%', background: '#26a69a' }} />HiveMQ Online</div>
+          <div className="s"><span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--safe)' }} />HiveMQ Online</div>
         </div>
         <div className="icon-btn"><I d={P.gear} s={19} /></div>
       </div>
@@ -184,7 +184,7 @@ export function FrameDetail() {
           ))}
           <div className="kpi">
             <div className="hstack between"><span className="kl">Air Quality VOC</span><I d={P.wind} s={15} /></div>
-            <div className="kv">105 <span style={{ fontSize: 11, fontWeight: 700, color: '#26a69a' }}>Normal</span></div>
+            <div className="kv">105 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--safe)' }}>Normal</span></div>
             <div className="ku">SGP40 VOC index</div>
           </div>
         </div>
@@ -212,7 +212,7 @@ export function FrameControl() {
         <div className="icon-btn"><I d={P.back} s={19} /></div>
         <div className="flex1">
           <div className="t" style={{ fontSize: 16 }}>Master Bedroom Pod</div>
-          <div className="s"><span style={{ width: 7, height: 7, borderRadius: '50%', background: '#26a69a' }} />HiveMQ Online</div>
+          <div className="s"><span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--safe)' }} />HiveMQ Online</div>
         </div>
         <div className="icon-btn"><I d={P.gear} s={19} /></div>
       </div>
@@ -230,7 +230,7 @@ export function FrameControl() {
             <div className="toggle"><span className="knob" /></div>
           </div>
           <div className="row row-52">
-            <I d={P.power} s={18} c='#26a69a' />
+            <I d={P.power} s={18} c='var(--safe)' />
             <div className="flex1">
               <div className="st">Relay Indicator</div>
               <div className="ss">Physical SSR state</div>

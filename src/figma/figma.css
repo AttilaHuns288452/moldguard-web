@@ -7,11 +7,11 @@
    ========================================================================= */
 .mg {
   --brand:#2f4156; --brand-dark:#1f2c3d; --brand-soft:#e7edf4;
-  --ink-2:#4a5a72; --muted:#8a8f98; --line:#e3e8f0; --nav-idle:#98a2b3; --sky:#bcd9eb;
-  --info:#3d6bdf; --info-bg:#e9f2fa;
-  --safe:#26a69a; --safe-bg:#e0f2f1;
-  --warn:#f5a623; --warn-bg:#fef5e7;
-  --crit:#ef5350; --crit-bg:#fdecea;
+  --ink-2:#4a5a72; --muted:#666b74; /* was #8a8f98: 3.25:1 on white; #666b74 is 5.36:1 white, 4.73:1 info-bg, 4.90:1 #f2f5f9 */ --line:#e3e8f0; --nav-idle:#5f6b7a; /* was #98a2b3: 2.4:1 on white for inactive nav labels */ --sky:#bcd9eb;
+  --info:#2f5fc9; --info-bg:#e9f2fa; /* #3d6bdf was 4.25:1 on --info-bg; this is 5.15:1, same hue */
+  --safe:#177069; /* was #26a69a: 2.59:1 on --safe-bg; now 5.10:1 */ --safe-bg:#e0f2f1;
+  --warn:#9c6200; /* was #f5a623: 1.88:1 on --warn-bg (worst in the file); now 4.67:1 */ --warn-bg:#fef5e7;
+  --crit:#bf2d2a; /* was #ef5350: 3.05:1 on --crit-bg; now 5.07:1 */ --crit-bg:#fdecea;
 
   width:390px; height:844px; display:flex; flex-direction:column;
   background:linear-gradient(180deg,#e3edf6 0%,#ffffff 60%);
