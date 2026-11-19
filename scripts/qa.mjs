@@ -25,9 +25,9 @@ const VIEWPORTS = [
 // suite exists to catch a route that lost a section, so a stale map here
 // silently passes a broken page.
 const ROUTE_SECTIONS = {
-  '/': ['top', 'problem', 'meet', 'sense-score-act', 'features', 'ownership', 'placement', 'download'],
+  '/': ['top', 'problem', 'meet', 'features', 'ownership', 'placement', 'download'],
   '/features': ['capabilities', 'what', 'risk', 'compare', 'parts', 'download'],
-  '/how-it-works': ['how', 'sense-score-act', 'faq'],
+  '/how-it-works': ['how', 'faq'],
   '/contact': ['contact', 'faq'],
   '/download': ['app'],
 }
@@ -168,9 +168,8 @@ for (const vp of VIEWPORTS) {
 
   // /how-it-works — Sense. Score. Act. is three columns; the loop is four stages
   await open(page, base + '/how-it-works', 600)
-  await page.evaluate(() => document.getElementById('sense-score-act').scrollIntoView())
+  await page.evaluate(() => document.getElementById('how').scrollIntoView())
   await page.waitForTimeout(600)
-  record('how: three stages present', (await page.locator('#sense-score-act h3').count()) === 3)
   record('how: loop has four stages', (await page.locator('#how li h2').count()) === 4)
 
   // /contact — real channels

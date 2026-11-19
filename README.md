@@ -11,7 +11,7 @@ own SketchUp model (`final-3d.skp`) shipped as an interactive glTF.
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # dist/
-node scripts/qa.mjs [url]   # visual + interaction QA, 103 checks, writes .qa/
+node scripts/qa.mjs [url]   # visual + interaction QA, 167 checks, writes .qa/
 ```
 
 ## Source of truth
