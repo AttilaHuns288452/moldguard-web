@@ -69,7 +69,7 @@ export default function Hero() {
                 mode="tour"
                 chrome={false}
                 hotspots={false}
-                nudgeX={0.055}
+                nudgeX={0.022}
               />
               {/* The unit is shown open on purpose: the panels are modelled apart
                   in the SketchUp file, and the interior IS the product argument

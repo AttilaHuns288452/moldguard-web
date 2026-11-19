@@ -86,6 +86,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
   const halfExtent = useRef(new THREE.Vector3(0.15, 0.12, 0.08))
   const target = useRef(new THREE.Vector3(0, 0.41, 0))
   const meshes = useRef<Record<string, THREE.Mesh>>({})
+  const partMeshesRef = useRef<Map<PartId, THREE.Mesh[]>>(new Map())
   const basePos = useRef<Record<string, THREE.Vector3>>({})
 
   useEffect(() => {
@@ -179,6 +180,32 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
     halfExtent.current.set(sz.x / 2, sz.y / 2, sz.z / 2)
     target.current.set(ctr.x, bb.min.y + sz.y * 0.5, ctr.z)
     target.current.x += nudgeX
+
+    // Map each declared part to the meshes that actually live inside its box.
+    // PARTS knows a world centre and size; the GLB knows node names. Those two
+    // never share a key, so the previous `meshes.current[part.id]` lookup matched
+    // nothing and the whole highlight/explode path was dead. Spatial membership
+    // is the honest join, and it is what makes a pin point at a real part.
+    const partMeshes = new Map<PartId, THREE.Mesh[]>()
+    const scratch = new THREE.Box3()
+    for (const part of PARTS) {
+      const [px, py, pz] = part.at
+      const [sx, sy, szp] = part.size
+      const box = new THREE.Box3(
+        new THREE.Vector3(px + nudgeX - sx / 2, py - sy / 2, pz - szp / 2),
+        new THREE.Vector3(px + nudgeX + sx / 2, py + sy / 2, pz + szp / 2),
+      )
+      const hits: THREE.Mesh[] = []
+      model.traverse((o) => {
+        const m = o as THREE.Mesh
+        if (!m.isMesh) return
+        scratch.setFromObject(m)
+        if (box.intersectsBox(scratch)) hits.push(m)
+      })
+      partMeshes.set(part.id, hits)
+    }
+    partMeshesRef.current = partMeshes
+
     ready.current = true
     onLoaded()
   }, [model, scene, onLoaded, camera])
@@ -220,11 +247,11 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
     if (!ready.current) return
     const k = Math.min(1, dt * 6)
     for (const part of PARTS) {
-      const m = meshes.current[part.id]
-      if (!m) continue
-      // materials are shared between meshes, so clone on first use and tint the
-      // clone: a selection must be visible, not just two decimal places of lerp.
+      // A part is a GROUP of meshes (see the spatial map built at load), not one.
+      const group = partMeshesRef.current.get(part.id)
+      if (!group || !group.length) continue
       const selected = active === part.id
+      for (const m of group) {
       const mat = m.material as THREE.MeshStandardMaterial
       if (!mat?.emissive) continue
       // Seed BOTH values together and guard on the intensity field, not on
@@ -240,7 +267,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
       mat.emissiveIntensity += (wantI - mat.emissiveIntensity) * k
       mat.emissive.lerp(selected ? new THREE.Color('#3a7bff') : m.userData.baseEmissive as THREE.Color, k)
       // exploded view: push each part outward along its own offset from centre
-      const base = basePos.current[part.id]
+      const base = basePos.current[m.name]
       if (base) {
         // Offsets are measured from the real body centre (y = 0.127), not the
         // old fake-tower value, and scaled to the 0.25 m body so the parts
@@ -252,6 +279,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
           : base.clone()
         m.position.lerp(goal, k)
       }
+      }
     }
   })
 
@@ -260,7 +288,10 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
   useFrame((_, dt) => {
     if (!ready.current) return
     const k = Math.min(1, dt * 6)
-    const want = mode === 'explode' || active !== null ? 0.02 : 1
+    // Selecting a part ghosts the wrapper so the chosen component reads clearly.
+    // 0.12 is low enough to see through and high enough to keep the unit's outline
+    // legible; 0.02 was below the visibility cut-off, so the whole body vanished.
+    const want = mode === 'explode' || active !== null ? 0.12 : 1
     for (const mesh of Object.values(meshes.current)) {
       if (!mesh.userData.isShell) continue
       const mat = mesh.material as THREE.MeshStandardMaterial
@@ -271,7 +302,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
       const solid = mat.opacity > 0.98
       mat.transparent = !solid
       mat.depthWrite = solid
-      mat.visible = mat.opacity > 0.03
+      mat.visible = mat.opacity > 0.02
     }
   })
 
