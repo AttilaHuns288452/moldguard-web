@@ -319,3 +319,47 @@ export const COMPARISON = {
     },
   ],
 }
+
+/**
+ * PDF page 2, "Built from parts you can trust." — six collapsed spec rows. The
+ * PDF ships them collapsed so its text layer has no body copy; the spec text
+ * here comes from the team's own hardware documents
+ * (moldguard-defense/context/cost-benefit-analysis.md and
+ * panel-defense-general-notes.md), so every line is verifiable, not invented.
+ */
+export const PARTS_TRUST = {
+  title: 'Built from parts you can trust.',
+  lede: 'Open, off-the-shelf components, expand a row for the plain-language spec.',
+  rows: [
+    {
+      n: '01',
+      title: 'Humidity & temperature sensing',
+      body: 'SHT41 relative-humidity and temperature sensor, read continuously rather than polled once per minute. Humidity and temperature are the two core inputs to the Mold Risk Index.',
+    },
+    {
+      n: '02',
+      title: 'VOC / air-quality sensing',
+      body: 'SGP40 volatile-organic-compound sensor, plus a VL53L0X time-of-flight sensor beside it. VOC is treated as supplementary context, never as standalone proof of mould.',
+    },
+    {
+      n: '03',
+      title: 'Dehumidification unit',
+      body: 'Thermoelectric TEC-12706 Peltier cooling stack between heat exchangers, with an 80 mm fan moving room air across the heatsink. Two units move roughly a litre of condensate a day.',
+    },
+    {
+      n: '04',
+      title: 'Brain & connectivity',
+      body: 'ESP32-WROOM microcontroller running the risk engine and the automation rule, publishing over WiFi to the app. No vendor cloud sits in the middle.',
+    },
+    {
+      n: '05',
+      title: 'Enclosure & placement',
+      body: 'ABS enclosure, 318 × 255 × 159 mm, standing on a tabletop or mounted to a wall. The lower bay holds the removable water tank; the upper bay holds the electronics and the LCD.',
+    },
+    {
+      n: '06',
+      title: 'Software stack',
+      body: 'Web dashboard and companion app on a standard stack, with a weather API for predictive pre-cooling. The rule the system runs is printed on screen, not hidden in a black box.',
+    },
+  ],
+}

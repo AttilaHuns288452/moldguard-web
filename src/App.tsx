@@ -12,6 +12,7 @@ import Loop from './sections/Loop'
 import Capabilities from './sections/Capabilities'
 import RiskShowcase from './sections/RiskShowcase'
 import Comparison from './sections/Comparison'
+import PartsTrust from './sections/PartsTrust'
 import WhatItDoes from './sections/WhatItDoes'
 // page 2
 import SenseScoreAct from './sections/SenseScoreAct'
@@ -90,6 +91,7 @@ export default function App() {
             <WhatItDoes asHeading="h2" />
             <RiskShowcase />
             <Comparison />
+            <PartsTrust />
             <ClosingCta />
           </>
         )}
