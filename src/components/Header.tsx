@@ -44,7 +44,7 @@ export default function Header({ page }: { page: Page }) {
                 href={pathFor(n.id)}
                 onClick={(e) => { e.preventDefault(); navigate(n.id) }}
                 aria-current={page === n.id ? 'page' : undefined}
-                className="nav-grow flex min-h-11 flex-1 items-center justify-center py-2.5 text-center text-[11.5px] text-ink-2 transition-colors hover:text-ink lg:min-h-0 lg:flex-none lg:justify-start lg:py-1 lg:text-[14px] lg:text-left"
+                className="nav-grow flex min-h-11 flex-1 items-center justify-center py-2.5 text-center text-[11.5px] text-ink-2 transition-colors hover:text-ink lg:min-h-10 lg:flex-none lg:justify-start lg:py-1 lg:text-[14px] lg:text-left"
               >
                 {n.label}
               </a>

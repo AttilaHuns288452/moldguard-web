@@ -24,7 +24,7 @@ export default function Faq() {
             <Reveal delay={80}>
               <p className="mt-3 max-w-[42ch] text-[15px] leading-relaxed text-ink-2">
                 The questions buyers actually ask before committing. Something not covered?{' '}
-                <a href="/contact" className="font-[650] text-accent-ink underline-offset-2 hover:underline">
+                <a href="/contact" className="inline-flex min-h-11 items-center font-[650] text-accent-ink underline-offset-2 hover:underline">
                   Ask the team
                 </a>
                 .
