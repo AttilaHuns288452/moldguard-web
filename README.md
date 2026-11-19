@@ -69,6 +69,12 @@ python3 -c "import json,struct;d=open('public/moldguard.glb','rb').read();cl,_=s
 - Everything else (product capabilities, hardware, placement, team, FAQ) is from
   the PDF.
 
+## Overnight refinement pass (2026-11-20)
+
+See [`docs/OVERNIGHT_REPORT.md`](docs/OVERNIGHT_REPORT.md) for the full pass:
+per-page band maps sampled from the PDF, one lede size, one button radius, one
+entrance duration. Screenshots in `docs/screenshots/`.
+
 ## Known limitations
 
 - **Lighthouse performance reads 58 in this container** because the 3D mesh
