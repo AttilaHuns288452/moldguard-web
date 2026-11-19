@@ -22,7 +22,7 @@
 
   --color-ink:         #15385e;
   --color-ink-2:       #465e7a;
-  --color-ink-3:       #5b7591;
+  --color-ink-3:       #516a84;  /* 4.97:1 on #eaf2fc (was #5b7591 at 4.23) */
 
   --color-accent:      #2563eb;  /* cobalt — primary CTA, key data */
   --color-accent-ink:  #1d4ed8;  /* CTA fill, white text */
@@ -69,10 +69,14 @@
 
   ::selection { background: var(--color-deep); color: var(--color-on-dark); }
 
+  /* Two-tone focus ring: cobalt alone is 5.94:1 on the pale ground but only
+     1.78:1 on navy, i.e. invisible on the dark bands. The white halo gives it
+     contrast against BOTH backgrounds without changing the accent. */
   :focus-visible {
     outline: 2.5px solid var(--color-accent-ink);
     outline-offset: 2px;
     border-radius: 4px;
+    box-shadow: 0 0 0 5px #ffffff;
   }
 
   h1, h2, h3, h4 {
@@ -138,6 +142,14 @@
   .band-white { background: #ffffff; }
   .band-pale  { background: var(--color-paper); }
   .band-dark  { background: var(--color-deep); color: var(--color-on-dark); }
+
+  /* The dark bands need a light focus ring: cobalt on navy is 1.78:1. This lives
+     in @layer utilities because a rule in @layer base loses to utilities. */
+  .band-dark :focus-visible,
+  footer :focus-visible {
+    outline-color: #ffffff;
+    box-shadow: 0 0 0 5px rgba(21, 56, 94, .85);
+  }
   /* kept for the secondary pages, which have no sampled band map of their own */
   .section-alt  { background: var(--color-paper); }
 }
