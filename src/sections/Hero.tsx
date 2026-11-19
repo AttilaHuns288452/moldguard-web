@@ -61,7 +61,7 @@ export default function Hero() {
             className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
             style={{ aspectRatio: '1 / 1.01' }}
           >
-            <div className="h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_90%_at_50%_18%,#f3f7fc_0%,#dbe5f2_52%,#c9d7e8_100%)]">
+            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_90%_at_50%_18%,#f3f7fc_0%,#dbe5f2_52%,#c9d7e8_100%)]">
               <DeviceViewer
                 active={active}
                 onSelect={setActive}
@@ -70,6 +70,16 @@ export default function Hero() {
                 chrome={false}
                 hotspots={false}
               />
+              {/* The unit is shown open on purpose: the panels are modelled apart
+                  in the SketchUp file, and the interior IS the product argument
+                  (thermoelectric stack, heatsink, fan, tank). Saying so turns a
+                  "broken front door" into a cutaway. */}
+              <p className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-full bg-deep/90 px-3 py-1 text-[10.5px] font-[650] tracking-[0.12em] text-on-dark uppercase backdrop-blur-sm">
+                Open view &middot; inside the unit
+              </p>
+              <p className="pointer-events-none absolute inset-x-4 bottom-4 rounded-tight bg-card/92 px-3 py-2 text-center text-[11.5px] leading-snug text-ink-2 backdrop-blur-sm">
+                {HERO.stageNote}
+              </p>
             </div>
           </div>
 

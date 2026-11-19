@@ -130,7 +130,13 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       // synthetic model and matched nothing.
       if (/^mesh_\d+_ROOT_Layer0/i.test(m.name || '')) {
         const mat = m.material as THREE.MeshStandardMaterial
-        mat.transparent = true
+        // Do NOT set transparent here. An always-transparent material is drawn
+        // after opaque geometry and depth-sorted per OBJECT, so an opaque shell
+        // shows its own back faces through its front face - which reads exactly
+        // as "the front door is open". Flip transparency on only when the shell
+        // actually fades (see the opacity frame loop).
+        mat.transparent = false
+        mat.depthWrite = true
         m.userData.isShell = true
       }
     })
@@ -254,7 +260,12 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom }: Props) {
       if (!mesh.userData.isShell) continue
       const mat = mesh.material as THREE.MeshStandardMaterial
       mat.opacity += (want - mat.opacity) * k
-      mat.depthWrite = mat.opacity > 0.9
+      // An opaque shell must NOT be in the transparent pass: transparent objects
+      // are depth-sorted per object, not per fragment, so a solid box would show
+      // its own interior through its front face.
+      const solid = mat.opacity > 0.98
+      mat.transparent = !solid
+      mat.depthWrite = solid
       mat.visible = mat.opacity > 0.03
     }
   })

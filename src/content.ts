@@ -24,6 +24,9 @@ export const HERO = {
   cat: 'IoT mold risk prevention & detection',
   titleLines: ['Know mold is', 'coming before', 'it shows.'],
   lede: 'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and starts dehumidifying before conditions become unsafe.',
+  // the hero shows the unit open; one line so the visitor knows what they are
+  // looking at rather than reading it as a broken front door
+  stageNote: 'Sensors, thermoelectric stack, fan and water tank \u2014 inside one unit.',
   primary: { label: 'Get the app', href: '/download' },
   secondary: { label: 'See how it works', href: '/how-it-works' },
 }
