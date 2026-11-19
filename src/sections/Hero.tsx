@@ -51,7 +51,7 @@ export default function Hero() {
             className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
             style={{ aspectRatio: '1 / 1.01' }}
           >
-            <div className="h-full w-full overflow-hidden rounded-soft bg-[#eef2f8]">
+            <div className="h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_90%_at_50%_18%,#f3f7fc_0%,#dbe5f2_52%,#c9d7e8_100%)]">
               <DeviceViewer
                 active={active}
                 onSelect={setActive}
@@ -65,7 +65,7 @@ export default function Hero() {
 
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
               the photo's right edge into the white frame, as the PDF does. */}
-          <div className="absolute -right-3 -bottom-5 w-[210px] rounded-shell border border-[#2b5c8f] bg-deep p-4 shadow-[0_26px_60px_-24px_rgba(15,39,71,.65)] sm:-right-5">
+          <div className="absolute -right-2 -bottom-4 w-[196px] rounded-shell border border-[#2b5c8f]/70 bg-deep/95 p-3.5 shadow-[0_22px_50px_-26px_rgba(15,39,71,.55)] backdrop-blur-sm sm:-right-4">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
             <p className="mt-2.5 flex items-center justify-between gap-2 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">
               <span>Mold Risk Index</span>
