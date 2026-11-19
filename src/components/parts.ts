@@ -45,8 +45,8 @@ export const PARTS: Part[] = [
   },
   {
     id: 'relay', name: 'Relay module',
-    what: 'A single-channel relay board that switches the connected dehumidifier.',
-    role: 'The part that makes the response physical: it closes the circuit so the dehumidifier actually runs.',
+    what: 'A single-channel relay board that switches the unit\u2019s own thermoelectric stack.',
+    role: 'The part that makes the response physical: it closes the circuit so the stack actually runs.',
     at: [-0.0559, 0.1589, -0.2288], size: [0.0096, 0.0119, 0.0229],
     face: 'side',
   },

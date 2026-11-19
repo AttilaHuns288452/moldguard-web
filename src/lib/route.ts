@@ -42,7 +42,7 @@ const HEAD: Record<Page, { title: string; description: string }> = {
   home: {
     title: 'MoldGuard - know mold is coming before it shows',
     description:
-      'MoldGuard watches humidity, temperature and air conditions, scores your mold risk in real time, and activates a connected dehumidifier when conditions become unsafe.',
+      'MoldGuard watches humidity, temperature and air conditions, scores your mold risk in real time, and dehumidifies before conditions become unsafe.',
   },
   features: {
     title: 'Features - MoldGuard',
@@ -52,7 +52,7 @@ const HEAD: Record<Page, { title: string; description: string }> = {
   'how-it-works': {
     title: 'How it works - MoldGuard',
     description:
-      'The closed loop: sense the room, analyze the real mold risk, respond on your own dehumidifier, and report everything to the app. Plus setup and straight answers.',
+      'The closed loop: sense the room, analyze the real mold risk, dehumidify on its own, and report everything to the app. Plus setup and straight answers.',
   },
   contact: {
     title: 'Contact - MoldGuard',

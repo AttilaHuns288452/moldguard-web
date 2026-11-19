@@ -23,7 +23,7 @@ export const CONTACT = {
 export const HERO = {
   cat: 'IoT mold risk prevention & detection',
   titleLines: ['Know mold is', 'coming before', 'it shows.'],
-  lede: 'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and activates a connected dehumidifier when conditions become unsafe.',
+  lede: 'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and starts dehumidifying before conditions become unsafe.',
   primary: { label: 'Get the app', href: '/download' },
   secondary: { label: 'See how it works', href: '/how-it-works' },
 }
@@ -52,16 +52,16 @@ export const PROBLEM = {
 
 export const MEET = {
   title: 'Meet MoldGuard.',
-  lede: 'One device senses the room. One system understands it. When risk rises, it responds on its own.',
+  lede: 'One device senses the room, scores the risk and dehumidifies on its own. You own the hardware.',
   caption: 'MoldGuard Pod · tabletop or wall-mounted',
   stages: [
     { n: '01', title: 'The pod senses', body: 'Temperature, humidity and air quality, continuously.' },
     { n: '02', title: 'The system understands', body: 'Readings become an environmental picture of the room.' },
     { n: '03', title: 'The system flags risk', body: 'A single Mold Risk Index, updated in real time.' },
-    { n: '04', title: 'The system responds', body: 'The dehumidifier switches itself on and back off.' },
+    { n: '04', title: 'The system responds', body: 'The stack switches itself on and back off.' },
   ],
   flowLabel: 'See the full data flow',
-  flowLede: 'MoldGuard monitors indoor conditions, identifies increasing mold or condensation risk, and can automatically control dehumidification.',
+  flowLede: 'MoldGuard monitors indoor conditions, identifies increasing mold or condensation risk, and dehumidifies automatically.',
   flowNote: 'Illustrative demo data.',
 }
 
@@ -90,7 +90,7 @@ export const FEATURES = {
 
 export const OWN = {
   title: "Own it, don't rent it.",
-  lede: 'Standard, individually sourced parts built around a dehumidifier you choose. The system is yours, with no proprietary ecosystem.',
+  lede: 'Standard, individually sourced parts inside one unit: sensors, a thermoelectric stack and a water tank. The hardware is yours, with no proprietary ecosystem.',
   // Every figure below is from the MTELOS Feasibility Study (Section V,
   // Economic feasibility). The caveat line is the study's own, not a hedge:
   // it states plainly that every production scenario currently loses money.
@@ -104,7 +104,7 @@ export const OWN = {
   points: [
     { title: 'Open hardware', body: 'Individually sourced, standard parts.' },
     { title: 'Fixed cost', body: 'One development cost, no monthly fees.' },
-    { title: 'Your system', body: 'Works with your own dehumidifier.' },
+    { title: 'Your unit', body: 'Senses, scores and dehumidifies in one device.' },
   ],
 }
 
@@ -198,7 +198,7 @@ export const LOOP = {
     },
     {
       n: '03', kicker: 'RESPOND · AUTO', head: 'Act: dehumidify, no hands.',
-      body: "When the index crosses the risk threshold, MoldGuard switches the connected dehumidifier on and pulls moisture back down, closing the loop without you touching anything. Extracted water collects in the removable 1 L tank, monitored so you're told before it's full.",
+      body: "When the index crosses the risk threshold, the thermoelectric stack starts and pulls moisture back down, closing the loop without you touching anything. Extracted water collects in the removable 1 L tank, monitored so you're told before it's full.",
       meta: 'Dry air out · Dehumidifier running on auto',
     },
     {
@@ -224,13 +224,13 @@ export const FAQ = {
   items: [
     { q: 'What is MoldGuard?', a: 'An IoT mold risk prevention and detection system: a sensor pod that scores the Mold Risk Index for a room and can automatically control dehumidification.' },
     { q: 'How does it detect mold risk?', a: 'It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature, and how long those conditions persist, instead of reacting to a single humidity threshold. Outdoor forecast data sharpens that window further.' },
-    { q: 'Does it control a dehumidifier?', a: 'Yes. When the index crosses the risk threshold, MoldGuard switches the connected dehumidifier on and pulls moisture back down, closing the loop without you touching anything.' },
+    { q: 'Is it a dehumidifier?', a: 'Yes, it is one. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses the threshold it starts pulling moisture down by itself.' },
     { q: 'What does the app show?', a: 'Live status and full history: the room, the readings behind the score, humidity, temperature, and dew point trends over time, with multi-room and multi-unit views. You can step in with manual override from anywhere, any time.' },
     { q: 'Can I monitor more than one room?', a: 'Yes. Multi-room and multi-unit views are logged over time for larger households, dormitories, or property managers.' },
     { q: 'How do I set it up?', a: 'Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to WiFi, and watch the loop run.' },
     { q: 'What maintenance does it need?', a: "Emptying the removable 1 L tank. Extracted water collects there, monitored so you're told before it's full." },
     { q: 'Does it work without the internet?', a: 'The loop runs on the device. Live status and history, alerts, and manual override are the parts that travel through the app and web dashboard.' },
-    { q: 'How much does it cost?', a: 'One development cost, no monthly fees. Standard, individually sourced parts built around a dehumidifier you choose. The system is yours, with no proprietary ecosystem.' },
+    { q: 'How much does it cost?', a: 'One development cost, no monthly fees. Standard, individually sourced parts inside one unit: sensors, a thermoelectric stack and a water tank. The hardware is yours, with no proprietary ecosystem.' },
     { q: 'Who is it for?', a: 'Renters and small property owners, larger households, dormitories, and property managers.' },
   ],
 }
