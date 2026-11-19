@@ -25,13 +25,19 @@ VITE_GOOGLE_FORM_ENTRY_ROLE=
 VITE_GOOGLE_FORM_ENTRY_MESSAGE=entry.1184808363
 ```
 
+> **There is a second, unused form** in the Drive called
+> "MoldGuard enquiry" (`11OMQ9oHw…`). It is a rebuild I abandoned mid-way and is
+> NOT wired to anything - ignore or delete it. The live one is the `1FAIpQLSf4Vru…`
+> id above.
+
 Two things worth knowing:
 
 - **Email is `emailAddress`, not `entry.NNN`.** Google's built-in email collector
   posts under its own key, so it is not an entry id like the others.
-- **"I am a" has no id** (`VITE_GOOGLE_FORM_ENTRY_ROLE` is empty) so the role is
-  simply not sent. Add a short-answer "I am a" question in the form, read its new
-  entry id from a fresh pre-filled link, and set it here — no code change needed.
+- **"I am a" has no id** (`VITE_GOOGLE_FORM_ENTRY_ROLE` is empty). Rather than drop
+  the visitor's choice, `Contact.tsx` folds it into the message body as
+  `I am a: <role>` — verified in the POST body. Add a "I am a" question and set
+  the env var to send it as its own column instead.
 
 ## Vercel
 

@@ -75,7 +75,10 @@ export default function Contact() {
           ...(ENTRY.email ? { [ENTRY.email]: email } : {}),
           ...(ENTRY.phone ? { [ENTRY.phone]: phone } : {}),
           ...(ENTRY.role ? { [ENTRY.role]: role } : {}),
-          ...(ENTRY.about ? { [ENTRY.about]: about } : {}),
+          // The form has no "I am a" question yet, so without this the visitor's
+          // choice was silently dropped on the Forms path (it only survived in the
+          // mailto fallback). Fold it into the message rather than lose it.
+          ...(ENTRY.about ? { [ENTRY.about]: ENTRY.role ? about : `I am a: ${role}\n\n${about}` } : {}),
           fvv: '1', pageHistory: '0', fbzx: '0',
         }),
       })
