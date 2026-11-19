@@ -5,7 +5,7 @@ const LINKS = [
   { href: '/features', label: 'Features' },
   { href: '/how-it-works', label: 'How it works' },
   { href: '/contact', label: 'Contact' },
-  { href: '/download', label: 'Get Started' },
+  { href: '/download', label: 'Get the app' },
 ]
 
 export default function Footer() {
@@ -22,17 +22,17 @@ export default function Footer() {
 
         <nav aria-label="Footer" className="grid gap-2 text-[14px]">
           {LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="inline-flex min-h-8 items-center py-1 text-on-dark-2 transition-colors hover:text-on-dark">
+            <a key={l.href} href={l.href} className="inline-flex min-h-11 items-center py-1 text-on-dark-2 transition-colors hover:text-on-dark">
               {l.label}
             </a>
           ))}
         </nav>
 
         <div className="grid gap-2 text-[14px]">
-          <a href={`mailto:${CONTACT.email}`} className="inline-flex min-h-8 items-center py-1 text-on-dark-2 transition-colors hover:text-on-dark">
+          <a href={`mailto:${CONTACT.email}`} className="inline-flex min-h-11 items-center py-1 text-on-dark-2 transition-colors hover:text-on-dark">
             {CONTACT.email}
           </a>
-          <a href={`tel:${CONTACT.phoneHref}`} className="inline-flex min-h-8 items-center py-1 text-on-dark-2 transition-colors hover:text-on-dark">
+          <a href={`tel:${CONTACT.phoneHref}`} className="inline-flex min-h-11 items-center py-1 text-on-dark-2 transition-colors hover:text-on-dark">
             {CONTACT.phone}
           </a>
         </div>

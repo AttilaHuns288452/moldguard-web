@@ -24,7 +24,7 @@ export const HERO = {
   cat: 'IoT mold risk prevention & detection',
   titleLines: ['Know mold is', 'coming before', 'it shows.'],
   lede: 'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and activates a connected dehumidifier when conditions become unsafe.',
-  primary: { label: 'Get Started', href: '/download' },
+  primary: { label: 'Get the app', href: '/download' },
   secondary: { label: 'See how it works', href: '/how-it-works' },
 }
 
@@ -91,6 +91,16 @@ export const FEATURES = {
 export const OWN = {
   title: "Own it, don't rent it.",
   lede: 'Standard, individually sourced parts built around a dehumidifier you choose. The system is yours, with no proprietary ecosystem.',
+  // Every figure below is from the MTELOS Feasibility Study (Section V,
+  // Economic feasibility). The caveat line is the study's own, not a hedge:
+  // it states plainly that every production scenario currently loses money.
+  cost: {
+    label: 'Prototype build cost',
+    figure: '\u20b19,268.30',
+    note: 'Including a 20% contingency.',
+    caveat: 'Production economics are not settled yet: at the \u20b14,994.00 price tested in our survey, unit cost runs from \u20b15,044.68 to \u20b17,734.68, so no production scenario is profitable and supplier quotes are still outstanding.',
+    source: 'MTELOS Feasibility Study, Section V',
+  },
   points: [
     { title: 'Open hardware', body: 'Individually sourced, standard parts.' },
     { title: 'Fixed cost', body: 'One development cost, no monthly fees.' },
@@ -108,7 +118,7 @@ export const PLACEMENT = {
 export const CTA = {
   title: 'Protect your space before mold appears.',
   lede: 'Get the app, or talk to the team about your space.',
-  primary: { label: 'Get Started', href: '/download' },
+  primary: { label: 'Get the app', href: '/download' },
   secondary: { label: 'Contact us', href: '/contact' },
 }
 
