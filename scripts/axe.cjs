@@ -13,11 +13,36 @@ const ROUTES = ['/', '/features', '/how-it-works', '/contact', '/download']
 // script is injected straight into the page instead.
 const AXE = require.resolve('axe-core/axe.min.js')
 
+/**
+ * Find a chromium to drive. Playwright 1.65 pins a build that may not be
+ * downloaded on this box, so rather than demanding `npx playwright install` we
+ * fall back to any chromium already in the playwright cache. PW_CHROMIUM still
+ * wins if set.
+ */
+function findChromium() {
+  if (process.env.PW_CHROMIUM) return process.env.PW_CHROMIUM
+  try {
+    const { chromium } = require('playwright')
+    const own = chromium.executablePath()
+    if (own && fs.existsSync(own)) return undefined // let playwright use its own
+  } catch { /* fall through */ }
+  const cache = path.join(process.env.HOME || '', '.cache/ms-playwright')
+  if (!fs.existsSync(cache)) return undefined
+  const candidates = fs.readdirSync(cache).filter((d) => /^chromium-\d+$/.test(d)).sort().reverse()
+  for (const d of candidates) {
+    for (const rel of ['chrome-linux64/chrome', 'chrome-linux/chrome']) {
+      const p = path.join(cache, d, rel)
+      if (fs.existsSync(p)) return p
+    }
+  }
+  return undefined
+}
+
 ;(async () => {
   const b = await chromium.launch({
     // PW_CHROMIUM lets this run without `npx playwright install`; unset, playwright
     // resolves its own browser (same fallback qa.mjs uses).
-    executablePath: process.env.PW_CHROMIUM || undefined,
+    executablePath: findChromium(),
     args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
   })
   const report = {}
