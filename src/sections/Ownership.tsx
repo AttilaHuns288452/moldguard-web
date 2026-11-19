@@ -18,6 +18,17 @@ export default function Ownership() {
               className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-white"
             />
             <p className="mt-3 max-w-[560px] text-[1.05rem] leading-relaxed text-on-dark-2">{OWN.lede}</p>
+
+            {/* Cost teaser. Figures are the feasibility study's own, including its
+                caveat — the study states plainly that production is not yet
+                profitable, so quoting only the build cost would mislead. */}
+            <div className="mt-6 rounded-soft border border-[#eaf2fc26] bg-[#eaf2fc08] p-4">
+              <p className="text-[10.5px] font-[650] tracking-[0.12em] text-on-dark-2 uppercase">{OWN.cost.label}</p>
+              <p className="measure mt-1 text-[1.6rem] leading-none font-semibold text-white">{OWN.cost.figure}</p>
+              <p className="mt-1 text-[12.5px] text-on-dark-2">{OWN.cost.note}</p>
+              <p className="mt-3 border-t border-[#eaf2fc1f] pt-3 text-[11.5px] leading-relaxed text-on-dark-2">{OWN.cost.caveat}</p>
+              <p className="mt-2 text-[10.5px] text-[#8fa8c4]">{OWN.cost.source}</p>
+            </div>
           </div>
         </Reveal>
         <ul className="divide-y divide-[#eaf2fc26] border-y border-[#eaf2fc26]">
