@@ -28,7 +28,7 @@ export default function GetApp() {
             <LineReveal
               as="h1"
               lines={splitTitle('Get the MoldGuard app.')}
-              className="max-w-[20ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
+              className="max-w-[20ch] text-[clamp(2.2rem,4.4vw,3.5rem)] leading-[1.1] font-[650] text-deep"
             />
             <Reveal delay={80}>
               <p className="mt-3 text-[1.05rem] leading-relaxed text-ink-2">
@@ -61,7 +61,8 @@ export default function GetApp() {
             Inside the app
           </p>
         </Reveal>
-        <ul tabIndex={0} aria-label="MoldGuard app screens, scrollable" className="mt-4 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">
+        <div className="relative mt-4">
+        <ul tabIndex={0} aria-label="MoldGuard app screens, scrollable" className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 pr-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">
           {FRAMES.map(({ el: Frame, label }) => (
             <li key={label} className="snap-start">
               <Reveal>
@@ -85,6 +86,9 @@ export default function GetApp() {
             </li>
           ))}
         </ul>
+        {/* fades the right edge so a clipped frame reads as "more to scroll" */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-paper to-transparent" aria-hidden="true" />
+        </div>
       </div>
     </section>
   )

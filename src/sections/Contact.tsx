@@ -41,7 +41,7 @@ export default function Contact() {
           <LineReveal
             as="h1"
             lines={["Let's keep your space", 'ahead of mold.']}
-            className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
+            className="max-w-[24ch] text-[clamp(2.2rem,4.4vw,3.5rem)] leading-[1.1] font-[650] text-deep"
           />
           <Reveal delay={70}>
             <p className="lede mt-3">{CONTACT_PAGE.lede}</p>
@@ -93,7 +93,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={!valid}
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#5b7591] disabled:opacity-70"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all duration-200 ease-[cubic-bezier(.4,0,.2,1)] hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#3f5670] disabled:opacity-100"
               >
                 Send message
                 <ArrowRight className="size-4" strokeWidth={2} />
