@@ -7,7 +7,7 @@
       "name": "What is MoldGuard?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "An IoT mold-risk prevention and detection system. A compact sensor pod watches a room, runs a Mold Risk Index over those readings, and closes the loop by switching a connected dehumidifier on and off. Live readings and history are in the app and web dashboard."
+        "text": "An IoT mold risk prevention and detection system: a sensor pod that scores the Mold Risk Index for a room and can automatically control dehumidification."
       }
     },
     {
@@ -15,15 +15,15 @@
       "name": "How does it detect mold risk?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It does not look for mold directly. It scores the conditions mold needs: relative humidity, temperature, and how long those conditions persist, plus a virtual surface dew-point margin so condensation headroom is part of the score. VOC readings are supplementary context, never standalone proof."
+        "text": "It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature, and how long those conditions persist, instead of reacting to a single humidity threshold. Outdoor forecast data sharpens that window further."
       }
     },
     {
       "@type": "Question",
-      "name": "Does it control a dehumidifier?",
+      "name": "Is it a dehumidifier?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. When the index crosses the risk threshold the connected dehumidifier is switched on automatically, and switched off again once conditions return to a safe range."
+        "text": "Yes, it is one. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses the threshold it starts pulling moisture down by itself."
       }
     },
     {
@@ -31,7 +31,7 @@
       "name": "What does the app show?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Live room status, current environmental readings, the risk state, humidity / temperature / dew-point trends, the automation rule that is currently running, and alerts as risk rises."
+        "text": "Live status and full history: the room, the readings behind the score, humidity, temperature, and dew point trends over time, with multi-room and multi-unit views. You can step in with manual override from anywhere, any time."
       }
     },
     {
@@ -39,7 +39,7 @@
       "name": "Can I monitor more than one room?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Multi-room and multi-unit views are part of the design, aimed at larger households, dormitories, and property managers."
+        "text": "Yes. Multi-room and multi-unit views are logged over time for larger households, dormitories, or property managers."
       }
     },
     {
@@ -47,7 +47,7 @@
       "name": "How do I set it up?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Place the unit (tabletop or wall-mounted, near a humidity-prone area), connect it to WiFi, and let the loop run."
+        "text": "Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to WiFi, and watch the loop run."
       }
     },
     {
@@ -55,7 +55,15 @@
       "name": "What maintenance does it need?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Emptying the removable 1 L water tank that collects the extracted moisture. The tank is monitored, so you are told before it is full."
+        "text": "The loop runs on the device. Live status and history, alerts, and manual override are the parts that travel through the app and web dashboard."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work without the internet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One development cost, no monthly fees. Standard, individually sourced parts inside one unit: sensors, a thermoelectric stack and a water tank. The hardware is yours, with no proprietary ecosystem."
       }
     },
     {
@@ -63,7 +71,7 @@
       "name": "How much does it cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "MoldGuard is a fixed-cost build rather than a subscription: itemized hardware, one development fee, and full ownership with no recurring monitoring fee."
+        "text": "Renters and small property owners, larger households, dormitories, and property managers."
       }
     },
     {
@@ -71,7 +79,7 @@
       "name": "Who is it for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Homes, dormitories, and property managers who have humidity-prone rooms and want the risk handled rather than merely displayed."
+        "text": "Download →"
       }
     }
   ]

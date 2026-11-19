@@ -44,9 +44,18 @@ export default function Features() {
                 {FEATURES.items[0].body}
               </p>
             </div>
-            {/* same arc gauge the Capabilities card uses, so the index is shown
-                the same way everywhere it appears */}
-            <Gauge value={38} className="w-[150px] shrink-0" />
+            {/* Same arc gauge AND the same readout the Capabilities card uses. Without
+                the number it was a bare arc - pure decoration on the strongest page. */}
+            <div className="w-[150px] shrink-0">
+              <Gauge value={38} className="block w-full" />
+              <div className="-mt-[2.2rem] text-center">
+                <p className="measure text-[1.5rem] leading-none font-semibold text-deep">38</p>
+                <p className="mt-0.5 text-[11px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
+              </div>
+              <div className="mt-2 flex justify-between text-[11px] tracking-[0.1em] text-ink-3 uppercase">
+                <span>Low</span><span>Watch</span><span>High</span>
+              </div>
+            </div>
           </article>
         </Reveal>
 

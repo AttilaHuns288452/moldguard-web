@@ -8,9 +8,15 @@ import { splitTitle } from '../lib/motion'
  * BELOW it, left-aligned — not beside the heading, which made the band 157px
  * shorter than the reference and read as a toolbar rather than a closing panel.
  */
-export default function ClosingCta() {
+export default function ClosingCta({ onDownloadPage = false }: { onDownloadPage?: boolean }) {
+  // On /download the band's own primary CTA pointed at /download - a dead control
+  // on the page whose entire job is conversion. There it points at the real
+  // install instead, and the id stops colliding with the hero's.
+  const primary = onDownloadPage
+    ? { label: 'Scan the code above', href: '#app' }
+    : CTA.primary
   return (
-    <section id="download" className="band-dark py-[72px] md:py-[128px]">
+    <section id="closing-cta" className="band-dark py-[72px] md:py-[128px]">
       <div className="shell">
         <Reveal>
           <div className="rounded-shell border border-[#eaf2fc33] px-7 py-8 md:px-10 md:py-9">
@@ -21,10 +27,10 @@ export default function ClosingCta() {
             <p className="mt-2 max-w-[560px] text-[1.05rem] leading-relaxed text-on-dark-2">{CTA.lede}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
-                href={CTA.primary.href}
+                href={primary.href}
                 className="inline-flex items-center rounded-[10px] bg-accent-ink px-[28px] py-[14px] text-[16px] font-semibold text-white transition-colors hover:bg-[#1d4ed8]"
               >
-                {CTA.primary.label}
+                {primary.label}
               </a>
               <a
                 href={CTA.secondary.href}

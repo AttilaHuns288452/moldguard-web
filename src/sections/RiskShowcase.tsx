@@ -107,18 +107,34 @@ export default function RiskShowcase() {
                     ['Temperature', sc.temp, 40, '°C'],
                     ['Sustained exposure', sc.hours, 48, 'h'],
                     ['Dew-point margin', sc.dew, 6, '°C'],
-                  ].map(([label, v, max, unit]) => (
-                    <li key={label as string}>
-                      <div className="flex items-baseline justify-between">
-                        <span className="text-[11.5px] text-ink-2">{label}</span>
-                        <span className="measure text-[11.5px] font-[650] text-deep">{v}<span className="ml-0.5 text-[11.5px] text-ink-3">{unit}</span></span>
-                      </div>
-                      <div className="mt-1 h-[3px] w-full rounded-full bg-line">
-                        <div className="h-[3px] rounded-full bg-accent-ink transition-[width] duration-700"
-                          style={{ width: `${Math.min(100, ((v as number) / (max as number)) * 100)}%` }} />
-                      </div>
-                    </li>
-                  ))}
+                  ].map(([label, v, max, unit]) => {
+                    const num = v as number
+                    // A negative dew-point margin means surfaces are ALREADY below
+                    // the dew point, i.e. condensation is forming - the worst state,
+                    // not zero risk. The old expression divided straight through, so
+                    // -0.4/6 produced a negative width and the bar painted full by
+                    // accident, which happened to look right for the wrong reason.
+                    // Now it is explicit, and the row says why.
+                    const belowDew = label === 'Dew-point margin' && num < 0
+                    const pct = belowDew ? 100 : Math.max(0, Math.min(100, (num / (max as number)) * 100))
+                    return (
+                      <li key={label as string}>
+                        <div className="flex items-baseline justify-between">
+                          <span className="text-[11.5px] text-ink-2">{label}</span>
+                          <span className={`measure text-[11.5px] font-[650] ${belowDew ? 'text-[#bf2d2a]' : 'text-deep'}`}>
+                            {v}<span className="ml-0.5 text-[11.5px] text-ink-3">{unit}</span>
+                          </span>
+                        </div>
+                        <div className="mt-1 h-[3px] w-full rounded-full bg-line">
+                          <div className={`h-[3px] rounded-full transition-[width] duration-700 ${belowDew ? 'bg-[#bf2d2a]' : 'bg-accent-ink'}`}
+                            style={{ width: `${pct}%` }} />
+                        </div>
+                        {belowDew && (
+                          <p className="mt-1 text-[11px] leading-snug text-[#bf2d2a]">Below dew point — condensing</p>
+                        )}
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
 

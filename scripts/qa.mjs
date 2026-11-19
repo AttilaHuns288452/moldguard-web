@@ -25,8 +25,8 @@ const VIEWPORTS = [
 // suite exists to catch a route that lost a section, so a stale map here
 // silently passes a broken page.
 const ROUTE_SECTIONS = {
-  '/': ['top', 'problem', 'meet', 'features', 'ownership', 'placement', 'download'],
-  '/features': ['capabilities', 'what', 'risk', 'compare', 'parts', 'download'],
+  '/': ['top', 'problem', 'meet', 'features', 'ownership', 'placement', 'closing-cta'],
+  '/features': ['capabilities', 'what', 'risk', 'compare', 'parts', 'closing-cta'],
   '/how-it-works': ['how', 'faq'],
   '/contact': ['contact', 'faq'],
   '/download': ['app'],

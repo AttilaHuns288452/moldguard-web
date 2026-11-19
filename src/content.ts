@@ -201,7 +201,7 @@ export const LOOP = {
     },
     {
       n: '03', kicker: 'RESPOND · AUTO', head: 'Act: dehumidify, no hands.',
-      body: "When the index crosses the risk threshold, the thermoelectric stack starts and pulls moisture back down, closing the loop without you touching anything. Extracted water collects in the removable 1 L tank, monitored so you're told before it's full.",
+      body: "When the index crosses the risk threshold, the thermoelectric stack starts and pulls moisture back down, closing the loop without you touching anything. Extracted water collects in a removable tank, monitored so you're told before it's full.",
       meta: 'Dry air out · Dehumidifier running on auto',
     },
     {
@@ -228,10 +228,10 @@ export const FAQ = {
     { q: 'What is MoldGuard?', a: 'An IoT mold risk prevention and detection system: a sensor pod that scores the Mold Risk Index for a room and can automatically control dehumidification.' },
     { q: 'How does it detect mold risk?', a: 'It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature, and how long those conditions persist, instead of reacting to a single humidity threshold. Outdoor forecast data sharpens that window further.' },
     { q: 'Is it a dehumidifier?', a: 'Yes, it is one. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses the threshold it starts pulling moisture down by itself.' },
-    { q: 'What does the app show?', a: 'Live status and full history: the room, the readings behind the score, humidity, temperature, and dew point trends over time, with multi-room and multi-unit views. You can step in with manual override from anywhere, any time.' },
-    { q: 'Can I monitor more than one room?', a: 'Yes. Multi-room and multi-unit views are logged over time for larger households, dormitories, or property managers.' },
+    { q: 'What does the app show?', a: 'Live status and history: the room, the readings behind the score, and humidity, temperature and dew-point trends over time (multi-room and multi-unit views are planned as a premium tier). You can step in with manual override from anywhere, any time.' },
+    { q: 'Can I monitor more than one room?', a: 'Not in the base product. Multi-room and multi-unit views are planned as an optional premium tier for larger households, dormitories or property managers.' },
     { q: 'How do I set it up?', a: 'Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to WiFi, and watch the loop run.' },
-    { q: 'What maintenance does it need?', a: "Emptying the removable 1 L tank. Extracted water collects there, monitored so you're told before it's full." },
+    { q: 'What maintenance does it need?', a: "Emptying the removable tank. Extracted water collects there, monitored so you're told before it's full." },
     { q: 'Does it work without the internet?', a: 'The loop runs on the device. Live status and history, alerts, and manual override are the parts that travel through the app and web dashboard.' },
     { q: 'How much does it cost?', a: 'One development cost, no monthly fees. Standard, individually sourced parts inside one unit: sensors, a thermoelectric stack and a water tank. The hardware is yours, with no proprietary ecosystem.' },
     { q: 'Who is it for?', a: 'Renters and small property owners, larger households, dormitories, and property managers.' },
@@ -255,6 +255,7 @@ export const CONTACT_PAGE = {
   },
   steps: {
     title: 'From message to quote in three steps.',
+    note: 'Student prototype under evaluation - not yet for sale. Certification (DTI-BPS / NTC) is not confirmed, so a quote here is a project proposal, not a product order.',
     items: [
       { n: '01', title: 'Tell us your space', body: 'Rooms, size, and where humidity hits hardest, the form or a quick call covers it.' },
       { n: '02', title: 'Get your quote', body: "MoldGuard is a fixed cost build: itemized hardware, one development fee, full ownership, no proprietary ecosystem. We'll walk you through it." },
@@ -288,7 +289,7 @@ export const AUTOMATIONS = {
   eyebrow: 'Automations',
   title: 'The rule is on the screen.',
   body: "The loop's decisions are visible, not hidden in a black box: the rule the system runs is written right on the screen.",
-  rule: 'When Mold Risk Index stays above 75 → Run the dehumidifier',
+  rule: 'When Mold Risk Index crosses its threshold → Run the dehumidifier',
   note: 'Runs automatically. You can override any time from the app.',
 }
 
@@ -324,7 +325,7 @@ export const COMPARISON = {
       drawbacks: 'No mold-specific modeling; locked to vendor app; no web dashboard.',
     },
     {
-      option: 'MoldGuard V1.0 (ours)',
+      option: 'MoldGuard (ours)',
       does: 'Mold Risk Index (humidity + temperature + duration), supplementary VOC context, predictive weather integration, closed-loop auto-dehumidification, water-tank monitoring, web + mobile dashboard.',
       cost: 'Fixed development fee.',
       drawbacks: 'Requires dedicated power source; periodic water-tank emptying.',
@@ -362,7 +363,7 @@ export const PARTS_TRUST = {
     {
       n: '04',
       title: 'Brain & connectivity',
-      body: 'ESP32-WROOM microcontroller running the risk engine and the automation rule, publishing over WiFi to the app. No vendor cloud sits in the middle.',
+      body: 'ESP32-WROOM microcontroller running the risk engine and the automation rule, publishing over WiFi to the app. Standard MQTT broker and open backend - no vendor-locked ecosystem.',
     },
     {
       n: '05',
@@ -372,7 +373,7 @@ export const PARTS_TRUST = {
     {
       n: '06',
       title: 'Software stack',
-      body: 'Web dashboard and companion app on a standard stack, with a weather API for predictive pre-cooling. The rule the system runs is printed on screen, not hidden in a black box.',
+      body: 'Web dashboard and companion app on a standard stack, with a weather API for forecast-based anticipation. The rule the system runs is printed on screen, not hidden in a black box.',
     },
   ],
 }

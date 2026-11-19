@@ -86,6 +86,12 @@ export default function GetApp() {
           <h2 className="mt-12 text-[clamp(1.4rem,2.4vw,1.9rem)] font-[650] text-deep">
             Inside the app
           </h2>
+          <p className="mt-2 flex items-center gap-2 text-[11.5px] text-ink-3">
+            <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 font-[650] tracking-[0.1em] uppercase">
+              Illustrative
+            </span>
+            App screens below use demo data.
+          </p>
         </Reveal>
         <div className="relative mt-4" ref={rowRef}>
         <ul tabIndex={0} aria-label="MoldGuard app screens, scrollable" className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 pr-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">

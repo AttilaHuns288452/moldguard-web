@@ -218,6 +218,9 @@ export default function Contact() {
             <h2 className="max-w-[22ch] text-[clamp(1.5rem,2.8vw,2.1rem)] font-[650] text-deep">
               {CONTACT_PAGE.steps.title}
             </h2>
+            <p className="mt-3 max-w-[66ch] text-[13px] leading-relaxed text-ink-3">
+              {CONTACT_PAGE.steps.note}
+            </p>
           </Reveal>
           <ol className="mt-6 grid gap-px overflow-hidden rounded-soft border border-line bg-line md:grid-cols-3">
             {CONTACT_PAGE.steps.items.map((s2, i) => (

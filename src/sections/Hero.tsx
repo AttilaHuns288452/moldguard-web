@@ -50,7 +50,7 @@ export default function Hero() {
             href="#problem"
             className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-[13px] sm:mt-8 text-ink-3 transition-colors hover:text-ink"
           >
-            See how it works
+            Scroll to see the unit
             <span aria-hidden="true">&darr;</span>
           </a>
         </div>

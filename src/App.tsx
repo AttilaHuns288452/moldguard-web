@@ -111,7 +111,7 @@ export default function App() {
         {page === 'download' && (
           <>
             <GetApp />
-            <ClosingCta />
+            <ClosingCta onDownloadPage />
           </>
         )}
         {page === 'not-found' && <NotFound />}

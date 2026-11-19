@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import { Reveal, LineReveal } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 import { LOOP, SETUP } from '../content'
@@ -9,7 +9,6 @@ import { LOOP, SETUP } from '../content'
  * architecture, the panel is the explanation.
  */
 export default function Loop() {
-  const [i, setI] = useState(0)
 
   return (
     <section id="how" className="section section-alt">
@@ -28,45 +27,13 @@ export default function Loop() {
           </Reveal>
         </div>
 
-        {/* the rail */}
-        <div className="mt-5 grid gap-px overflow-hidden rounded-soft border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {LOOP.rail.map((r, n) => {
-            const on = i === n
-            return (
-              <Reveal key={r.n} delay={n * 50}>
-                <button
-                  type="button"
-                  onClick={() => setI(n)}
-                  aria-pressed={on}
-                  className={`relative h-full w-full px-5 py-4 text-left transition-colors ${
-                    on ? 'bg-card' : 'bg-paper-deep/40 hover:bg-card'
-                  }`}
-                >
-                  <span
-                    className={`absolute inset-x-0 top-0 h-[2px] transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ background: 'linear-gradient(90deg,transparent,#2563eb,transparent)' }}
-                    aria-hidden="true"
-                  />
-                  <span className="measure text-[11px] text-ink-3">{r.n}</span>
-                  <span className={`mt-1 block text-[15px] font-[650] ${on ? 'text-deep' : 'text-ink-2'}`}>
-                    {r.name}
-                  </span>
-                  <span className="mt-0.5 block text-[11.5px] leading-snug text-ink-3">{r.meta}</span>
-                </button>
-              </Reveal>
-            )
-          })}
-        </div>
-
         {/* all four stages, stacked as the PDF lays them out */}
         <ol className="mt-5 divide-y divide-line overflow-hidden rounded-soft border border-line bg-card">
           {LOOP.stages.map((stg, n) => (
             <li key={stg.n}>
               <Reveal delay={n * 50}>
                 <div
-                  className={`grid gap-5 px-6 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:gap-8 md:px-8 md:py-6 ${
-                    i === n ? 'bg-[#2563eb07]' : ''
-                  }`}
+                  className="grid gap-5 px-6 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:gap-8 md:px-8 md:py-6"
                 >
                   <div className="flex items-start gap-3 md:w-24 md:flex-col md:gap-1.5">
                     <span className="measure text-[12px] tracking-[0.14em] text-accent">{stg.n}</span>
@@ -99,9 +66,6 @@ export default function Loop() {
               </Reveal>
             ))}
           </ol>
-          <Reveal delay={120}>
-            <p className="mt-4 text-[12.5px] text-ink-3">{SETUP.caption}</p>
-          </Reveal>
         </div>
       </div>
     </section>

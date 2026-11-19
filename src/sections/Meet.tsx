@@ -93,7 +93,7 @@ export default function Meet() {
             <div className="relative overflow-hidden rounded-soft border border-line bg-card">
               <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
                 <span className="text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{MEET.caption}</span>
-                <span className="measure text-[11px] text-ink-3">overall {mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[2])} &times; {mm(MODEL_SIZE[1])} mm</span>
+                <span className="measure text-[11px] text-ink-3">overall {mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[1])} &times; {mm(MODEL_SIZE[2])} mm</span>
               </div>
               <div className="relative h-[clamp(400px,58vh,560px)] w-full bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
                 <DeviceViewer active={active} onSelect={(id) => { if (id) pick(id) }} autoSpin={autoSpin} mode={mode} />
