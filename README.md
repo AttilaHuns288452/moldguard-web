@@ -62,8 +62,10 @@ python3 -c "import json,struct;d=open('public/moldguard.glb','rb').read();cl,_=s
 
 - The hero risk readout (`38`, `82% RH`, `26h`) and every dashboard/app value is
   **demo data**, labelled as such on screen. The page is not connected to a device.
-- The contact form has **no backend**: it composes a `mailto:` to the team address
-  and says so. Nothing is stored.
+- The contact form posts to a **Google Form** when one is configured in
+  `.env.local`/Vercel env (setup: `docs/google-form-setup.md`). With no form
+  configured it falls back to composing a `mailto:` to the team address, and the
+  disclosure under the button changes to match. Nothing is stored by this site.
 - Everything else (product capabilities, hardware, placement, team, FAQ) is from
   the PDF.
 
@@ -72,7 +74,7 @@ python3 -c "import json,struct;d=open('public/moldguard.glb','rb').read();cl,_=s
 - **Lighthouse performance reads 58 in this container** because the 3D mesh
   renders through SwiftShader software GL. Blocking the GLB gives 76 with 480 ms
   TBT, which is the real-user shape. Re-measure on GPU hardware before quoting.
-- `og.png` is a screenshot of the live hero; regenerate if the hero changes.
+- `og.png` is the designed share card (`public/og-card.png` was a duplicate, now removed); regenerate if the headline or product shot changes.
 - Vercel SSO protection is enabled at team level, so only the production alias
   `moldguard-web.vercel.app` is public; raw `*-projects.vercel.app` URLs redirect
   to a Vercel login. That is a team setting, deliberately not changed here.

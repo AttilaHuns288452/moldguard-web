@@ -30,9 +30,51 @@ export default function Contact() {
   }
   const touched = { name: name.length > 0, email: email.length > 0, about: about.length > 0 }
   const valid = !errs.name && !errs.email && !errs.about
+  // Google Forms endpoint. VITE_GOOGLE_FORM_ACTION is the form's formResponse
+  // URL; the entry.* field ids map this form's inputs onto that form's questions.
+  // When it is not configured we fall back to a mailto: so the page never
+  // silently does nothing. Same pattern as the animewaifu feedback form.
+  const FORM_ACTION = import.meta.env.VITE_GOOGLE_FORM_ACTION as string | undefined
+  const ENTRY = {
+    name: import.meta.env.VITE_GOOGLE_FORM_ENTRY_NAME as string | undefined,
+    email: import.meta.env.VITE_GOOGLE_FORM_ENTRY_EMAIL as string | undefined,
+    phone: import.meta.env.VITE_GOOGLE_FORM_ENTRY_PHONE as string | undefined,
+    role: import.meta.env.VITE_GOOGLE_FORM_ENTRY_ROLE as string | undefined,
+    about: import.meta.env.VITE_GOOGLE_FORM_ENTRY_MESSAGE as string | undefined,
+  }
+  const useForm = Boolean(FORM_ACTION && ENTRY.about)
+
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+
   const mailto =
     `mailto:${CONTACT.email}?subject=${encodeURIComponent(`MoldGuard enquiry — ${name || 'website'}`)}` +
     `&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone || '—'}\nI am a: ${role}\n\n${about}`)}`
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!useForm) { window.location.href = mailto; return }
+    setState('sending')
+    try {
+      // mode:'no-cors' is what Google Forms requires from a static site: the
+      // response is opaque, so success can only mean "the request left".
+      await fetch(FORM_ACTION!, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          ...(ENTRY.name ? { [ENTRY.name]: name } : {}),
+          ...(ENTRY.email ? { [ENTRY.email]: email } : {}),
+          ...(ENTRY.phone ? { [ENTRY.phone]: phone } : {}),
+          ...(ENTRY.role ? { [ENTRY.role]: role } : {}),
+          ...(ENTRY.about ? { [ENTRY.about]: about } : {}),
+          fvv: '1', pageHistory: '0', fbzx: '0',
+        }),
+      })
+      setState('sent')
+    } catch {
+      setState('error')
+    }
+  }
 
   return (
     <section id="contact" className="section">
@@ -51,9 +93,24 @@ export default function Contact() {
         <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-start lg:gap-10">
           {/* ── Start the conversation ── */}
           <Reveal>
+            {state === 'sent' ? (
+              <div className="rounded-soft border border-[#177069]/30 bg-[#1770690d] p-7 text-center md:p-8">
+                <p className="text-[1.15rem] font-[650] text-[#177069]">Thank you — your message is on its way.</p>
+                <p className="mt-2 text-[13.5px] leading-relaxed text-ink-2">
+                  We reply to {email}. If it is urgent, call {CONTACT.phone}.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setState('idle')}
+                  className="mt-5 inline-flex min-h-11 items-center rounded-[10px] border border-line-hi bg-card px-5 py-2.5 text-[14px] font-semibold text-ink transition-colors hover:border-ink-3"
+                >
+                  Send another message
+                </button>
+              </div>
+            ) : (
             <form
               className="rounded-soft border border-line bg-card p-7 md:p-8"
-              onSubmit={(e) => { e.preventDefault(); window.location.href = mailto }}
+              onSubmit={submit}
             >
               <h2 className="text-[1.15rem] font-[650] text-deep">{CONTACT_PAGE.formTitle}</h2>
 
@@ -90,20 +147,30 @@ export default function Contact() {
                 </Field>
               </div>
 
+              <>
+              {state === 'error' && (
+                <p role="alert" className="mt-4 rounded-tight border border-[#bf2d2a]/30 bg-[#bf2d2a0a] px-3 py-2 text-[13px] text-[#bf2d2a]">
+                  That did not send. Email us directly at {CONTACT.email} and we will pick it up.
+                </p>
+              )}
               <button
                 type="submit"
-                disabled={!valid}
+                disabled={!valid || state === 'sending'}
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#3f5670] disabled:opacity-100"
               >
-                Send message
+                {state === 'sending' ? 'Sending...' : 'Send message'}
                 <ArrowRight className="size-4" strokeWidth={2} />
               </button>
+              </>
 
               <p className="mt-3 flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink-3">
                 <Check className="mt-0.5 size-3 shrink-0 text-accent-ink" strokeWidth={2.5} />
-                No backend — this opens your own mail app with the message ready, addressed to {CONTACT.email}.
+                {useForm
+                  ? 'Sent straight to our team inbox. We never share your details.'
+                  : `No backend — this opens your own mail app with the message ready, addressed to ${CONTACT.email}.`}
               </p>
             </form>
+            )}
           </Reveal>
 
           {/* ── Prefer direct? ── */}
