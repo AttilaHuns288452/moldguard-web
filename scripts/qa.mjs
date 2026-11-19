@@ -32,8 +32,20 @@ const ROUTE_SECTIONS = {
   '/download': ['app'],
 }
 
+
 const results = []
 const record = (name, ok, detail = '') => results.push({ name, ok, detail })
+// Guard: every route-map id must be rendered by SOME section component, otherwise
+// the map has drifted from App.tsx. This drifted twice (duplicate ids, then a
+// deleted section), each time making the suite fail on something that did not
+// exist. A grep is enough: section files declare their own id.
+{
+  const { readdirSync, readFileSync } = await import('node:fs')
+  const src = readdirSync('src/sections').map((f) => readFileSync('src/sections/' + f, 'utf8')).join('\n')
+  const missing = [...new Set(Object.values(ROUTE_SECTIONS).flat())].filter((id) => !src.includes('id="' + id + '"'))
+  record('qa map: every route-section id exists in a component', missing.length === 0, missing.join(' '))
+}
+
 
 // Reuse the playwright browser already on this box instead of downloading another.
 const browser = await chromium.launch({
