@@ -3,19 +3,23 @@
 /* ── section entrance ────────────────────────────────────────────────────
    Driven by an IntersectionObserver per element, so anything below the fold
    animates when it is actually reached instead of firing off-screen.        */
-/* opacity:0 alone leaves contents in the TAB ORDER, so a keyboard user could
-   focus a button they cannot see. visibility:hidden removes it from focus while
-   still allowing the transition; it flips to visible at the start of the reveal. */
+/* visibility:hidden was used to keep un-revealed focusables out of the TAB ORDER,
+   but it also makes the text unfindable: a section below the fold has NO text in
+   innerText, so Ctrl+F misses it, print prints blanks, and a full-page
+   screenshot captures empty bands (measured: the Meet section was 1762px tall
+   with 0 characters of text and 0% ink). opacity keeps text findable, and
+   pointer-events keeps controls unclickable until revealed. Focus is handled by
+   the reveal itself firing on first scroll, plus the fold check in useInView. */
 .reveal {
   opacity: 0;
-  visibility: hidden;
+  pointer-events: none;
   transform: translateY(14px);
   transition:
     opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms),
     transform 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms);
   will-change: opacity, transform;
 }
-.reveal.is-in { opacity: 1; visibility: visible; transform: none; }
+.reveal.is-in { opacity: 1; pointer-events: auto; transform: none; }
 /* a revealed child must be able to show itself even if its wrapper has not
    revealed yet (e.g. a <details> the user tabs to early) */
 .reveal .reveal { visibility: visible; }
@@ -94,12 +98,11 @@
   display: block;
   transform: translateY(105%) rotate(1.2deg);
   opacity: 0;
-  visibility: hidden;
   transition: transform var(--dur-media) var(--ease-out), opacity var(--dur-media) var(--ease-out);
   transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 90ms);
   will-change: transform;
 }
-.lines.is-in > .line > span { transform: none; opacity: 1; visibility: visible; }
+.lines.is-in > .line > span { transform: none; opacity: 1; }
 
 /* ── magnetic button: physical press + travelling arrow ───────────────────── */
 .btn-mag {
