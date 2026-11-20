@@ -35,7 +35,7 @@ export default function RiskGaugeCard() {
         <span>Low</span><span>High</span>
       </div>
       <figcaption className="mt-3 border-t border-line px-4 py-2.5 text-[10.5px] leading-relaxed text-ink-3">
-        Closet 82% RH · 26h sustained · dew-point margin −0.4°C
+        Closet · 82% RH · 26h · dew −0.4°C
       </figcaption>
     </figure>
   )

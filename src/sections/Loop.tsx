@@ -49,14 +49,14 @@ export default function Loop() {
           {LOOP.stages.map((stg, n) => (
             <li key={stg.n}>
               <Reveal delay={n * 50}>
-                <div className="grid gap-6 px-6 py-6 md:grid-cols-[auto_minmax(0,1fr)_minmax(212px,220px)] md:items-start md:gap-8 md:px-8 md:py-7">
+                <div className="grid gap-6 px-6 py-6 md:grid-cols-[auto_minmax(0,1fr)_minmax(212px,220px)] md:items-center md:gap-8 md:px-8 md:py-7 md:min-h-[332px]">
                   <div className="flex items-start gap-3 md:w-20 md:flex-col md:gap-1.5">
                     <span className="measure text-[12px] tracking-[0.14em] text-accent">{stg.n}</span>
                     <span className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{stg.kicker}</span>
                   </div>
                   <div>
                     <h2 className="text-[clamp(1.125rem,2vw,1.375rem)] font-[650] text-deep">{stg.head}</h2>
-                    <p className="mt-2 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2">{stg.body}</p>
+                    <p className="mt-2 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2 md:max-w-none">{stg.body}</p>
                     <p className="mt-2.5 text-[12.5px] text-ink-3">{stg.meta}</p>
                   </div>
                   {/* the approved Figma frame for this stage of the loop. The frame is
