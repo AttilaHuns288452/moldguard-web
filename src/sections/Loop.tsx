@@ -49,7 +49,7 @@ export default function Loop() {
           {LOOP.stages.map((stg, n) => (
             <li key={stg.n}>
               <Reveal delay={n * 50}>
-                <div className="grid gap-6 px-6 py-6 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-start md:gap-8 md:px-8 md:py-7">
+                <div className="grid gap-6 px-6 py-6 md:grid-cols-[auto_minmax(0,1fr)_minmax(212px,220px)] md:items-start md:gap-8 md:px-8 md:py-7">
                   <div className="flex items-start gap-3 md:w-20 md:flex-col md:gap-1.5">
                     <span className="measure text-[12px] tracking-[0.14em] text-accent">{stg.n}</span>
                     <span className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{stg.kicker}</span>
@@ -64,15 +64,15 @@ export default function Loop() {
                       as a whole and the wrapper carries the SCALED footprint. */}
                   {/* one column, one height: every stage visual occupies the same
                       box so the four rows share a rhythm instead of 206/198/474/474 */}
-                  <div className="hidden md:flex md:h-[248px] md:w-[212px] md:items-center md:justify-center md:justify-self-end">
+                  <div className="hidden md:flex md:h-[248px] md:w-full md:flex-col md:items-center md:justify-center lg:h-[320px] xl:h-[368px]">
                     {n === 0
                       ? <SensorPodFrame />
                       : n === 1
                       ? <RiskGaugeCard />
                       : (
                         <figure className="overflow-hidden rounded-soft border border-line bg-white shadow-[0_1px_2px_rgba(21,56,94,.06),0_16px_36px_-28px_rgba(21,56,94,.5)]">
-                          <div className="h-[196px] w-[91px] overflow-hidden">
-                            <div className="origin-top-left scale-[0.233] [width:390px] [height:844px]">
+                          <div className="h-[196px] w-[91px] overflow-hidden lg:h-[262px] lg:w-[121px] xl:h-[302px] xl:w-[140px]">
+                            <div className="origin-top-left scale-[0.233] lg:scale-[0.31] xl:scale-[0.358] [width:390px] [height:844px]">
                               {(() => { const F = STAGE_FRAME[n]; return <F /> })()}
                             </div>
                           </div>
