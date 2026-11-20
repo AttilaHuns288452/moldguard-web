@@ -2,6 +2,21 @@
 import { Reveal, LineReveal } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 import { LOOP, SETUP } from '../content'
+import { FrameHome, FrameDetail, FrameControl, FrameAnalytics } from '../figma/PhoneFrames'
+
+/**
+ * The approved Figma application frames, one per stage. PDF page 3 puts a visual
+ * beside each of the four numbered blocks (sensor pod, gauge card, phone mockup,
+ * product card); these are the real Figma frames for exactly those moments, so
+ * each stage shows what the app looks like at that point in the loop.
+ */
+const STAGE_FRAME = [FrameHome, FrameDetail, FrameControl, FrameAnalytics]
+const STAGE_FRAME_LABEL = [
+  'Both pods, live status',
+  'Risk reading and VOC detail',
+  'Auto-pilot and manual override',
+  'Humidity and dew-point history',
+]
 
 /**
  * PDF page 3: the closed loop. A rail of four stages (SENSE → ANALYZE →
@@ -32,18 +47,29 @@ export default function Loop() {
           {LOOP.stages.map((stg, n) => (
             <li key={stg.n}>
               <Reveal delay={n * 50}>
-                <div
-                  className="grid gap-5 px-6 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:gap-8 md:px-8 md:py-6"
-                >
-                  <div className="flex items-start gap-3 md:w-24 md:flex-col md:gap-1.5">
+                <div className="grid gap-6 px-6 py-6 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-start md:gap-8 md:px-8 md:py-7">
+                  <div className="flex items-start gap-3 md:w-20 md:flex-col md:gap-1.5">
                     <span className="measure text-[12px] tracking-[0.14em] text-accent">{stg.n}</span>
                     <span className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{stg.kicker}</span>
                   </div>
                   <div>
                     <h2 className="text-[clamp(1.125rem,2vw,1.375rem)] font-[650] text-deep">{stg.head}</h2>
-                    <p className="mt-2 max-w-[68ch] text-[14.5px] leading-relaxed text-ink-2">{stg.body}</p>
+                    <p className="mt-2 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2">{stg.body}</p>
                     <p className="mt-2.5 text-[12.5px] text-ink-3">{stg.meta}</p>
                   </div>
+                  {/* the approved Figma frame for this stage of the loop. The frame is
+                      authored at 390x844 and must not be re-laid-out, so it is scaled
+                      as a whole and the wrapper carries the SCALED footprint. */}
+                  <figure className="hidden overflow-hidden rounded-soft border border-line bg-white shadow-[0_1px_2px_rgba(21,56,94,.06),0_16px_36px_-28px_rgba(21,56,94,.5)] md:block md:justify-self-end">
+                    <div className="h-[441px] w-[204px] overflow-hidden">
+                      <div className="origin-top-left scale-[0.523] [width:390px] [height:844px]">
+                        {(() => { const F = STAGE_FRAME[n]; return <F /> })()}
+                      </div>
+                    </div>
+                    <figcaption className="border-t border-line px-3 py-2 text-[10.5px] leading-snug text-ink-3">
+                      {STAGE_FRAME_LABEL[n]}
+                    </figcaption>
+                  </figure>
                 </div>
               </Reveal>
             </li>
