@@ -12,7 +12,7 @@ export default function SensorPodFrame({ label = 'Sensor pod' }: { label?: strin
     <figure className="flex flex-col items-center">
       <svg
         viewBox="0 0 120 180"
-        className="h-auto w-[120px]"
+        className="h-auto w-[132px]"
         role="img"
         aria-label="Sensor pod: a compact wall unit with a live status light"
       >

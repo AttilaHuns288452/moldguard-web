@@ -62,23 +62,25 @@ export default function Loop() {
                   {/* the approved Figma frame for this stage of the loop. The frame is
                       authored at 390x844 and must not be re-laid-out, so it is scaled
                       as a whole and the wrapper carries the SCALED footprint. */}
-                  <div className="hidden md:block md:justify-self-end">
+                  {/* one column, one height: every stage visual occupies the same
+                      box so the four rows share a rhythm instead of 206/198/474/474 */}
+                  <div className="hidden md:flex md:h-[248px] md:w-[212px] md:items-center md:justify-center md:justify-self-end">
                     {n === 0
                       ? <SensorPodFrame />
                       : n === 1
                       ? <RiskGaugeCard />
                       : (
                         <figure className="overflow-hidden rounded-soft border border-line bg-white shadow-[0_1px_2px_rgba(21,56,94,.06),0_16px_36px_-28px_rgba(21,56,94,.5)]">
-                          <div className="h-[441px] w-[204px] overflow-hidden">
-                            <div className="origin-top-left scale-[0.523] [width:390px] [height:844px]">
+                          <div className="h-[196px] w-[91px] overflow-hidden">
+                            <div className="origin-top-left scale-[0.233] [width:390px] [height:844px]">
                               {(() => { const F = STAGE_FRAME[n]; return <F /> })()}
                             </div>
                           </div>
-                          <figcaption className="border-t border-line px-3 py-2 text-[10.5px] leading-snug text-ink-3">
-                            {STAGE_FRAME_LABEL[n]}
-                          </figcaption>
                         </figure>
                       )}
+                    {n > 1 && (
+                      <p className="mt-1.5 text-center text-[10px] leading-snug text-ink-3">{STAGE_FRAME_LABEL[n]}</p>
+                    )}
                   </div>
                 </div>
               </Reveal>
