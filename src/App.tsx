@@ -17,6 +17,7 @@ import WhatItDoes from './sections/WhatItDoes'
 // page 2
 // page 3 (how it works)
 import Features from './sections/Features'
+import SenseScoreAct from './sections/SenseScoreAct'
 import Ownership from './sections/Ownership'
 import Placement from './sections/Placement'
 // other artboards
@@ -85,6 +86,7 @@ export default function App() {
             <Hero />
             <Problem />
             <Meet />
+            <SenseScoreAct />
             <Features />
             <Ownership />
             <Placement />

@@ -19,7 +19,7 @@ export default function Faq() {
           <div className="lg:sticky lg:top-28 lg:self-start">
             <LineReveal
               lines={splitTitle(FAQ.title)}
-              className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
+              className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-deep"
             />
             <Reveal delay={80}>
               <p className="mt-3 max-w-[42ch] text-[15px] leading-relaxed text-ink-2">

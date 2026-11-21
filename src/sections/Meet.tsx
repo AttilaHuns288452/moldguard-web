@@ -60,6 +60,25 @@ export default function Meet() {
             <Reveal delay={70}>
               <p className="lede mt-3">{MEET.lede}</p>
             </Reveal>
+            {/* One column, not two. This block sits in the left half of a
+                two-column section (the 3D stage takes the right), so a 2-col grid
+                left each item ~130px wide and orphaned the last word ("…
+                continuously." / "… real time.") on its own line. Measured on the
+                rendered page; one column reads cleanly and keeps the four rows as
+                a list, which is what the artboard shows anyway. */}
+            <ol className="mt-6 grid gap-y-3">
+              {MEET.stages.map((s, i) => (
+                <Reveal key={s.n} delay={90 + i * 40} as="li">
+                  <div className="flex items-baseline gap-2.5 border-t border-line pt-2.5">
+                    <span className="measure text-[10.5px] tracking-[0.16em] text-accent-ink">{s.n}</span>
+                    <div>
+                      <p className="text-[0.9375rem] font-[650] text-deep">{s.title}</p>
+                      <p className="mt-0.5 text-[13.5px] leading-snug text-ink-2">{s.body}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </ol>
           </div>
           <Reveal delay={110}>
             <div className="flex items-center gap-1.5">

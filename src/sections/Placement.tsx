@@ -9,7 +9,7 @@ export default function Placement() {
       <div className="shell grid items-center gap-10 md:grid-cols-2 md:gap-11">
         <Reveal>
           <div>
-            <LineReveal lines={splitTitle(PLACEMENT.title)} className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep" />
+            <LineReveal lines={splitTitle(PLACEMENT.title)} className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-deep" />
             <p className="lede mt-2">{PLACEMENT.lede}</p>
             <a
               href={PLACEMENT.cta.href}

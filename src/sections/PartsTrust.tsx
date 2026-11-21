@@ -18,7 +18,7 @@ export default function PartsTrust() {
           <LineReveal
             as="h2"
             lines={splitTitle(PARTS_TRUST.title)}
-            className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
+            className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-deep"
           />
           <Reveal delay={70}>
             <p className="lede mt-2">{PARTS_TRUST.lede}</p>

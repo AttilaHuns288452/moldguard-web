@@ -28,9 +28,16 @@ export default function Hero() {
         {/* copy */}
         <div className="relative z-10">
           <p className="mb-4 text-[13px] text-ink-3">{HERO.cat}</p>
+          {/* PDF p1 h1 = 110pt on 1280 = 8.59% of page width. Straight-matching
+              that ratio is impossible HERE because the copy is longer than the
+              artboard's ("Know when conditions become mold-friendly." vs "Know mold
+              is coming before it shows.") and the text column is 561px of 1440.
+              Measured: at 1440 any size above ~4.6vw wraps to 4-5 lines, splitting
+              "mold-friendly", which is worse than being smaller. 4.6vw = 66px keeps
+              the artboard's 3-line shape at 1440 (was 72px / 4 lines). */}
           <LineReveal
             as="h1"
-            className="max-w-[15ch] text-[clamp(2.75rem,5.6vw,4.5rem)] leading-[1.02] font-bold tracking-[-0.032em] text-deep"
+            className="max-w-[15ch] text-[clamp(2.75rem,4.6vw,4.1rem)] leading-[1.02] font-bold tracking-[-0.032em] text-deep"
             lines={HERO.titleLines}
           />
           <p className="lede mt-4 max-w-[34ch] sm:mt-6">{HERO.lede}</p>
@@ -64,13 +71,15 @@ export default function Hero() {
             className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
             style={{ aspectRatio: '1 / 1.01' }}
           >
-            {/* The backdrop is deliberately DARKER at the edges than the model, not a
-                light-to-light wash. Measured on the rendered hero: the model filled
-                the same stage as the explorer's but its tonal spread was 60 vs 116
-                — the white body had almost no value range against a pale ground.
-                A deeper outer stop costs nothing and gives the white assembly an
-                edge everywhere, which is what made it read as a "ghost". */}
-            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(115%_88%_at_50%_16%,#e8f0f7_0%,#a8c0d6_46%,#5f7d9b_100%)]">
+            {/* Stage tone sampled from the artboard's hero product card: the device
+                sits on a WARM, LIGHT surface (beige/cream studio), not a cool blue
+                field. That contrast direction is what makes a white product read as
+                a product: warm light ground, cool white object. The site had a cool
+                mid-blue gradient (#e8f0f7 -> #5f7d9b) which fought the model — a
+                white body on cool blue sits at the same value and dissolves.
+                Measured after switching: product-region p5..p95 spread 70 -> see
+                scripts/model_check.mjs + the band note in docs/FIGMA_RECONSTRUCTION_LOG.md. */}
+            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_95%_at_50%_20%,#fdfbf7_0%,#efe7db_55%,#d9cdbb_100%)]">
               <DeviceViewer
                 active={active}
                 onSelect={setActive}
@@ -81,14 +90,13 @@ export default function Hero() {
                 nudgeX={-0.014}
               />
               {/* The unit is shown open on purpose: the panels are modelled apart
-                  in the SketchUp file, and the interior IS the product argument
-                  (thermoelectric stack, heatsink, fan, tank). Saying so turns a
-                  "broken front door" into a cutaway. */}
-              <p className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-full bg-deep/90 px-3 py-1 text-[11px] font-[650] tracking-[0.12em] text-on-dark uppercase backdrop-blur-sm">
-                Open view &middot; inside the unit
-              </p>
+                  in the SketchUp file, and the interior IS the product argument.
+                  Two stickers used to say so; the artboard has neither, and the
+                  hero read as crowded. Keep ONE line (the bottom one, which also
+                  names the parts) and drop the "OPEN VIEW" pill — the open view is
+                  self-evident once the model is on screen. */}
               <p className="mt-2 px-1 text-center text-[11px] leading-snug text-ink-3 sm:pointer-events-none sm:absolute sm:bottom-4 sm:left-4 sm:right-[188px] sm:mt-0 sm:rounded-tight sm:bg-card/92 sm:px-3 sm:py-2 sm:text-[11.5px] sm:text-ink-2 sm:backdrop-blur-sm">
-                {HERO.stageNote}
+                Open cutaway &middot; {HERO.stageNote}
               </p>
             </div>
           </div>

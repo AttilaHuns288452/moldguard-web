@@ -77,9 +77,13 @@ export default function RiskShowcase() {
                 </span>
               </div>
 
-              <div className="mt-4 grid items-center gap-6 sm:grid-cols-[auto_minmax(0,1fr)]">
+              <div className="mt-4 grid items-center gap-6 min-[380px]:grid-cols-[auto_minmax(0,1fr)]">
                 {/* gauge */}
-                <svg width={168} height={168} viewBox="0 0 168 168" aria-hidden="true" className="shrink-0">
+                {/* Fluid, not a fixed 168px. At 320px the card's p-6 + this 168px + gap-6
+                    exceeded the viewport by 31px (measured, .findover2.mjs). A viewBox
+                    with w-full/h-auto scales the same drawing; max-w keeps desktop
+                    identical to the approved frame. */}
+                <svg viewBox="0 0 168 168" aria-hidden="true" className="h-auto w-full max-w-[168px] shrink-0">
                   <g transform="rotate(145 84 84)">
                     <circle cx={84} cy={84} r={R} fill="none" stroke="#d7e3f2" strokeWidth={9}
                       strokeDasharray={`${(SWEEP / 360) * C} ${C}`} />
@@ -142,14 +146,20 @@ export default function RiskShowcase() {
                 <span className="text-[11.5px] text-ink-3">{sc.room}</span>
                 <span className="measure text-[11.5px] text-ink-3">{sc.hours}h sustained</span>
               </div>
-              <div className="mt-3 flex items-center gap-3 text-[11.5px] text-ink-3">
+              {/* flex-wrap: this legend is four unbreakable flex items plus a
+                  right-aligned "acts at 70". At 320px the row is wider than the
+                  card and forced 31px of horizontal page scroll (measured by
+                  hiding sections in turn — the whole route overflowed, only #risk
+                  owned it). Wrapping is the honest fix; the row is a legend, it
+                  has no reason to be one line on a narrow phone. */}
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11.5px] text-ink-3">
                 {[['Safe', 0, 40], ['Watch', 40, 70], ['Act', 70, 100]].map(([n, lo, hi]) => (
-                  <span key={n as string} className="flex items-center gap-1.5">
+                  <span key={n as string} className="flex items-center gap-1.5 whitespace-nowrap">
                     <span className="h-[3px] w-4 rounded-full" style={{ background: n === 'Act' ? '#1d4ed8' : n === 'Watch' ? '#5b7591' : '#465e7a' }} />
                     {n} <span className="measure opacity-70">{lo}–{hi}</span>
                   </span>
                 ))}
-                <span className="ml-auto flex items-center gap-1.5">
+                <span className="ml-auto flex items-center gap-1.5 whitespace-nowrap">
                   <span className="h-2.5 w-px bg-accent-ink" /> acts at 70
                 </span>
               </div>

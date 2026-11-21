@@ -11,7 +11,7 @@ export default function Problem() {
           <Reveal>
             <LineReveal
               lines={splitTitle(PROBLEM.title)}
-              className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-deep"
+              className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-deep"
             />
           </Reveal>
           <Reveal delay={80}>

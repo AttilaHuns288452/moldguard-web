@@ -29,8 +29,13 @@ export const HERO = {
   // looking at rather than reading it as a broken front door
   stageNote: 'Sensors · thermoelectric stack · fan · water tank',
   status: 'Direct app access · not an app-store listing yet',
+  // The artboard's CTA pair is "Get Started" + "See how it works". "See how it
+  // works" is the more useful second action here: it answers the question the
+  // hero raises (how does it know?) and it points at the /how-it-works page this
+  // site has and the static artboard could not. Contact remains in the nav and in
+  // the closing band, so nothing is lost.
   primary: { label: 'Get the app', href: '/download' },
-  secondary: { label: 'Contact the team', href: '/contact' },
+  secondary: { label: 'See how it works', href: '/how-it-works' },
 }
 
 // The demo readout used by DataFlow. It is NOT the hero card (that is explicit

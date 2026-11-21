@@ -15,7 +15,7 @@ export default function Ownership() {
           <div>
             <LineReveal
               lines={splitTitle(OWN.title)}
-              className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-white"
+              className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-white"
             />
             <p className="lede mt-3 max-w-[560px] text-on-dark-2">{OWN.lede}</p>
 

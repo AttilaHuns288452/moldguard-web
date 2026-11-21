@@ -114,10 +114,14 @@
   }
 
   .lede {
-    font-size: 1.22rem;
+    /* PDF p1 body measure: 29pt on a 1280pt artboard = 2.27% of page width
+       -> ~26.2px at a 1440 viewport. The site was running 19.5px (1.36%), i.e.
+       74% of the artboard's body size, which is a large part of why the page
+       read lighter and less assured than the approved frame. */
+    font-size: clamp(1.06rem, 1.82vw, 1.64rem);
     color: var(--color-ink-2);
-    max-width: 560px;
-    line-height: 1.58;
+    max-width: 34em;
+    line-height: 1.55;
   }
   .band-dark .lede { color: var(--color-on-dark-2); }
 

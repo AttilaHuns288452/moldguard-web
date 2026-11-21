@@ -22,7 +22,7 @@ export default function ClosingCta({ onDownloadPage = false }: { onDownloadPage?
           <div className="rounded-shell border border-[#eaf2fc33] px-7 py-8 md:px-10 md:py-9">
             <LineReveal
               lines={splitTitle(CTA.title)}
-              className="max-w-[24ch] text-[clamp(1.9rem,3.2vw,2.7rem)] leading-[1.1] font-[650] text-white"
+              className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-white"
             />
             <p className="lede mt-2 max-w-[560px] text-on-dark-2">{CTA.lede}</p>
             <div className="mt-6 flex flex-wrap gap-3">

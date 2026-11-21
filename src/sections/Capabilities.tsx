@@ -22,7 +22,7 @@ export default function Capabilities() {
             <LineReveal
               as="h1"
               lines={splitTitle(CAPABILITIES.title)}
-              className="max-w-[24ch] text-[clamp(2.2rem,4.4vw,3.5rem)] leading-[1.08] font-[650] text-deep"
+              className="max-w-[24ch] text-[clamp(2.2rem,3.5vw,3.5rem)] leading-[1.08] font-[650] text-deep"
             />
             <Reveal delay={70}>
               <p className="lede mt-3 max-w-[66ch]">{CAPABILITIES.lede}</p>
