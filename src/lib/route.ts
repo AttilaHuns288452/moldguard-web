@@ -45,9 +45,9 @@ export function navigate(page: Page) {
  */
 const HEAD: Record<Location_, { title: string; description: string }> = {
   home: {
-    title: 'MoldGuard - know mold is coming before it shows',
+    title: 'MoldGuard - know when conditions become mold-friendly',
     description:
-      'MoldGuard watches humidity, temperature and air conditions, scores your mold risk in real time, and dehumidifies before conditions become unsafe.',
+      'MoldGuard watches humidity, temperature and sustained exposure, scores a room-level environmental risk index, and dehumidifies automatically. Student prototype, not a mold diagnostic.',
   },
   features: {
     title: 'Features - MoldGuard',
