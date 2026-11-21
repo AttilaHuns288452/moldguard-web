@@ -16,7 +16,13 @@ export default function Features() {
   // only makes sense on the home page (on /features it is a link to itself).
   const onFeaturesRoute = typeof window !== 'undefined' && /^\/features\/?$/.test(window.location.pathname)
   return (
-    <section id="features" className="section band-white">
+    // PDF page 1, band 5: {#eaf2fc}, i.e. PALE. This was switched to white when
+    // `SenseScoreAct` was deleted, because the section below it was then also pale
+    // and the two merged. Now that Sense (white) sits between Meet and Features,
+    // the artboard's pale band is correct again and does not merge with anything:
+    //   meet pale · sense white · features pale · ownership navy
+    // Measured after the change: / is back to the artboard's 5-colour rhythm.
+    <section id="features" className="section band-pale">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div className="max-w-[720px]">

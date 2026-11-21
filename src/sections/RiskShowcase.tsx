@@ -123,9 +123,14 @@ export default function RiskShowcase() {
                     const pct = belowDew ? 100 : Math.max(0, Math.min(100, (num / (max as number)) * 100))
                     return (
                       <li key={label as string}>
-                        <div className="flex items-baseline justify-between">
-                          <span className="text-[11.5px] text-ink-2">{label}</span>
-                          <span className={`measure text-[11.5px] font-[650] ${belowDew ? 'text-[#bf2d2a]' : 'text-deep'}`}>
+                        {/* Both sides must be allowed to wrap: at ≤340px the label
+                            column is 52px and "Temperature" needs 65, so it was
+                            clipped (scrollWidth 65 vs clientWidth 52, measured).
+                            min-w-0 lets the flex item shrink, and the label wraps
+                            rather than overflowing. */}
+                        <div className="flex items-baseline justify-between gap-2">
+                          <span className="min-w-0 text-[11.5px] text-ink-2">{label}</span>
+                          <span className={`measure shrink-0 text-[11.5px] font-[650] ${belowDew ? 'text-[#bf2d2a]' : 'text-deep'}`}>
                             {v}<span className="ml-0.5 text-[11.5px] text-ink-3">{unit}</span>
                           </span>
                         </div>

@@ -84,7 +84,11 @@ export default function DataFlow() {
             ))}
           </div>
 
-          <div className="grid grid-cols-3">
+          {/* 3 columns only when there is room for them. At 320px each cell is
+              ~52px and "Temperature" needs 65 (measured: scrollWidth 65 vs
+              clientWidth 52), so the word was clipped. Below 380px these are
+              sensor names — a single column reads fine and nothing is cut. */}
+          <div className="grid grid-cols-1 min-[380px]:grid-cols-3">
             {['Temperature', 'Humidity', 'Air quality'].map((k) => (
               <div key={k} className="p-1">
                 <div className="rounded-tight border border-line bg-surface px-2 py-2 text-center">
