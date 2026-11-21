@@ -33,13 +33,15 @@ export const HERO = {
   secondary: { label: 'Contact the team', href: '/contact' },
 }
 
+// The demo readout used by DataFlow. It is NOT the hero card (that is explicit
+// markup), but it is live, so its values must obey the site's one risk vocabulary:
+// Safe / Watch / Act. It previously carried three rooms and "Elevated" — the same
+// contradiction that was removed from the hero, still shipping in this component.
 export const APP_MOCK = {
   risk: 38,
   cap: 'Conditions steady',
   rooms: [
-    { name: 'Living room', state: 'Low' },
-    { name: 'Bedroom', state: 'Low' },
-    { name: 'Closet', state: 'Elevated' },
+    { name: 'Closet', state: 'Watch' },
     { name: 'Dehumidifier', state: 'Running' },
   ],
 }
