@@ -54,7 +54,7 @@ export default function RiskShowcase() {
                     type="button"
                     onClick={() => setI(n)}
                     aria-pressed={i === n}
-                    className={`rounded-tight border px-3 py-1.5 text-[12.5px] transition-colors ${
+                    className={`min-h-11 rounded-tight border px-3 py-1.5 text-[12.5px] transition-colors ${
                       i === n ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
                     }`}
                   >

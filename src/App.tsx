@@ -51,10 +51,17 @@ export default function App() {
   // `main` already carries tabIndex={-1} for exactly this: without moving focus,
   // a route change leaves a keyboard/screen-reader user on the old page's markup
   // with no announcement that anything happened.
-  const first = useRef(true)
+  //
+  // Compare against the previous route, not a "have I run yet" flag. StrictMode
+  // mounts this effect twice, so a flag was already false on the second run and
+  // every clean load (including QA's) landed focus on `main` — making the first
+  // Tab skip the skip link. A route comparison is idempotent, so the double
+  // mount changes nothing.
+  const lastPage = useRef(page)
   useEffect(() => {
     applyHead(page)
-    if (first.current) { first.current = false; return }
+    if (lastPage.current === page) return
+    lastPage.current = page
     document.getElementById('main')?.focus({ preventScroll: false })
   }, [page])
 

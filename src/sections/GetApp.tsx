@@ -38,7 +38,11 @@ export default function GetApp() {
   return (
     <section id="app" className="section band-white">
       <div className="shell">
-        <div className="grid items-center gap-10 md:grid-cols-[1fr_auto] md:gap-16">
+        {/* ponytail: a 360px QR side column from md squeezed the copy into a narrow
+            ribbon beside a card far shorter than the heading. Below lg the card now
+            stacks under the copy at its own 360px width; the approved two-column
+            composition is lg and up only. */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center lg:gap-16">
           <div>
             <LineReveal
               as="h1"
@@ -53,7 +57,7 @@ export default function GetApp() {
           </div>
 
           <Reveal delay={120}>
-            <div className="rounded-shell border border-line bg-card p-6 shadow-[0_1px_2px_rgba(21,56,94,.05),0_16px_36px_-24px_rgba(21,56,94,.35)]">
+            <div className="max-w-[360px] rounded-shell border border-line bg-card p-6 shadow-[0_1px_2px_rgba(21,56,94,.05),0_16px_36px_-24px_rgba(21,56,94,.35)]">
               <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Scan with your phone</p>
               <img
                 src="/download-qr.svg"

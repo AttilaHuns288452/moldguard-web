@@ -1,4 +1,4 @@
-import { CTA } from '../content'
+import { CONTACT, CTA } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 
@@ -9,11 +9,11 @@ import { splitTitle } from '../lib/motion'
  * shorter than the reference and read as a toolbar rather than a closing panel.
  */
 export default function ClosingCta({ onDownloadPage = false }: { onDownloadPage?: boolean }) {
-  // On /download the band's own primary CTA pointed at /download - a dead control
-  // on the page whose entire job is conversion. There it points at the real
-  // install instead, and the id stops colliding with the hero's.
+  // The download page already contains the QR and direct URL above. Its closing
+  // action therefore offers the honest next step available to this prototype:
+  // request the link from the team instead of scrolling the user back upward.
   const primary = onDownloadPage
-    ? { label: 'Scan the code above', href: '#app' }
+    ? { label: 'Request the app link', href: `mailto:${CONTACT.email}?subject=MoldGuard%20app%20link` }
     : CTA.primary
   return (
     <section id="closing-cta" className="band-dark py-[72px] md:py-[128px]">

@@ -11,7 +11,7 @@ own SketchUp model (`final-3d.skp`) shipped as an interactive glTF.
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # dist/
-node scripts/qa.mjs [url]   # visual + interaction QA, 170 checks, writes .qa/
+node scripts/qa.mjs [url]   # visual + interaction QA, 202 checks, writes .qa/
 npm run qa:a11y [url]       # axe-core WCAG 2.1 AA on all 5 routes x 2 viewports
                             # finds a browser in the playwright cache; PW_CHROMIUM overrides
 ```

@@ -31,7 +31,7 @@
       "name": "What does the app show?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Live status and full history: the room, the readings behind the score, humidity, temperature, and dew point trends over time, with multi-room and multi-unit views. You can step in with manual override from anywhere, any time."
+        "text": "Live status and history: the room, the readings behind the score, and humidity, temperature and dew-point trends over time (multi-room and multi-unit views are planned as a premium tier). You can step in with manual override from anywhere, any time."
       }
     },
     {
@@ -39,7 +39,7 @@
       "name": "Can I monitor more than one room?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Multi-room and multi-unit views are logged over time for larger households, dormitories, or property managers."
+        "text": "Not in the base product. Multi-room and multi-unit views are planned as an optional premium tier for larger households, dormitories or property managers."
       }
     },
     {

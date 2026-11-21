@@ -128,6 +128,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
     <div className="relative h-full w-full">
       <div
         ref={hostRef}
+        data-model-loaded={loaded ? 'true' : 'false'}
         className={`relative h-full w-full ${armed ? 'touch-none' : 'touch-pan-y'}`}
         onClick={() => { if (!armed) setArmed(true) }}
         role="application"
@@ -170,7 +171,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
       </div>
 
       {/* the activation hint is not chrome: without it the stage looks static */}
-      {!failed && loaded && !armed && (
+      {!failed && chrome && loaded && !armed && (
         <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
           <span className="rounded-full border border-line bg-card/90 px-3 py-1 text-[11px] text-ink-2 shadow-sm">
             Click to interact
@@ -185,17 +186,17 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
           </span>
           <div className="flex items-center gap-0.5">
             <button type="button" onClick={() => setZoom((z) => Math.min(2.4, z + 0.18))}
-              className="grid size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              className="grid size-10 place-items-center rounded-full border border-line bg-card/80 text-ink-2 shadow-sm transition-colors hover:bg-card hover:text-ink"
               aria-label="Zoom in">
               <ZoomIn className="size-4" strokeWidth={1.9} />
             </button>
             <button type="button" onClick={() => setZoom((z) => Math.max(0.55, z - 0.18))}
-              className="grid size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              className="grid size-10 place-items-center rounded-full border border-line bg-card/80 text-ink-2 shadow-sm transition-colors hover:bg-card hover:text-ink"
               aria-label="Zoom out">
               <ZoomOut className="size-4" strokeWidth={1.9} />
             </button>
             <button type="button" onClick={() => { setZoom(1); setResetKey((k) => k + 1) }}
-              className="grid size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink"
+              className="grid size-10 place-items-center rounded-full border border-line bg-card/80 text-ink-2 shadow-sm transition-colors hover:bg-card hover:text-ink"
               aria-label="Reset the view">
               <RotateCcw className="size-3.5" strokeWidth={1.9} />
             </button>
@@ -206,7 +207,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
             </button>
             <button type="button"
               onClick={() => hostRef.current?.parentElement?.requestFullscreen?.().catch(() => {})}
-              className="hidden size-8 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink md:grid"
+              className="hidden size-10 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/60 hover:text-ink md:grid"
               aria-label="View the model fullscreen">
               <Maximize2 className="size-3.5" strokeWidth={1.9} />
             </button>

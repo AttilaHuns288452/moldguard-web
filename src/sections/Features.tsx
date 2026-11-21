@@ -4,11 +4,9 @@ import { Reveal, LineReveal, MagButton, Gauge, Seq } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 
 /**
- * PDF page 1, band 0.602–0.702: a plain 2×3 numbered grid, heading left and
- * "Explore the features" right. The PDF has NO hero card and no index dial
- * here — an invented hero card made this band 13.8% of the page against the
- * reference's 10.0% and pushed the whole page 38% longer than the artboard.
- * Six equal cells are the approved composition.
+ * PDF-grounded feature band: the Mold Risk Index leads, while the remaining
+ * capabilities stay in the same panel as supporting rows. One visual block
+ * keeps the page hierarchy clear without repeating six equal-weight cards.
  */
 export default function Features() {
   // White on both pages. PDF page 2 is one continuous white canvas, and on page 1
@@ -33,48 +31,52 @@ export default function Features() {
 
         {/* Six equal-weight rows give the reader six equal claims, i.e. none.
             The Mold Risk Index is the differentiator, so it gets a wide card and
-            the other five stay as a compact grid. */}
+            the other five stay as supporting rows in the SAME panel: one card,
+            one hierarchy, rather than a standalone hero card and a detached list. */}
         <Reveal delay={60}>
-          <article className="card-lift mt-10 grid items-center gap-6 rounded-shell border border-line bg-card p-6 md:grid-cols-[minmax(0,1fr)_auto] md:p-8">
-            <div>
-              <span className="measure text-[0.6875rem] tracking-[0.16em] text-accent-ink">
-                {FEATURES.items[0].n}
-              </span>
-              <h3 className="mt-2 text-[clamp(1.25rem,2.2vw,1.5rem)] font-[650] text-deep">
-                {FEATURES.items[0].title}
-              </h3>
-              <p className="mt-2 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">
-                {FEATURES.items[0].body}
-              </p>
-            </div>
-            {/* Same arc gauge AND the same readout the Capabilities card uses. Without
-                the number it was a bare arc - pure decoration on the strongest page. */}
-            <div className="w-[150px] shrink-0">
-              <Gauge value={38} className="block w-full" />
-              <div className="-mt-[2.2rem] text-center">
-                <p className="measure text-[1.5rem] leading-none font-semibold text-deep">38</p>
-                <p className="mt-0.5 text-[11px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
+          <article className="card-lift mt-7 overflow-hidden rounded-shell border border-line bg-card">
+            <div className="grid items-center gap-6 p-6 md:grid-cols-[minmax(0,1fr)_auto] md:p-8">
+              <div>
+                <span className="measure text-[0.6875rem] tracking-[0.16em] text-accent-ink">
+                  {FEATURES.items[0].n}
+                </span>
+                <h3 className="mt-2 text-[clamp(1.25rem,2.2vw,1.5rem)] font-[650] text-deep">
+                  {FEATURES.items[0].title}
+                </h3>
+                <p className="mt-2 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">
+                  {FEATURES.items[0].body}
+                </p>
               </div>
-              <div className="mt-2 flex justify-between text-[11px] tracking-[0.1em] text-ink-3 uppercase">
-                <span>Low</span><span>Watch</span><span>High</span>
+              {/* Same arc gauge AND the same readout the Capabilities card uses. Without
+                  the number it was a bare arc - pure decoration on the strongest page. */}
+              <div className="w-[150px] shrink-0">
+                <Gauge value={38} className="block w-full" />
+                <div className="-mt-[2.2rem] text-center">
+                  <p className="measure text-[1.5rem] leading-none font-semibold text-deep">38</p>
+                  <p className="mt-0.5 text-[11px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
+                </div>
+                <div className="mt-2 flex justify-between text-[11px] tracking-[0.1em] text-ink-3 uppercase">
+                  <span>Low</span><span>Watch</span><span>High</span>
+                </div>
               </div>
             </div>
+
+            {/* one observer for the whole index, children stagger off their own
+                position (see .seq) rather than five independent Reveals. It sits
+                inside the card so the dominant claim and its supporters are one block. */}
+            <Seq className="grid border-t border-line px-6 md:grid-cols-2 md:gap-x-12 md:px-8">
+              {FEATURES.items.slice(1).map((f) => (
+                <div key={f.n} className="flex gap-5 border-b border-line py-4 last:border-b-0 md:[&:nth-last-child(2)]:border-b-0">
+                  <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>
+                  <div>
+                    <h3 className="text-[1.05rem] font-[650] text-deep">{f.title}</h3>
+                    <p className="mt-1 text-[14.5px] leading-relaxed text-ink-2">{f.body}</p>
+                  </div>
+                </div>
+              ))}
+            </Seq>
           </article>
         </Reveal>
-
-        {/* one observer for the whole index, children stagger off their own
-            position (see .seq) rather than five independent Reveals */}
-        <Seq className="mt-6 grid gap-x-14 border-t-2 border-deep sm:grid-cols-2">
-          {FEATURES.items.slice(1).map((f) => (
-            <div key={f.n} className="card-lift flex gap-5 border-b border-line py-5">
-              <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>
-              <div>
-                <h3 className="text-[1.05rem] font-[650] text-deep">{f.title}</h3>
-                <p className="mt-1 text-[14.5px] leading-relaxed text-ink-2">{f.body}</p>
-              </div>
-            </div>
-          ))}
-        </Seq>
       </div>
     </section>
   )

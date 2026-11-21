@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useInView, prefersReducedMotion } from '../lib/motion'
 
 /** Viewport-driven reveal. Never mount-driven: content below the fold would
@@ -7,10 +7,15 @@ export function Reveal({
   children, delay = 0, className = '', as: Tag = 'div',
 }: { children: ReactNode; delay?: number; className?: string; as?: 'div' | 'li' | 'section' }) {
   const [ref, inView] = useInView<HTMLDivElement>()
+  const [focused, setFocused] = useState(false)
   return (
     <Tag
       ref={ref as never}
-      className={`reveal ${inView ? 'is-in' : ''} ${className}`}
+      // A control inside an un-revealed block is still tabbable (opacity keeps it
+      // in the tab order by design), so keyboard focus must reveal it — otherwise
+      // Tab lands on a control the user cannot see. onFocus bubbles in React.
+      onFocus={() => setFocused(true)}
+      className={`reveal ${inView || focused ? 'is-in' : ''} ${className}`}
       style={{ '--d': `${delay}ms` } as React.CSSProperties}
     >
       {children}
@@ -81,10 +86,12 @@ export function Seq({
   children, className = '', delay = 0, as: Tag = 'div',
 }: { children: ReactNode; className?: string; delay?: number; as?: 'div' | 'tbody' | 'ul' }) {
   const [ref, inView] = useInView<HTMLElement>()
+  const [focused, setFocused] = useState(false)
   return (
     <Tag
       ref={ref as never}
-      className={`seq ${inView ? 'is-in' : ''} ${className}`}
+      onFocus={() => setFocused(true)}   // same contract as Reveal: focus reveals
+      className={`seq ${inView || focused ? 'is-in' : ''} ${className}`}
       style={{ '--d': `${delay}ms` } as React.CSSProperties}
     >
       {children}

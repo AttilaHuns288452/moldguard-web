@@ -191,7 +191,7 @@ button, summary, a[href] {
   transform: scaleX(0); transform-origin: left;
   transition: transform var(--dur-micro) var(--ease-state);
 }
-.nav-grow:hover::after, .nav-grow[aria-current="true"]::after { transform: scaleX(1); }
+.nav-grow:hover::after, .nav-grow[aria-current="page"]::after { transform: scaleX(1); }
 
 /* ── scroll progress hairline: the one scroll-linked indicator ───────────── */
 .scroll-progress {

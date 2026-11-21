@@ -67,7 +67,7 @@ export default function Meet() {
                 type="button"
                 onClick={() => { setMode('tour'); setActive(null) }}
                 aria-pressed={mode === 'tour' && active === null}
-                className={`inline-flex items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
+                className={`inline-flex min-h-11 items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
                   mode === 'tour' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
                 }`}
               >
@@ -77,7 +77,7 @@ export default function Meet() {
                 type="button"
                 onClick={() => { setMode('explode'); setAutoSpin(false); setActive(null) }}
                 aria-pressed={mode === 'explode'}
-                className={`inline-flex items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
+                className={`inline-flex min-h-11 items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
                   mode === 'explode' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
                 }`}
               >
@@ -106,7 +106,7 @@ export default function Meet() {
                   type="button"
                   onClick={() => setAutoSpin((v) => !v)}
                   aria-pressed={autoSpin}
-                  className={`rounded-tight border px-3 py-2 text-[11px] transition-colors ${
+                  className={`min-h-11 rounded-tight border px-3 py-2 text-[11px] transition-colors ${
                     autoSpin ? 'border-accent-ink bg-[#2563eb0f] text-deep' : 'border-line text-ink-3 hover:border-line-hi'
                   }`}
                 >

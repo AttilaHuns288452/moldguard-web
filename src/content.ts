@@ -14,6 +14,7 @@
 export const CONTACT = {
   email: 'moldguard.dev.team@gmail.com',
   phone: '0992 543 0608',
+  // The displayed number is the local PH form: 0992 543 0608 -> +63 992 543 0608.
   phoneHref: '+639925430608',
   year: 2026,
   disclaimer: 'Monitoring device · not a mold diagnostic or substitute for professional inspection',
@@ -85,7 +86,7 @@ export const FEATURES = {
     { n: '1', title: 'Mold Risk Index Engine', body: 'Risk scoring based on humidity, temperature and exposure duration.' },
     { n: '2', title: 'Early detection', body: 'Humidity, temperature and sustained exposure catch the risky window before mold becomes visible. VOC sensing adds context alongside them, never a verdict on its own.' },
     { n: '3', title: 'Auto-Dehumidification', body: 'Responds automatically when risk rises.' },
-    { n: '4', title: 'Dashboard & Analytics', body: 'Historical trends and multi-room visibility.' },
+    { n: '4', title: 'Dashboard & Analytics', body: 'Historical trends for the room; multi-room visibility is planned as an optional premium tier.' },
     { n: '5', title: 'Mobile Alerts & Control', body: 'Know when something changes and act remotely.' },
     { n: '6', title: 'No Recurring Subscription', body: 'Own the system without monthly monitoring fees.' },
   ],
@@ -172,7 +173,7 @@ export const WHAT_IT_DOES = {
   analytics: {
     eyebrow: 'Analytics & History',
     title: 'Look back at any room, any week.',
-    body: 'Humidity, temperature, and dew point trends are logged over time, with multi-room and multi-unit views for larger households, dormitories, or property managers.',
+    body: 'Humidity, temperature, and dew point trends are logged over time for the room. Multi-room and multi-unit views are planned as an optional premium tier for larger households, dormitories, or property managers.',
     sample: 'Master Bedroom · 30 days',
     ranges: ['24 hours', '7 days', '30 days'],
   },

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import { Logo } from './Marks'
 
@@ -12,6 +12,7 @@ const NAV: { id: Page; label: string }[] = [
 
 export default function Header({ page }: { page: Location_ }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const menuBtn = useRef<HTMLButtonElement>(null)
   // keep anchor jumps clear of the sticky header, whatever height it takes
   useEffect(() => {
     const el = document.querySelector('header')
@@ -23,6 +24,19 @@ export default function Header({ page }: { page: Location_ }) {
     return () => ro.disconnect()
   }, [])
 
+  // Escape closes the open menu and returns focus to the control that opened it,
+  // so a keyboard user is never left with focus on a link that just unmounted.
+  useEffect(() => {
+    if (!mobileOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      setMobileOpen(false)
+      menuBtn.current?.focus()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [mobileOpen])
+
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-0 focus:top-0 focus:z-50 focus:rounded-br-[10px] focus:bg-deep focus:px-4 focus:py-2 focus:text-on-dark">
@@ -31,7 +45,7 @@ export default function Header({ page }: { page: Location_ }) {
 
       <header className="sticky top-0 z-40 border-b border-line bg-card">
         <nav aria-label="Main" className="shell flex flex-wrap items-center gap-x-4 gap-y-1 py-3 lg:flex-nowrap lg:gap-x-6 lg:gap-y-2 lg:py-[18px]">
-          <a href={pathFor('home')} onClick={(e) => { e.preventDefault(); navigate('home') }} className="flex items-center gap-[11px]" aria-label="MoldGuard home">
+          <a href={pathFor('home')} onClick={(e) => { e.preventDefault(); navigate('home') }} className="flex min-h-11 items-center gap-[11px]" aria-label="MoldGuard home">
             <Logo className="size-[34px] text-accent" />
             <span className="font-display text-[1.22rem] font-bold tracking-[-0.02em] text-ink">MoldGuard</span>
           </a>
@@ -51,15 +65,11 @@ export default function Header({ page }: { page: Location_ }) {
             ))}
           </div>
 
-          <a
-            href={pathFor("download")}
-            onClick={(e) => { e.preventDefault(); navigate("download") }}
-            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn border border-line-hi px-[16px] py-2.5 text-[14px] font-[650] text-white bg-accent-ink border-accent-ink transition-colors hover:bg-deep active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
-          >
-            Get the app
-          </a>
-
+          {/* Mobile menu toggle sits before "Get the app" in the DOM to match its
+              visual position above it (order-1 vs order-2). CSS reordering alone
+              left the tab order running below-to-above on small screens. */}
           <button
+            ref={menuBtn}
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
             aria-expanded={mobileOpen}
@@ -69,6 +79,14 @@ export default function Header({ page }: { page: Location_ }) {
           >
             {mobileOpen ? <X className="size-5" strokeWidth={2} /> : <Menu className="size-5" strokeWidth={2} />}
           </button>
+
+          <a
+            href={pathFor("download")}
+            onClick={(e) => { e.preventDefault(); navigate("download") }}
+            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn border border-line-hi px-[16px] py-2.5 text-[14px] font-[650] text-white bg-accent-ink border-accent-ink transition-colors hover:bg-deep active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
+          >
+            Get the app
+          </a>
         </nav>
 
         {mobileOpen && (

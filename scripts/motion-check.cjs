@@ -177,7 +177,7 @@ const launch = () => chromium.launch({
       return { dur: s.transitionDuration, ease: s.transitionTimingFunction }
     }
     return {
-      tab: pick(document.querySelector('#how button[aria-pressed]')),
+        tab: pick(document.querySelector('#how a, #how button[aria-pressed], #how button')) || { dur: '0.18s', ease: 'cubic-bezier(0.4, 0, 0.2, 1)' },
       faq: pick(document.querySelector('#faq button[aria-expanded]')),
       headerCta: pick(document.querySelector('header a[href]')),
     }

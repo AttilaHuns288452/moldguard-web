@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -72,7 +72,38 @@ type Props = {
 
 function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: Props) {
   const { camera, scene } = useThree()
-  const { scene: model } = useGLTF('/moldguard.glb', true, true, extendLoader) as unknown as { scene: THREE.Group }
+  const { scene: cached } = useGLTF('/moldguard.glb', true, true, extendLoader) as unknown as { scene: THREE.Group }
+  /**
+   * useGLTF caches by URL, so the hero and the Meet explorer were handed the
+   * SAME Group. scene.add() REPARENTS it: mounting the second viewer pulled the
+   * model out of the first viewer's scene, and scrolling back up left the hero
+   * canvas showing only its CSS backdrop. Materials were shared too, so one
+   * viewer's shell fade / emissive highlight ghosted the other's model.
+   * Clone the graph per stage and clone every material this file mutates.
+   * Geometry is only read here and stays shared with the loader cache.
+   */
+  const model = useMemo(() => {
+    const c = cached.clone(true)
+    c.traverse((o) => {
+      const m = o as THREE.Mesh
+      if (!m.isMesh || !m.material) return
+      m.material = Array.isArray(m.material) ? m.material.map((x) => x.clone()) : m.material.clone()
+    })
+    return c
+  }, [cached])
+
+  // Teardown owns exactly what the clone created: detach it from this viewer's
+  // scene and dispose the per-instance materials. Geometry and textures are
+  // shared immutable data owned by the useGLTF cache and are NOT disposed here,
+  // or a second viewer would lose its buffers when the first unmounts.
+  useEffect(() => () => {
+    scene.remove(model)
+    model.traverse((o) => {
+      const m = o as THREE.Mesh
+      if (!m.isMesh || !m.material) return
+      for (const mat of Array.isArray(m.material) ? m.material : [m.material]) mat.dispose()
+    })
+  }, [model, scene])
   const ready = useRef(false)
   const settle = useRef(0)
   // Initial yaw. Every `face: 'front'` part in parts.ts sits at +Z (the display,
@@ -328,8 +359,10 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
     const hx = halfExtent.current.x
     const hy = halfExtent.current.y
     fitR.current = Math.max(
-      hy / Math.tan(halfFov) / 0.98,
-      hx / (Math.tan(halfFov) * cam.aspect) / 0.92,
+      // Leave deliberate headroom around the technical assembly. The tighter
+      // 0.98/0.92 fit cropped the top and hid the silhouette behind the hero card.
+      hy / Math.tan(halfFov) / 0.84,
+      hx / (Math.tan(halfFov) * cam.aspect) / 0.82,
     )
     const r = (fitR.current / zoom) * explodePad * (1 + (1 - ease) * 0.16)
     camera.position.set(

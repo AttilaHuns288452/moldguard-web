@@ -24,7 +24,7 @@ export default function Hero() {
       {/* Column split measured off the PDF: content 1120pt = text 36.3% ·
           19.4% gap · photo 41.8%. The photo is SQUARE (468x473pt), not the
           landscape panel a 50/50 split produces. */}
-      <div className="shell relative grid items-center gap-5 pt-6 pb-8 [@media(min-width:1352px)]:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] [@media(min-width:1352px)]:gap-[19%] [@media(min-width:1352px)]:pt-[118px] [@media(min-width:1352px)]:pb-[52px]">
+      <div className="shell relative grid gap-5 pt-6 pb-8 lg:items-center lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)] lg:gap-[7%] lg:pt-16 lg:pb-10 min-[1352px]:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] min-[1352px]:gap-[19%] min-[1352px]:pt-[118px] min-[1352px]:pb-[52px]">
         {/* copy */}
         <div className="relative z-10">
           <p className="mb-4 text-[13px] text-ink-3">IoT mold risk prevention &amp; detection</p>
@@ -61,7 +61,7 @@ export default function Hero() {
             className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
             style={{ aspectRatio: '1 / 1.01' }}
           >
-            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_90%_at_50%_18%,#f3f7fc_0%,#dbe5f2_52%,#c9d7e8_100%)]">
+            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_90%_at_50%_18%,#e2edf7_0%,#b8cede_52%,#91aac0_100%)]">
               <DeviceViewer
                 active={active}
                 onSelect={setActive}
@@ -69,7 +69,7 @@ export default function Hero() {
                 mode="tour"
                 chrome={false}
                 hotspots={false}
-                nudgeX={0.022}
+                nudgeX={-0.014}
               />
               {/* The unit is shown open on purpose: the panels are modelled apart
                   in the SketchUp file, and the interior IS the product argument
@@ -78,15 +78,16 @@ export default function Hero() {
               <p className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-full bg-deep/90 px-3 py-1 text-[11px] font-[650] tracking-[0.12em] text-on-dark uppercase backdrop-blur-sm">
                 Open view &middot; inside the unit
               </p>
-              <p className="mt-2 px-1 text-center text-[11px] leading-snug text-ink-3 sm:pointer-events-none sm:absolute sm:bottom-4 sm:left-4 sm:right-[216px] sm:mt-0 sm:rounded-tight sm:bg-card/92 sm:px-3 sm:py-2 sm:text-[11.5px] sm:text-ink-2 sm:backdrop-blur-sm">
+              <p className="mt-2 px-1 text-center text-[11px] leading-snug text-ink-3 sm:pointer-events-none sm:absolute sm:bottom-4 sm:left-4 sm:right-[188px] sm:mt-0 sm:rounded-tight sm:bg-card/92 sm:px-3 sm:py-2 sm:text-[11.5px] sm:text-ink-2 sm:backdrop-blur-sm">
                 {HERO.stageNote}
               </p>
             </div>
           </div>
 
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
-              the photo's right edge into the white frame, as the PDF does. */}
-          <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-[0_22px_50px_-26px_rgba(15,39,71,.55)] backdrop-blur-sm sm:absolute sm:-right-4 sm:-bottom-4 sm:mt-0 sm:w-[196px] sm:rounded-shell sm:p-3.5">
+              the photo's right edge into the white frame, as the PDF does —
+              narrow enough that it clips the frame corner, not the unit. */}
+          <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-[0_22px_50px_-26px_rgba(15,39,71,.55)] backdrop-blur-sm sm:absolute sm:-right-6 sm:-bottom-5 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
             <p className="mt-2.5 flex items-center justify-between gap-2 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">
               <span>Mold Risk Index</span>

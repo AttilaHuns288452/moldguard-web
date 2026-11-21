@@ -6,7 +6,7 @@
 import { chromium } from 'playwright'
 import { mkdirSync } from 'node:fs'
 
-const URL = process.argv[2]?.startsWith('http') ? process.argv[2] : 'http://127.0.0.1:5199/'
+const URL = process.argv[2]?.startsWith('http') ? process.argv[2] : 'http://127.0.0.1:5173/'
 const FULL = process.argv.includes('--full')
 const OUT = '.qa'
 mkdirSync(OUT, { recursive: true })
@@ -26,10 +26,10 @@ const VIEWPORTS = [
 // silently passes a broken page.
 const ROUTE_SECTIONS = {
   '/': ['top', 'problem', 'meet', 'features', 'ownership', 'placement', 'closing-cta'],
-  '/features': ['capabilities', 'what', 'risk', 'compare', 'parts', 'closing-cta'],
-  '/how-it-works': ['how', 'faq'],
+  '/features': ['capabilities', 'features', 'what', 'risk', 'compare', 'parts', 'closing-cta'],
+  '/how-it-works': ['how', 'faq', 'closing-cta'],
   '/contact': ['contact', 'faq'],
-  '/download': ['app'],
+  '/download': ['app', 'closing-cta'],
 }
 
 
@@ -58,6 +58,7 @@ const browser = await chromium.launch({
 const errors = []
 const failed = []
 const thirdPartyFailed = []
+let navigationInFlight = false
 
 /**
  * Load a URL. `networkidle` never fires on production (Vercel keeps a beacon/
@@ -66,10 +67,51 @@ const thirdPartyFailed = []
  * 'networkidle' best-effort when we are on localhost.
  */
 async function open(page, url, settle = 700) {
-  await page.goto(url, { waitUntil: 'load', timeout: 45000 })
+  navigationInFlight = true
+  try {
+    await page.goto(url, { waitUntil: 'load', timeout: 45000 })
+  } finally {
+    navigationInFlight = false
+  }
   const idle = /localhost|127\.0\.0\.1/.test(url)
   if (idle) await page.waitForLoadState?.('networkidle', { timeout: 8000 }).catch(() => {})
   await page.waitForTimeout(settle)
+}
+
+/**
+ * Percentage of a 3D stage's pixels that are NOT its backdrop, judged by RGB
+ * distance from the sampled corner colour. Whole-canvas variance cannot tell a
+ * blank stage from a drawn one here: the hero's radial-gradient ground plus the
+ * HTML overlays keep the colour count high with no model at all. Returns -1 when
+ * the stage or its pixels are unavailable.
+ */
+async function modelInk(page, selector) {
+  const shot = await page.locator(selector).first().screenshot({ animations: 'disabled' }).catch(() => null)
+  if (!shot) return -1
+  return page.evaluate(async (b64) => {
+    const img = new Image()
+    img.src = 'data:image/png;base64,' + b64
+    await img.decode().catch(() => {})
+    if (!img.width) return -1
+    const s = document.createElement('canvas')
+    s.width = 160; s.height = 160
+    const c = s.getContext('2d', { willReadFrequently: true })
+    if (!c) return -1
+    c.drawImage(img, 0, 0, 160, 160)
+    const d = c.getImageData(0, 0, 160, 160).data
+    let br = 0, bg = 0, bb = 0
+    for (const [x, y] of [[2, 2], [157, 2], [2, 157], [157, 157]]) {
+      const i = (y * 160 + x) * 4
+      br += d[i]; bg += d[i + 1]; bb += d[i + 2]
+    }
+    br /= 4; bg /= 4; bb /= 4
+    let far = 0
+    for (let i = 0; i < d.length; i += 4) {
+      const dr = d[i] - br, dg = d[i + 1] - bg, db = d[i + 2] - bb
+      if (dr * dr + dg * dg + db * db > 900) far++ // 30+ RGB from the backdrop
+    }
+    return +(100 * far / (160 * 160)).toFixed(2)
+  }, shot.toString('base64'))
 }
 
 for (const vp of VIEWPORTS) {
@@ -80,6 +122,11 @@ for (const vp of VIEWPORTS) {
     const u = r.url()
     const thirdParty = !u.startsWith(URL) && !u.startsWith('/') && !/^https?:\/\/(localhost|127\.0\.0\.1|moldguard-web\.vercel\.app)/.test(u)
     const line = `[${vp.name}] ${u} ${r.failure()?.errorText}`
+    // A request is only ignorable when Chromium aborted it during route cleanup.
+    // Keep other aborts visible because a real asset failure can also surface as
+    // ERR_ABORTED; the explicit blocked-GLB test below covers intentional failure.
+    const routeCleanupAbort = navigationInFlight && r.failure()?.errorText === 'net::ERR_ABORTED' && /node_modules|fonts\.googleapis|moldguard\.glb/.test(u)
+    if (routeCleanupAbort) return
     // A flaky font CDN is not a defect in this site, and letting it fail the suite
     // made a 170-check run look like a regression. Report it, do not gate on it.
     if (thirdParty) thirdPartyFailed.push(line)
@@ -126,7 +173,7 @@ for (const vp of VIEWPORTS) {
     }
     record(`${vp.name}: canvas mounted`, !!canvasBox, canvasBox ? `${Math.round(canvasBox.width)}x${Math.round(canvasBox.height)}` : 'none')
     if (canvasBox) {
-      const shot = await page.locator('[data-device-canvas]').first().screenshot({ path: `${OUT}/${vp.name}-canvas.png` })
+      const shot = await page.locator('[data-device-canvas]').first().screenshot({ path: `${OUT}/${vp.name}-canvas.png`, animations: 'disabled' })
       const ink = await page.evaluate(() => {
         const cv = document.querySelector('[data-device-canvas] canvas')
         if (!cv) return -1
@@ -134,6 +181,62 @@ for (const vp of VIEWPORTS) {
         return gl ? 1 : 0
       })
       record(`${vp.name}: webgl context live`, ink === 1)
+      // A live context is not proof of pixels: a scene that never draws (bad
+      // camera, cleared buffer, unmounted mesh) still has one.
+      // Poll the viewer's own loaded marker rather than a fixed sleep.
+      let modelLoaded = false
+      for (let i = 0; i < 24; i++) {
+        modelLoaded = await page.evaluate(() =>
+          document.querySelector('[data-device-canvas]')?.parentElement
+          ?.getAttribute('data-model-loaded') === 'true')
+        if (modelLoaded) break
+        await page.waitForTimeout(250)
+      }
+      record(`${vp.name}: 3D model loaded`, modelLoaded)
+      // Regression: useGLTF caches by URL, so before the per-viewer clone the
+      // hero and Meet shared one Group; mounting Meet reparented it and the hero
+      // canvas went blank while still reporting a live context and a nonzero
+      // colour count (its CSS backdrop and overlays stayed). So this measures the
+      // HERO stage after the explorer has mounted and we scroll back, counting
+      // model pixels by distance from the stage backdrop rather than raw variance.
+      if (vp.w >= 1024) {
+        const before = await modelInk(page, '#top [data-device-canvas]')
+        await page.evaluate(() => document.getElementById('meet')?.scrollIntoView())
+        await page.waitForTimeout(2200)
+        await page.evaluate(() => window.scrollTo(0, 0))
+        await page.waitForTimeout(1400)
+        const after = await modelInk(page, '#top [data-device-canvas]')
+        record(`${vp.name}: hero keeps its model after Meet mounts`,
+          after >= 3 && after >= before * 0.6, `${before}% -> ${after}% model pixels`)
+      }
+      // Sample the COMPOSITED screenshot, not the live canvas: the renderer runs
+      // with preserveDrawingBuffer:false, so an in-page drawImage() reads an
+      // already-cleared buffer and reports a blank stage on a healthy render.
+      // Downscaled to 64x64 in the page: ~4k pixel reads to tell a model from a void.
+      const px = await page.evaluate(async (b64) => {
+        const img = new Image()
+        img.src = 'data:image/png;base64,' + b64
+        await img.decode().catch(() => {})
+        const s = document.createElement('canvas')
+        s.width = 64; s.height = 64
+        const c2 = s.getContext('2d', { willReadFrequently: true })
+        if (!c2 || !img.width) return { colors: -1, spread: 0 }
+        c2.drawImage(img, 0, 0, 64, 64)
+        const d = c2.getImageData(0, 0, 64, 64).data
+        const seen = new Set()
+        let lo = 255, hi = 0
+        for (let i = 0; i < d.length; i += 4) {
+          const l = (d[i] * 299 + d[i + 1] * 587 + d[i + 2] * 114) / 1000
+          if (l < lo) lo = l
+          if (l > hi) hi = l
+          seen.add(((d[i] >> 3) << 10) | ((d[i + 1] >> 3) << 5) | (d[i + 2] >> 3))
+        }
+        return { colors: seen.size, spread: Math.round(hi - lo) }
+      }, shot.toString('base64'))
+      // A blank/uniform stage scores 1 colour and ~0 spread; a real model on its
+      // gradient ground clears this floor by an order of magnitude.
+      record(`${vp.name}: canvas is not blank`, px.colors >= 8 && px.spread >= 12,
+        `${px.colors} colours, spread ${px.spread}`)
     }
   }
 

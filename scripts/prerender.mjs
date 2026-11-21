@@ -18,7 +18,7 @@ const ROUTES = {
   '': {
     title: 'MoldGuard - know mold is coming before it shows',
     description:
-      'MoldGuard watches humidity, temperature and air conditions, scores your mold risk in real time, and activates a connected dehumidifier when conditions become unsafe.',
+      'MoldGuard watches humidity, temperature and air conditions, scores your mold risk in real time, and dehumidifies before conditions become unsafe.',
   },
   features: {
     title: 'Features - MoldGuard',
@@ -28,7 +28,7 @@ const ROUTES = {
   'how-it-works': {
     title: 'How it works - MoldGuard',
     description:
-      'The closed loop: sense the room, analyze the real mold risk, respond with your own dehumidifier, and report everything to the app. Plus setup and straight answers.',
+      'The closed loop: sense the room, analyze the real mold risk, dehumidify on its own, and report everything to the app. Plus setup and straight answers.',
   },
   contact: {
     title: 'Contact - MoldGuard',
@@ -38,22 +38,35 @@ const ROUTES = {
     title: 'Get the app - MoldGuard',
     description: 'Scan to get the MoldGuard app and monitor your home from anywhere.',
   },
+  '__404__': {
+    title: 'Page not found - MoldGuard',
+    description: 'That page does not exist. Head back to the MoldGuard home page.',
+  },
 }
 
 const src = readFileSync(resolve(DIST, 'index.html'), 'utf8')
+const faqSchema = readFileSync(resolve(DIST, 'faq.json'), 'utf8').trim().replace(/</g, '\\u003c')
+const faqSlot = '<script type="application/ld+json" id="faq-schema"></script>'
+if (!src.includes(faqSlot)) throw new Error('prerender: FAQ schema slot missing in index.html')
 
 for (const [route, meta] of Object.entries(ROUTES)) {
+  const notFound = route === '__404__'
   const url = `${HOST}/${route}`
-  let html = src
+  let html = src.replace(faqSlot, `<script type="application/ld+json" id="faq-schema">${faqSchema}</script>`)
+  if (notFound) {
+    html = html
+      .replace(/<link rel="canonical" href="[^"]*"\s*\/>\n?/, '')
+      .replace(/<meta property="og:url" content="[^"]*"\s*\/>\s*/, '')
+  }
   // each replacement targets the exact tag index.html ships, so a template
   // change fails loudly here instead of silently emitting the wrong head
   const swaps = [
     [/<title>[^<]*<\/title>/, `<title>${meta.title}</title>`],
     [/<meta name="description" content="[^"]*"/, `<meta name="description" content="${meta.description}"`],
-    [/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="${url}"`],
+    ...(!notFound ? [[/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="${url}"`]] : []),
     [/<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${meta.title}"`],
     [/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${meta.description}"`],
-    [/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="${url}"`],
+    ...(!notFound ? [[/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="${url}"`]] : []),
     [/<meta name="twitter:title" content="[^"]*"/, `<meta name="twitter:title" content="${meta.title}"`],
     [/<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${meta.description}"`],
   ]
@@ -61,8 +74,8 @@ for (const [route, meta] of Object.entries(ROUTES)) {
     if (!re.test(html)) throw new Error(`prerender: ${re} did not match in index.html`)
     html = html.replace(re, rep)
   }
-  const out = resolve(DIST, route === '' ? 'index.html' : `${route}.html`)
+  const out = resolve(DIST, route === '' ? 'index.html' : route === '__404__' ? '404.html' : `${route}.html`)
   mkdirSync(dirname(out), { recursive: true })
   writeFileSync(out, html)
-  console.log(`prerendered ${route || '/'} -> ${out.replace(DIST + '/', '')}`)
+  console.log(`prerendered ${route === '__404__' ? '404' : route || '/'} -> ${out.replace(DIST + '/', '')}`)
 }

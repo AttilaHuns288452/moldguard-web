@@ -49,7 +49,7 @@ export default function Loop() {
           {LOOP.stages.map((stg, n) => (
             <li key={stg.n}>
               <Reveal delay={n * 50}>
-                <div className="grid gap-6 px-6 py-6 md:grid-cols-[auto_minmax(0,1fr)_minmax(212px,220px)] md:items-center md:gap-8 md:px-8 md:py-7 md:min-h-[332px]">
+                <div className="grid gap-6 px-6 py-6 md:grid-cols-[auto_minmax(0,1fr)_minmax(212px,220px)] md:items-center md:gap-8 md:px-8 md:py-6">
                   <div className="flex items-start gap-3 md:w-20 md:flex-col md:gap-1.5">
                     <span className="measure text-[12px] tracking-[0.14em] text-accent">{stg.n}</span>
                     <span className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{stg.kicker}</span>
@@ -63,8 +63,10 @@ export default function Loop() {
                       authored at 390x844 and must not be re-laid-out, so it is scaled
                       as a whole and the wrapper carries the SCALED footprint. */}
                   {/* one column, one height: every stage visual occupies the same
-                      box so the four rows share a rhythm instead of 206/198/474/474 */}
-                  <div className="hidden md:flex md:h-[248px] md:w-full md:flex-col md:items-center md:justify-center lg:h-[320px] xl:h-[368px]">
+                      box so the four rows share a rhythm instead of 206/198/474/474.
+                      The box hugs its tallest child (frame 302 + caption 20 at xl)
+                      rather than adding a fixed 368 gutter of dead air under it. */}
+                  <div className="hidden md:flex md:h-[216px] md:w-full md:flex-col md:items-center md:justify-center lg:h-[282px] xl:h-[322px]">
                     {n === 0
                       ? <SensorPodFrame />
                       : n === 1

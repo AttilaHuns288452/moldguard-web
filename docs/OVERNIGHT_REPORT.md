@@ -153,7 +153,7 @@ nothing).
 | `npm run build` | ✓ builds clean |
 | `tsc -p tsconfig.json --noEmit` | ✓ clean |
 | `npm run lint` | 0 errors |
-| `node scripts/qa.mjs` | **170/170** |
+| `node scripts/qa.mjs` | **202/202** |
 | `node scripts/axe.cjs` | **0 violations / 10 route-viewport combos** |
 | Console errors | 0 across all routes |
 | Mobile (390×844) | band rhythm identical to desktop, **no horizontal overflow** on any route |
@@ -177,5 +177,6 @@ Screenshots of the final implementation: `docs/screenshots/{home,features,how,co
 5. **The 3D dark-ink metric is misleading on this model.** The unit is near-white
    on a pale stage, so a dark-pixel count reads ~2% on mobile while the product
    visibly fills the frame. Judge this panel visually, not by ink.
-6. **Lighthouse was measured at 100/100/100/100 earlier in the session** on this
-   container (SwiftShader). Not re-run after these commits.
+6. **Lighthouse is not a current release gate.** The current README records the
+   latest in-container SwiftShader measurement and its limitations; re-measure
+   on GPU hardware before quoting a score.

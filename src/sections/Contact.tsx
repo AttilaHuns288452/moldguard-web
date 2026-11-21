@@ -102,11 +102,11 @@ export default function Contact() {
           </Reveal>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-start lg:gap-10">
+        <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-stretch lg:gap-10">
           {/* ── Start the conversation ── */}
           <Reveal>
             {state === 'sent' ? (
-              <div className="rounded-soft border border-[#177069]/30 bg-[#1770690d] p-7 text-center md:p-8">
+              <div role="status" aria-live="polite" className="rounded-soft border border-[#177069]/30 bg-[#1770690d] p-7 text-center md:p-8">
                 <p className="text-[1.15rem] font-[650] text-[#177069]">Thank you — your message is on its way.</p>
                 <p className="mt-2 text-[13.5px] leading-relaxed text-ink-2">
                   We reply to {email}. If it is urgent, call {CONTACT.phone}.
@@ -186,11 +186,14 @@ export default function Contact() {
           </Reveal>
 
           {/* ── Prefer direct? ── */}
-          <Reveal delay={80}>
-            <div className="rounded-soft border border-line bg-card p-7 md:p-8">
+          <Reveal delay={80} className="order-first lg:order-none">
+            {/* Below lg the direct channels are the first actionable alternative after
+                the intro, not buried below the full form. The order class has to sit
+                on the grid child; on the inner div it reordered nothing. */}
+            <div className="rounded-soft border border-line bg-card p-7 md:p-8 lg:flex lg:h-full lg:flex-col">
               <h2 className="text-[1.15rem] font-[650] text-deep">{CONTACT_PAGE.directTitle}</h2>
-              <ul className="mt-5 divide-y divide-line">
-                <li className="py-4">
+              <ul className="mt-5 divide-y divide-line lg:flex lg:flex-1 lg:flex-col">
+                <li className="py-4 lg:flex lg:flex-1 lg:flex-col lg:justify-center">
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Email</p>
                   <a href={`mailto:${CONTACT.email}`}
                     className="mt-1 inline-flex min-h-11 items-center text-[15px] font-[650] text-deep underline-offset-2 hover:underline">
@@ -198,7 +201,7 @@ export default function Contact() {
                   </a>
                   <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{CONTACT_PAGE.directNotes[0]}</p>
                 </li>
-                <li className="py-4">
+                <li className="py-4 lg:flex lg:flex-1 lg:flex-col lg:justify-center">
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Phone</p>
                   <a href={`tel:${CONTACT.phoneHref}`}
                     className="mt-1 inline-flex min-h-11 items-center text-[15px] font-[650] text-deep underline-offset-2 hover:underline">
@@ -206,11 +209,11 @@ export default function Contact() {
                   </a>
                   <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{CONTACT_PAGE.directNotes[1]}</p>
                 </li>
-                <li className="py-4">
+                <li className="py-4 lg:flex lg:flex-1 lg:flex-col lg:justify-center">
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Quote</p>
                   <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{CONTACT_PAGE.directNotes[2]}</p>
                 </li>
-                <li className="py-4">
+                <li className="py-4 lg:flex lg:flex-1 lg:flex-col lg:justify-center">
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">App</p>
                   <p className="mt-1 text-[13px] leading-relaxed text-ink-2">
                     {CONTACT_PAGE.app.kicker} {CONTACT_PAGE.app.body}{' '}
