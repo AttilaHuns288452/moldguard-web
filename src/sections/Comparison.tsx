@@ -49,8 +49,11 @@ export default function Comparison() {
                     <th scope="row" className={`px-5 py-5 align-top text-[15px] font-[650] ${r.ours ? 'text-accent-ink' : 'text-deep'}`}>
                       {r.option}
                       {r.ours && (
-                        <span className="mt-1.5 inline-flex items-center rounded-full bg-accent-ink px-2 py-0.5 text-[11.5px] font-[650] tracking-[0.06em] text-white uppercase">
-                          MoldGuard prototype
+                        // whitespace-nowrap: at the table's 1st-column width this
+                        // pill used to break "MOLDGUARD PROTOTYPE" across two lines
+                        // inside a tight rounded blob. One short word instead.
+                        <span className="mt-1.5 inline-flex items-center rounded-full bg-accent-ink px-2 py-0.5 text-[11px] font-[650] tracking-[0.06em] whitespace-nowrap text-white uppercase">
+                          Prototype
                         </span>
                       )}
                     </th>

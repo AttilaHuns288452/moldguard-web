@@ -71,7 +71,7 @@ export default function Capabilities() {
                   <p className="mt-0.5 text-[11.5px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
                 </div>
                 <div className="mt-2 flex justify-between text-[11.5px] tracking-[0.1em] text-ink-3 uppercase">
-                  <span>Low</span><span>Watch</span><span>High</span>
+                  <span>Safe</span><span>Watch</span><span>Act</span>
                 </div>
               </div>
 

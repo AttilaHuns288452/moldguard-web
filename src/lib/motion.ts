@@ -20,21 +20,36 @@ export function useInView<T extends Element>(margin = '0px 0px 18% 0px') {
     )
     io.observe(el)
 
-    // Safety net: IntersectionObserver fires for elements ABOVE the viewport too,
-    // but a fast scroll (or an element already scrolled past before this effect
-    // attached) can leave one unobserved. The reveal CSS sets visibility:hidden,
-    // so an unobserved element is permanently invisible - to sighted users AND to
-    // screen readers, which then report an empty heading. Reveal anything that is
-    // already at or above the fold shortly after mount.
-    const revealIfNear = () => {
+    // Safety net. IntersectionObserver only reports CHANGES while it is observing:
+    // if the main thread is saturated, a fast scroll can step past an element
+    // between two IO callbacks, and IO then reports it as never-intersecting. The
+    // reveal CSS starts at opacity 0, so that element is permanently invisible —
+    // to sighted users AND to screen readers. Measured: 4 of 21 blocks stranded on
+    // / while the QA suite competed for CPU, 0 when idle.
+    //
+    // Scroll events are not enough (they coalesce or are dropped under load), so
+    // poll geometry on a timer for a few seconds and stop as soon as it fires.
+    // "At or above the fold" includes elements we have already scrolled PAST
+    // (bottom < 0), which is exactly the case a dropped IO callback leaves behind.
+    const check = () => {
       const r = el.getBoundingClientRect()
-      if (r.top < window.innerHeight * 1.2) setInView(true)
+      if (r.top < window.innerHeight * 1.2 || r.bottom < 0) {
+        setInView(true)
+        return true
+      }
+      return false
     }
-    const t = window.setTimeout(revealIfNear, 1200)
-    // and once more on any scroll, so dragging the scrollbar fast cannot strand
-    // an element mid-page in the invisible state
-    window.addEventListener('scroll', revealIfNear, { passive: true, once: true })
-    return () => { window.clearTimeout(t); window.removeEventListener('scroll', revealIfNear); io.disconnect() }
+    let ticks = 0
+    const timer = window.setInterval(() => {
+      ticks += 1
+      if (check() || ticks > 20) window.clearInterval(timer)   // ~4s at 200ms
+    }, 200)
+    // Belt and braces: scroll fires far more often than the timer, so a block the
+    // user scrolls past is caught on the way past rather than up to 200ms later.
+    // Unconditional (no `once`) — the removed listener was the whole bug.
+    const onScroll = () => { if (check()) window.removeEventListener('scroll', onScroll) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.clearInterval(timer); window.removeEventListener('scroll', onScroll); io.disconnect() }
   }, [margin])
   return [ref, inView] as const
 }

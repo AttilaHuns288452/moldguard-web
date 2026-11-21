@@ -64,7 +64,13 @@ export default function Hero() {
             className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
             style={{ aspectRatio: '1 / 1.01' }}
           >
-            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_90%_at_50%_18%,#e2edf7_0%,#b8cede_52%,#91aac0_100%)]">
+            {/* The backdrop is deliberately DARKER at the edges than the model, not a
+                light-to-light wash. Measured on the rendered hero: the model filled
+                the same stage as the explorer's but its tonal spread was 60 vs 116
+                — the white body had almost no value range against a pale ground.
+                A deeper outer stop costs nothing and gives the white assembly an
+                edge everywhere, which is what made it read as a "ghost". */}
+            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(115%_88%_at_50%_16%,#e8f0f7_0%,#a8c0d6_46%,#5f7d9b_100%)]">
               <DeviceViewer
                 active={active}
                 onSelect={setActive}
@@ -100,11 +106,16 @@ export default function Hero() {
               <span>Conditions steady</span>
               <span className="shrink-0 rounded-full border border-[#eaf2fc33] px-1.5 py-0.5 text-[9px] tracking-[0.04em] uppercase">Demo</span>
             </p>
+            {/* ONE room, not three. content.ts is explicit that multi-room is a
+                planned premium tier and not in the base product, so a hero card
+                listing Living room + Bedroom + Closet claimed a capability the
+                FAQ then disclaims 4,000px lower. The band names are the site's
+                one vocabulary (Safe / Watch / Act), not Low / Elevated. */}
             <ul className="mt-3 divide-y divide-[#eaf2fc24] border-t border-[#eaf2fc24]">
-              {[['Living room', 'Low', false], ['Bedroom', 'Low', false], ['Closet', 'Elevated', true], ['Dehumidifier', 'Running', true]].map(([n, st, hot]) => (
-                <li key={n as string} className="flex items-center justify-between gap-2 py-2">
+              {[['Closet', 'Watch'], ['Dehumidifier', 'Running']].map(([n, st]) => (
+                <li key={n} className="flex items-center justify-between gap-2 py-2">
                   <span className="text-[12px] text-on-dark-2">{n}</span>
-                  <span className={`text-[12px] font-[650] ${hot ? 'text-on-dark' : 'text-on-dark'}`} style={hot ? { color: '#7fb6ff' } : undefined}>{st}</span>
+                  <span className="text-[12px] font-[650] text-on-dark">{st}</span>
                 </li>
               ))}
             </ul>

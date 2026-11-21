@@ -58,16 +58,21 @@ export default function GetApp() {
 
           <Reveal delay={120}>
             <div className="max-w-[360px] rounded-shell border border-line bg-card p-6 shadow-[0_1px_2px_rgba(21,56,94,.05),0_16px_36px_-24px_rgba(21,56,94,.35)]">
-              <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Scan with your phone</p>
+              {/* The QR encodes THIS page's URL, not a separate artifact, so the
+                  caption must not promise an app. It is a "open this page on your
+                  phone" convenience (the link is easier to tap there than to retype),
+                  and the access path is the team mailto below. Labelling it
+                  "app download" is what made it read as a broken promise. */}
+              <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Open this page on your phone</p>
               <img
                 src="/download-qr.svg"
-                alt="QR code that opens the MoldGuard app download page"
+                alt="QR code that opens the MoldGuard download page"
                 width={220}
                 height={220}
                 className="mt-3 size-[220px]"
               />
               <p className="mt-3 max-w-[220px] text-[12.5px] leading-relaxed text-ink-2">
-                Point your camera at the code, or open the link on the phone you want it on.
+                Scan to open this page on the phone you want it on, then request access below.
               </p>
               <a
                 href="https://moldguard-web.vercel.app/download"
@@ -75,11 +80,12 @@ export default function GetApp() {
               >
                 moldguard-web.vercel.app/download
               </a>
-              {/* Honest distribution note. There is no App Store or Play listing,
-                  so a store badge here would promise an install that does not
-                  exist. Stated plainly instead. */}
+              {/* Honest distribution note. There is no App Store or Play listing
+                  AND no downloadable package in public/ (verified: no .apk/.ipa/
+                  .aab), so "direct install ... is available" promised an install
+                  that cannot happen. Access is granted by the team instead. */}
               <p className="mt-3 border-t border-line pt-3 text-[11.5px] leading-relaxed text-ink-3">
-                Student prototype. Direct install and scan-code access are available; it is not distributed through an app store yet.
+                Student prototype. Not distributed through an app store, and there is no public install package yet — the team grants access directly.
               </p>
               <a
                 href={`mailto:moldguard.dev.team@gmail.com?subject=MoldGuard%20app%20access`}

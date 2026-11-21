@@ -156,6 +156,11 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
       // the hero was reported broken. The SKP contains no door components and no
       // rotations, so one outer shell is the whole product: keep the largest
       // (mesh_3) and hide the nested duplicates.
+      //
+      // mesh_4 is a fourth copy in the same volume, but hiding it changed ZERO
+      // pixels (A/B diff 0/1186x1198 while hiding mesh_3 changed 206 — so the
+      // probe is sensitive and mesh_4 is simply already invisible). Leaving the
+      // regex at (1|5) is correct; do not "fix" it again without that diff.
       if (/^mesh_(1|5)_ROOT_Layer0_/i.test(m.name || '')) {
         m.visible = false
         return

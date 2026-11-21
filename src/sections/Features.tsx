@@ -12,6 +12,9 @@ export default function Features() {
   // White on both pages. PDF page 2 is one continuous white canvas, and on page 1
   // this has to be white because the section that used to separate it from `meet`
   // was removed - without that, two pale blocks merged into one wash.
+  // This component is shared by / and /features; the "explore the features" CTA
+  // only makes sense on the home page (on /features it is a link to itself).
+  const onFeaturesRoute = typeof window !== 'undefined' && /^\/features\/?$/.test(window.location.pathname)
   return (
     <section id="features" className="section band-white">
       <div className="shell">
@@ -23,9 +26,15 @@ export default function Features() {
             />
           </div>
           <Reveal delay={60}>
-            <MagButton href={FEATURES.cta.href} variant="ghost" icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
-              {FEATURES.cta.label}
-            </MagButton>
+            {/* On /features this section IS the features page, so the same CTA
+                linked to /features — a button that navigates to the page you are
+                already on. Hide it there; on the home page it is the path to the
+                full page and stays. */}
+            {!onFeaturesRoute && (
+              <MagButton href={FEATURES.cta.href} variant="ghost" icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
+                {FEATURES.cta.label}
+              </MagButton>
+            )}
           </Reveal>
         </div>
 
@@ -56,7 +65,7 @@ export default function Features() {
                   <p className="mt-0.5 text-[11px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
                 </div>
                 <div className="mt-2 flex justify-between text-[11px] tracking-[0.1em] text-ink-3 uppercase">
-                  <span>Low</span><span>Watch</span><span>High</span>
+                  <span>Safe</span><span>Watch</span><span>Act</span>
                 </div>
                 <p className="mt-1.5 text-center text-[10.5px] leading-snug text-ink-3">
                   Illustrative demo reading
@@ -67,16 +76,29 @@ export default function Features() {
             {/* one observer for the whole index, children stagger off their own
                 position (see .seq) rather than five independent Reveals. It sits
                 inside the card so the dominant claim and its supporters are one block. */}
-            <Seq className="grid border-t border-line px-6 md:grid-cols-2 md:gap-x-12 md:px-8">
-              {FEATURES.items.slice(1).map((f) => (
-                <div key={f.n} className="flex gap-5 border-b border-line py-4 last:border-b-0 md:[&:nth-last-child(2)]:border-b-0">
+            {/* Dividers must be CONTINUOUS. A grid with `gap-x-12` plus per-cell
+                borders draws each cell's rule separately, leaving a 48px hole in
+                the gutter (measured: rules at x123–696 and x744–1317) — which reads
+                as a broken line now that the last row spans both columns.
+                So: no column gap at all, and the visual gutter comes from padding
+                inside the left cell. Adjacent cells then share one continuous
+                border-bottom. */}
+            <Seq className="grid border-t border-line px-6 md:grid-cols-2 md:px-8 [&>*]:border-b [&>*]:border-line [&>*:last-child]:border-b-0">
+              {FEATURES.items.slice(1).map((f, i, arr) => {
+                const spans = i === arr.length - 1 && arr.length % 2 === 1
+                return (
+                  <div
+                    key={f.n}
+                    className={`flex gap-5 py-4 ${spans ? 'md:col-span-2' : i % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}
+                  >
                   <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>
                   <div>
                     <h3 className="text-[1.05rem] font-[650] text-deep">{f.title}</h3>
                     <p className="mt-1 text-[14.5px] leading-relaxed text-ink-2">{f.body}</p>
                   </div>
                 </div>
-              ))}
+                )
+              })}
             </Seq>
           </article>
         </Reveal>

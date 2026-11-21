@@ -126,6 +126,15 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
 
   return (
     <div className="relative h-full w-full">
+      {/* Print only (see @media print in app.css): a WebGL canvas never composites
+          into a printed page, so both stages printed as empty gradient blocks. This
+          still shows the product in its place; on screen it is `hidden`. */}
+      <img
+        src={chrome ? '/pod-meet.png' : '/pod-hero.png'}
+        alt="MoldGuard assembly, open cutaway view"
+        data-print-still
+        className="hidden h-full w-full object-contain"
+      />
       <div
         ref={hostRef}
         data-model-loaded={loaded ? 'true' : 'false'}
@@ -170,14 +179,9 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
         )}
       </div>
 
-      {/* the activation hint is not chrome: without it the stage looks static */}
-      {!failed && chrome && loaded && !armed && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
-          <span className="rounded-full border border-line bg-card/90 px-3 py-1 text-[11px] text-ink-2 shadow-sm">
-            Select to explore · drag to orbit
-          </span>
-        </div>
-      )}
+      {/* No separate "select to explore" pill: the control bar below already
+          carries that instruction, and in the hero (chrome={false}) the stage is
+          deliberately bare. Two copies of the same hint read as a mistake. */}
 
       {!failed && chrome && (
         <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-2 pb-1">

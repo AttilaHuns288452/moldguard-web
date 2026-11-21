@@ -73,16 +73,22 @@ export default function Loop() {
                   {/* one column, one height: every stage visual occupies the same
                       box so the four rows share a rhythm instead of 206/198/474/474.
                       The box hugs its tallest child (frame 302 + caption 20 at xl)
-                      rather than adding a fixed 368 gutter of dead air under it. */}
-                  <div className="hidden md:flex md:h-[216px] md:w-full md:flex-col md:items-center md:justify-center lg:h-[282px] xl:h-[322px]">
+                      rather than adding a fixed 368 gutter of dead air under it.
+
+                      NOT hidden on mobile any more. It used to be `hidden md:flex`,
+                      which turned /how-it-works into a wall of text on a phone while
+                      the intro promised "app screens and readouts below" — and the
+                      390x844 frames are already authored at exactly phone width.
+                      Cap the height so a 390px frame does not own the viewport. */}
+                  <div className="flex h-[240px] w-full flex-col items-center justify-center md:h-[216px] lg:h-[282px] xl:h-[322px]">
                     {n === 0
                       ? <SensorPodFrame />
                       : n === 1
                       ? <RiskGaugeCard />
                       : (
                         <figure className="overflow-hidden rounded-soft border border-line bg-white shadow-[0_1px_2px_rgba(21,56,94,.06),0_16px_36px_-28px_rgba(21,56,94,.5)]">
-                          <div className="h-[196px] w-[91px] overflow-hidden lg:h-[262px] lg:w-[121px] xl:h-[302px] xl:w-[140px]">
-                            <div className="origin-top-left scale-[0.233] lg:scale-[0.31] xl:scale-[0.358] [width:390px] [height:844px]">
+                          <div className="h-[240px] w-[111px] overflow-hidden md:h-[196px] md:w-[91px] lg:h-[262px] lg:w-[121px] xl:h-[302px] xl:w-[140px]">
+                            <div className="origin-top-left scale-[0.285] md:scale-[0.233] lg:scale-[0.31] xl:scale-[0.358] [width:390px] [height:844px]">
                               {(() => { const F = STAGE_FRAME[n]; return <F /> })()}
                             </div>
                           </div>

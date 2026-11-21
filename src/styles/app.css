@@ -29,6 +29,30 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; visibility: visible; transform: none; transition: none; }
 }
+/* Print / Ctrl+P must render the WHOLE page. Entrance blocks are opacity:0 until
+   scrolled into view, and a printed sheet never scrolls — without this the PDF
+   export of any route is mostly blank paper (measured on /features: 20 of 24
+   blocks invisible). Print has no motion, so the final state is the only state. */
+@media print {
+  .reveal, .seq > * { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
+  .lines > .line > span { transform: none !important; opacity: 1 !important; }
+  /* A WebGL canvas does not composite into a printed page: the hero/Meet stages
+     print as empty gradient blocks while every other section prints fine. Hide the
+     dead stage and show the product still in its place, so a printed copy still
+     contains the product. */
+  [data-device-canvas] canvas { display: none !important; }
+  /* The stage wrapper still reserves its box; the still fills it. `position:
+     absolute` so the still lands exactly where the canvas was instead of pushing
+     layout in print. */
+  [data-print-still] {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+}
 
 .input {
   width: 100%;
