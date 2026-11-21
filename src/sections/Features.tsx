@@ -58,6 +58,9 @@ export default function Features() {
                 <div className="mt-2 flex justify-between text-[11px] tracking-[0.1em] text-ink-3 uppercase">
                   <span>Low</span><span>Watch</span><span>High</span>
                 </div>
+                <p className="mt-1.5 text-center text-[10.5px] leading-snug text-ink-3">
+                  Illustrative demo reading
+                </p>
               </div>
             </div>
 

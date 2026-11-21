@@ -42,6 +42,14 @@ export default function Loop() {
           <Reveal delay={120}>
             <p className="mt-5 text-[12.5px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{LOOP.label}</p>
           </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-3 flex flex-wrap items-center gap-2 text-[12px] text-ink-3">
+              <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 font-[650] tracking-[0.08em] uppercase">
+                Illustrative
+              </span>
+              App screens and readouts below use demo data, not a live device.
+            </p>
+          </Reveal>
         </div>
 
         {/* all four stages, stacked as the PDF lays them out */}

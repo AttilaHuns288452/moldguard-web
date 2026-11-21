@@ -27,7 +27,7 @@ export default function Hero() {
       <div className="shell relative grid gap-5 pt-6 pb-8 lg:items-center lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)] lg:gap-[7%] lg:pt-16 lg:pb-10 min-[1352px]:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] min-[1352px]:gap-[19%] min-[1352px]:pt-[118px] min-[1352px]:pb-[52px]">
         {/* copy */}
         <div className="relative z-10">
-          <p className="mb-4 text-[13px] text-ink-3">IoT mold risk prevention &amp; detection</p>
+          <p className="mb-4 text-[13px] text-ink-3">{HERO.cat}</p>
           <LineReveal
             as="h1"
             className="max-w-[15ch] text-[clamp(2.75rem,5.6vw,4.5rem)] leading-[1.02] font-bold tracking-[-0.032em] text-deep"
@@ -43,6 +43,9 @@ export default function Hero() {
               {HERO.secondary.label}
             </MagButton>
           </div>
+          <p className="mt-4 max-w-[42ch] border-l-2 border-accent pl-3 text-[12.5px] leading-relaxed text-ink-2">
+            {HERO.status}. Demo scores show environmental conditions only; MoldGuard is not a mold diagnostic.
+          </p>
 
           {/* the hero is tall enough that the fold can read as the end of the page;
               one quiet cue down to the next section fixes that */}
@@ -89,16 +92,14 @@ export default function Hero() {
               narrow enough that it clips the frame corner, not the unit. */}
           <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-[0_22px_50px_-26px_rgba(15,39,71,.55)] backdrop-blur-sm sm:absolute sm:-right-6 sm:-bottom-5 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
-            <p className="mt-2.5 flex items-center justify-between gap-2 text-[11px] tracking-[0.08em] text-on-dark-2 uppercase">
-              <span>Mold Risk Index</span>
-              {/* the same disclosure Meet and the data-flow figure carry: this is
-                  demo data, not a live device reading */}
-              <span className="rounded-full border border-[#eaf2fc33] px-1.5 py-0.5 text-[10.5px] tracking-[0.08em]">Demo</span>
-            </p>
+            <p className="mt-2.5 text-[10px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
             <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">
               38<span className="text-[13px] text-on-dark-2">/100</span>
             </p>
-            <p className="mt-1 text-[11.5px] text-on-dark-2">Conditions steady</p>
+            <p className="mt-1 flex items-center justify-between gap-2 whitespace-nowrap text-[11px] text-on-dark-2">
+              <span>Conditions steady</span>
+              <span className="shrink-0 rounded-full border border-[#eaf2fc33] px-1.5 py-0.5 text-[9px] tracking-[0.04em] uppercase">Demo</span>
+            </p>
             <ul className="mt-3 divide-y divide-[#eaf2fc24] border-t border-[#eaf2fc24]">
               {[['Living room', 'Low', false], ['Bedroom', 'Low', false], ['Closet', 'Elevated', true], ['Dehumidifier', 'Running', true]].map(([n, st, hot]) => (
                 <li key={n as string} className="flex items-center justify-between gap-2 py-2">

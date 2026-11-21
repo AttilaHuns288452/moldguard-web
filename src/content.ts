@@ -22,14 +22,15 @@ export const CONTACT = {
 }
 
 export const HERO = {
-  cat: 'IoT mold risk prevention & detection',
-  titleLines: ['Know mold is', 'coming before', 'it shows.'],
-  lede: 'MoldGuard watches humidity, temperature and air conditions. It scores your mold risk in real time and starts dehumidifying before conditions become unsafe.',
+  cat: 'Indoor environmental monitoring · student prototype',
+  titleLines: ['Know when', 'conditions become', 'mold-friendly.'],
+  lede: 'MoldGuard watches humidity, temperature and sustained exposure, then turns those conditions into a room-level risk score and an automatic dehumidification response.',
   // the hero shows the unit open; one line so the visitor knows what they are
   // looking at rather than reading it as a broken front door
-  stageNote: 'Sensors \u00b7 Peltier stack \u00b7 fan \u00b7 water tank',
+  stageNote: 'Sensors · thermoelectric stack · fan · water tank',
+  status: 'Direct app access · not an app-store listing yet',
   primary: { label: 'Get the app', href: '/download' },
-  secondary: { label: 'See how it works', href: '/how-it-works' },
+  secondary: { label: 'Contact the team', href: '/contact' },
 }
 
 export const APP_MOCK = {
@@ -123,7 +124,7 @@ export const CTA = {
   title: 'Protect your space before mold appears.',
   lede: 'Get the app, or talk to the team about your space.',
   primary: { label: 'Get the app', href: '/download' },
-  secondary: { label: 'Contact us', href: '/contact' },
+  secondary: { label: 'Contact the team', href: '/contact' },
 }
 
 export const CAPABILITIES = {
@@ -242,7 +243,7 @@ export const FAQ = {
 export const CONTACT_PAGE = {
   title: "Let's keep your space ahead of mold.",
   lede: "Tell us a little about your space and we'll get back to you, or reach us directly through any channel below.",
-  formTitle: 'Start the conversation.',
+  formTitle: 'Tell us about your space.',
   directTitle: 'Prefer direct?',
   directNotes: [
     'General inquiries and quotes, replies from the team.',
@@ -255,7 +256,7 @@ export const CONTACT_PAGE = {
     cta: 'Download →',
   },
   steps: {
-    title: 'From message to quote in three steps.',
+    title: 'What happens after you reach out.',
     note: 'Student prototype under evaluation - not yet for sale. Certification (DTI-BPS / NTC) is not confirmed, so a quote here is a project proposal, not a product order.',
     items: [
       { n: '01', title: 'Tell us your space', body: 'Rooms, size, and where humidity hits hardest, the form or a quick call covers it.' },

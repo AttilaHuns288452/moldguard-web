@@ -49,6 +49,11 @@ export default function Header({ page }: { page: Location_ }) {
             <Logo className="size-[34px] text-accent" />
             <span className="font-display text-[1.22rem] font-bold tracking-[-0.02em] text-ink">MoldGuard</span>
           </a>
+          {/* Status badge sits outside the home link: inside it, the extra visible
+              text is not part of the link's accessible name (axe: label-content-name-mismatch). */}
+          <span className="hidden rounded-full border border-line-hi bg-paper-deep px-2 py-1 text-[10px] font-[650] tracking-[0.08em] text-ink-3 uppercase sm:inline-flex">
+            Prototype
+          </span>
 
           {/* desktop links */}
           <div className="order-3 hidden w-full basis-full gap-2 text-[13.5px] font-medium lg:order-none lg:ml-auto lg:flex lg:w-auto lg:basis-auto lg:gap-7 lg:text-[14px]">
@@ -96,7 +101,8 @@ export default function Header({ page }: { page: Location_ }) {
                 key={n.id}
                 href={pathFor(n.id)}
                 onClick={(e) => { e.preventDefault(); setMobileOpen(false); navigate(n.id) }}
-                className="flex min-h-12 items-center justify-between border-b border-line text-[16px] text-ink-2 active:text-deep"
+                aria-current={page === n.id ? 'page' : undefined}
+                className={`flex min-h-12 items-center justify-between border-b border-line text-[16px] transition-colors active:text-deep ${page === n.id ? 'font-[650] text-deep' : 'text-ink-2'}`}
               >
                 {n.label}
                 <ArrowRight className="size-4 text-ink-3" strokeWidth={2} />

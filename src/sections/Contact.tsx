@@ -105,6 +105,12 @@ export default function Contact() {
         <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-stretch lg:gap-10">
           {/* ── Start the conversation ── */}
           <Reveal>
+            <div className="mb-4 rounded-soft border border-line-hi bg-paper-deep px-4 py-3">
+              <p className="text-[12.5px] leading-relaxed text-ink-2">
+                <span className="font-[650] text-deep">Prototype, not a store product.</span>{' '}
+                Tell us about your space, ask about the hardware, or request app access. We usually reply within one to two business days.
+              </p>
+            </div>
             {state === 'sent' ? (
               <div role="status" aria-live="polite" className="rounded-soft border border-[#177069]/30 bg-[#1770690d] p-7 text-center md:p-8">
                 <p className="text-[1.15rem] font-[650] text-[#177069]">Thank you — your message is on its way.</p>

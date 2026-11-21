@@ -79,8 +79,14 @@ export default function GetApp() {
                   so a store badge here would promise an install that does not
                   exist. Stated plainly instead. */}
               <p className="mt-3 border-t border-line pt-3 text-[11.5px] leading-relaxed text-ink-3">
-                Student prototype. Distributed by direct install and scan code, not through an app store yet.
+                Student prototype. Direct install and scan-code access are available; it is not distributed through an app store yet.
               </p>
+              <a
+                href={`mailto:moldguard.dev.team@gmail.com?subject=MoldGuard%20app%20access`}
+                className="mt-3 inline-flex min-h-11 items-center text-[13px] font-[650] text-accent-ink underline-offset-2 hover:underline"
+              >
+                Need access help? Contact the team →
+              </a>
             </div>
           </Reveal>
         </div>
