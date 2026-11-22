@@ -7,6 +7,7 @@ import { navigate, pathFor, type Page, type Location_ } from '../lib/route'
 const NAV: { id: Page; label: string }[] = [
   { id: 'features', label: 'Features' },
   { id: 'how-it-works', label: 'How it works' },
+  { id: 'download', label: 'Get the app' },
   { id: 'contact', label: 'Contact' },
 ]
 

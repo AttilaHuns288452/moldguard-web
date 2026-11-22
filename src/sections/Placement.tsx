@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import { PLACEMENT } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
 import { splitTitle } from '../lib/motion'
+import DeviceViewer from '../components/DeviceViewer'
 
 export default function Placement() {
   return (
@@ -20,15 +21,25 @@ export default function Placement() {
             </a>
           </div>
         </Reveal>
+        {/* The photo that used to sit here was a render of a DIFFERENT object: a
+            cream box with a perforated speaker-style grille and no display, while
+            every other section shows the real SketchUp assembly (LCD, fan,
+            thermoelectric stack, tank). A buyer saw two products on one page.
+            This render is the same model the other sections use, so the page now
+            shows ONE device - and it is the one that actually exists. */}
         <Reveal delay={90}>
-          <div className="ph-zoom overflow-hidden rounded-soft bg-paper-deep">
-            <img
-              src="/pod-bath.webp"
-              alt={PLACEMENT.photoAlt}
-              width={1024}
-              height={1024}
-              className="aspect-[4/3] w-full object-cover"
+          <div className="relative aspect-[4/3] overflow-hidden rounded-soft border border-line bg-[radial-gradient(120%_95%_at_50%_20%,#fdfbf7_0%,#efe7db_55%,#d9cdbb_100%)]">
+            <DeviceViewer
+              active={null}
+              onSelect={() => {}}
+              autoSpin={false}
+              mode="tour"
+              chrome={false}
+              hotspots={false}
             />
+            <p className="pointer-events-none absolute inset-x-4 bottom-3 text-center text-[11.5px] leading-snug text-ink-2">
+              {PLACEMENT.photoAlt}
+            </p>
           </div>
         </Reveal>
       </div>

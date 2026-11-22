@@ -211,7 +211,7 @@ export default function Meet() {
 
               <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5">
                 <span className="text-[11px] text-ink-3">
-                  {PARTS.length} components · real SketchUp geometry
+                  {PARTS.length} documented components
                 </span>
               </div>
             </div>

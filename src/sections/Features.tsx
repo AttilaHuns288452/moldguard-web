@@ -65,9 +65,13 @@ export default function Features() {
               {/* Same arc gauge AND the same readout the Capabilities card uses. Without
                   the number it was a bare arc - pure decoration on the strongest page. */}
               <div className="w-[150px] shrink-0">
-                <Gauge value={38} className="block w-full" />
+                {/* 87, not 38. The hero shows a steady room at 38; repeating that
+                    number in every gauge meant a reader never saw the index move.
+                    This is the same closet scenario the walkthrough uses, so the
+                    three gauges now show three points on one scale. */}
+                <Gauge value={87} className="block w-full" />
                 <div className="-mt-[2.2rem] text-center">
-                  <p className="measure text-[1.5rem] leading-none font-semibold text-deep">38</p>
+                  <p className="measure text-[1.5rem] leading-none font-semibold text-deep">87</p>
                   <p className="mt-0.5 text-[11px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
                 </div>
                 <div className="mt-2 flex justify-between text-[11px] tracking-[0.1em] text-ink-3 uppercase">

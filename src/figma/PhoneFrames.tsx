@@ -174,7 +174,7 @@ export function FrameDetail() {
           {[
             { l: 'Relative Humidity', v: '80% RH', u: 'SHT41 sensor', d: P.drop, c: '#1f2c3d' },
             { l: 'Ambient Temp', v: '30.0°C', u: 'SHT41 sensor', d: P.thermo, c: '#1f2c3d' },
-            { l: 'Surface Dew Point', v: '26.2°C', u: 'Magnus-Tetens formula', d: P.wind, c: '#f5a623' },
+            { l: 'Surface Dew Point', v: '26.2°C', u: 'Air dew point calculation', d: P.wind, c: '#f5a623' },
           ].map((k) => (
             <div className="kpi" key={k.l}>
               <div className="hstack between"><span className="kl">{k.l}</span><I d={k.d} s={15} c={k.c} /></div>
@@ -259,7 +259,7 @@ export function FrameControl() {
           </div>
           <div className="step-item">
             <I d={P.gear} s={18} c='#8a8f98' />
-            <div className="flex1"><div className="st">Firmware</div><div className="ss">ESP32 OTA · v2.4.1</div></div>
+            <div className="flex1"><div className="st">Firmware</div><div className="ss">ESP32 OTA</div></div>
             <span className="hint" style={{ fontWeight: 600 }}>Latest</span>
           </div>
         </div>
@@ -318,9 +318,6 @@ export function FrameAnalytics() {
           </div>
         </div>
 
-        <div className="mt-auto" style={{ textAlign: 'center', fontSize: 11, color: '#8a8f98' }}>
-          Humidity &amp; dew point on next frame
-        </div>
       </div>
       <Nav active="Analytics" />
     </div>

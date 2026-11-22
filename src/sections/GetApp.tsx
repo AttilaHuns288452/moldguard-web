@@ -119,7 +119,7 @@ export default function GetApp() {
                     moldguard-web.vercel.app/download
                   </a>
                   <p className="mt-2 border-t border-line pt-2 text-[11.5px] leading-relaxed text-ink-3">
-                    Available on Google Play and the App Store.
+                    Request access and the team sends the build for your phone.
                   </p>
                 </div>
               </div>
@@ -145,8 +145,8 @@ export default function GetApp() {
                       so it is scaled as a whole. The wrapper must carry the SCALED
                       footprint: transform does not affect layout, so leaving it at
                       390px made the row claim 1628px and clip the 4th frame. */}
-                  <div className="h-[645px] w-[298px] overflow-hidden">
-                    <div className="origin-top-left scale-[0.764] [width:390px] [height:844px]">
+                  <div className="h-[793px] w-[366px] overflow-hidden">
+                    <div className="origin-top-left scale-[0.94] [width:390px] [height:844px]">
                       <Frame />
                     </div>
                   </div>

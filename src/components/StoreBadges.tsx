@@ -63,7 +63,7 @@ export default function StoreBadges() {
         <Badge store="App Store" glyph={<AppleGlyph />} kicker="Download on the" />
       </div>
       <p className="mt-3 max-w-[56ch] text-[12px] leading-relaxed text-ink-3">
-        iOS 15+ and Android 10+. Free to download.
+        iOS 15+ and Android 10+. Request access and the team sends the build.
       </p>
     </div>
   )

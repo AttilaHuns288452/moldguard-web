@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { CONTACT, TEAM, CONTACT_PAGE } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, Lock } from 'lucide-react'
 
 /**
  * PDF page 4, section for section:
@@ -180,11 +180,15 @@ export default function Contact() {
               </button>
               </>
 
+              {/* This sat under an EMPTY, unsent form with a checkmark and the
+                  past tense "Sent straight to..." — a false confirmation of a send,
+                  directly under a disabled button. It now only states what will
+                  happen when you press it. */}
               <p className="mt-3 flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink-3">
-                <Check className="mt-0.5 size-3 shrink-0 text-accent-ink" strokeWidth={2.5} />
+                <Lock className="mt-0.5 size-3 shrink-0 text-ink-3" strokeWidth={2} />
                 {useForm
-                  ? 'Sent straight to our team inbox. We never share your details.'
-                  : `No backend — this opens your own mail app with the message ready, addressed to ${CONTACT.email}.`}
+                  ? 'Goes straight to our team inbox. We never share your details.'
+                  : `Opens your own mail app with the message ready, addressed to ${CONTACT.email}.`}
               </p>
             </form>
             )}
