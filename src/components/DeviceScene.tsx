@@ -149,22 +149,20 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
           mat.roughness = Math.min(Math.max(mat.roughness ?? 0.8, 0.55), 0.95)
         }
       }
-      // Three nested shells occupy the IDENTICAL volume (Y -15..239,
-      // Z -305..-146): mesh_1 (200_217_230_ds), mesh_5 (198_198_198_ss) and
-      // mesh_3 (200_217_230_ss). Rendering all three makes the box read as
-      // several separate slabs - a front door swung open - which is exactly how
-      // the hero was reported broken. The SKP contains no door components and no
-      // rotations, so one outer shell is the whole product: keep the largest
-      // (mesh_3) and hide the nested duplicates.
+      // DO NOT hide the other shells. This is where "the walls are broken" came
+      // from: mesh_1/mesh_5 are not nested duplicates of mesh_3, they are the
+      // missing WALL PANELS of the enclosure. Hiding them left the box as a
+      // front panel plus a floating back slab, which is exactly what a reader
+      // reports as broken walls / gaps at the corners.
       //
-      // mesh_4 is a fourth copy in the same volume, but hiding it changed ZERO
-      // pixels (A/B diff 0/1186x1198 while hiding mesh_3 changed 206 — so the
-      // probe is sensitive and mesh_4 is simply already invisible). Leaving the
-      // regex at (1|5) is correct; do not "fix" it again without that diff.
-      if (/^mesh_(1|5)_ROOT_Layer0_/i.test(m.name || '')) {
-        m.visible = false
-        return
-      }
+      // A/B verified on the rendered hero: with mesh_1+mesh_5 hidden the box has
+      // an open right side and a detached back panel; with them visible the
+      // front, side and top panels meet cleanly at every corner. The earlier
+      // "keep the largest shell" decision was made from a pixel-difference test
+      // that measured whether hiding a mesh CHANGED THE IMAGE, which cannot tell
+      // a duplicate from a wall - both change pixels, and a wall changes them
+      // more. Shell fading for the exploded/selected state is handled below via
+      // userData.isShell, so every panel still ghosts together.
 
       // The body shell in the real export is the root `Layer0` meshes (the
       // enclosure panels). Those are what must fade to reveal the internals;
