@@ -37,7 +37,7 @@ export default function RiskShowcase() {
           <div>
             <LineReveal
               lines={splitTitle('One number, built from four.')}
-              className="max-w-[22ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] font-[650] text-deep"
+              className="max-w-[22ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.08] font-[650] text-deep"
             />
             <Reveal delay={70}>
               <p className="lede mt-3">
@@ -162,7 +162,7 @@ export default function RiskShowcase() {
                   </span>
                 ))}
                 <span className="ml-auto flex items-center gap-1.5 whitespace-nowrap">
-                  <span className="h-2.5 w-px bg-accent-ink" /> acts at 70
+                  <span className="h-2.5 w-px bg-accent-ink" /> acts at <span className="measure">70</span>
                 </span>
               </div>
             </div>

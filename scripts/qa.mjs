@@ -173,7 +173,7 @@ for (const vp of VIEWPORTS) {
     }
     record(`${vp.name}: canvas mounted`, !!canvasBox, canvasBox ? `${Math.round(canvasBox.width)}x${Math.round(canvasBox.height)}` : 'none')
     if (canvasBox) {
-      const shot = await page.locator('[data-device-canvas]').first().screenshot({ path: `${OUT}/${vp.name}-canvas.png`, animations: 'disabled' })
+      let shot = await page.locator('[data-device-canvas]').first().screenshot({ path: `${OUT}/${vp.name}-canvas.png`, animations: 'disabled' }).catch(() => null)
       const ink = await page.evaluate(() => {
         const cv = document.querySelector('[data-device-canvas] canvas')
         if (!cv) return -1
@@ -193,6 +193,15 @@ for (const vp of VIEWPORTS) {
         await page.waitForTimeout(250)
       }
       record(`${vp.name}: 3D model loaded`, modelLoaded)
+      // Re-shoot AFTER the model is known to be loaded. The first shot above can
+      // catch the canvas mid-stream, which made this check report "1 colour,
+      // spread 0" on a perfectly rendered hero under CPU load.
+      if (modelLoaded) {
+        await page.waitForTimeout(600)
+        shot = await page.locator('[data-device-canvas]').first()
+          .screenshot({ path: `${OUT}/${vp.name}-canvas.png`, animations: 'disabled' })
+          .catch(() => shot)
+      }
       // Regression: useGLTF caches by URL, so before the per-viewer clone the
       // hero and Meet shared one Group; mounting Meet reparented it and the hero
       // canvas went blank while still reporting a live context and a nonzero

@@ -34,7 +34,7 @@ export default function Loop() {
           <LineReveal
             as="h1"
             lines={splitTitle(LOOP.title)}
-            className="max-w-[26ch] text-[clamp(2.2rem,3.5vw,3.5rem)] leading-[1.08] font-[650] text-deep"
+            className="max-w-[26ch] text-[clamp(2.2rem,4.1vw,3.9rem)] leading-[1.08] font-[650] text-deep"
           />
           <Reveal delay={70}>
             <p className="lede mt-3 max-w-[62ch]">{LOOP.lede}</p>

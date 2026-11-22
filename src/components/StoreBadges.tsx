@@ -37,7 +37,7 @@ function AppleGlyph() {
   )
 }
 
-function Badge({ store, glyph }: { store: string; glyph: ReactNode }) {
+function Badge({ store, glyph, kicker }: { store: string; glyph: ReactNode; kicker: string }) {
   return (
     <span
       className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-floating transition-transform hover:-translate-y-px"
@@ -48,7 +48,7 @@ function Badge({ store, glyph }: { store: string; glyph: ReactNode }) {
     >
       <span className="text-white">{glyph}</span>
       <span className="flex flex-col leading-none">
-        <span className="text-[9.5px] tracking-[0.14em] text-white/70 uppercase">Get it on</span>
+        <span className="text-[9.5px] tracking-[0.14em] text-white/70 uppercase">{kicker}</span>
         <span className="mt-1 text-[15px] leading-none font-semibold">{store}</span>
       </span>
     </span>
@@ -59,8 +59,8 @@ export default function StoreBadges() {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <Badge store="Google Play" glyph={<PlayGlyph />} />
-        <Badge store="App Store" glyph={<AppleGlyph />} />
+        <Badge store="Google Play" glyph={<PlayGlyph />} kicker="Get it on" />
+        <Badge store="App Store" glyph={<AppleGlyph />} kicker="Download on the" />
       </div>
       <p className="mt-3 max-w-[56ch] text-[12px] leading-relaxed text-ink-3">
         iOS 15+ and Android 10+. Free to download.

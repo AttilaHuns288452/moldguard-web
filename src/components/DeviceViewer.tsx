@@ -130,7 +130,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
           into a printed page, so both stages printed as empty gradient blocks. This
           still shows the product in its place; on screen it is `hidden`. */}
       <img
-        src={chrome ? '/pod-meet.png' : '/pod-hero.png'}
+        src={chrome ? '/pod-meet.webp' : '/pod-hero.webp'}
         alt="MoldGuard assembly, open cutaway view"
         data-print-still
         className="hidden h-full w-full object-contain"

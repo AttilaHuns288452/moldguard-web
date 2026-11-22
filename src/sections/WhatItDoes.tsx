@@ -19,7 +19,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
           <LineReveal
             as={asHeading}
             lines={splitTitle(title)}
-            className="max-w-[24ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.08] font-[650] text-deep"
+            className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.08] font-[650] text-deep"
           />
           <Reveal delay={70}>
             <p className="lede mt-3 max-w-[60ch]">{lede}</p>

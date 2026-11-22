@@ -22,7 +22,7 @@ export default function Capabilities() {
             <LineReveal
               as="h1"
               lines={splitTitle(CAPABILITIES.title)}
-              className="max-w-[24ch] text-[clamp(2.2rem,3.5vw,3.5rem)] leading-[1.08] font-[650] text-deep"
+              className="max-w-[24ch] text-[clamp(2.2rem,4.1vw,3.9rem)] leading-[1.08] font-[650] text-deep"
             />
             <Reveal delay={70}>
               <p className="lede mt-3 max-w-[66ch]">{CAPABILITIES.lede}</p>
@@ -48,7 +48,7 @@ export default function Capabilities() {
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           {/* 01 — the risk engine, with its real reading */}
-          <Reveal>
+          <Reveal >
             <article className="card-lift flex h-full flex-col rounded-soft border border-line bg-card p-6 md:p-7">
               <div>
                 <span className="measure text-[11px] tracking-[0.14em] text-accent">{engine.n}</span>
@@ -80,7 +80,7 @@ export default function Capabilities() {
           </Reveal>
 
           {/* 02 — VOC, stated honestly as context */}
-          <Reveal delay={80}>
+          <Reveal delay={80} >
             <article className="card-lift flex h-full flex-col rounded-soft border border-line bg-card p-6 md:p-7">
               <span className="measure text-[11px] tracking-[0.14em] text-accent">{voc.n}</span>
               <h2 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{voc.eyebrow}</h2>
