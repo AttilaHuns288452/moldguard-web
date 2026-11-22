@@ -1,0 +1,163 @@
+/* Team roster card + the single native profile dialog.
+   Only transform/opacity/colour animate; the native <dialog> supplies Escape,
+   focus trapping and inertness. */
+
+.team-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-soft);
+  transition:
+    transform var(--dur-micro) var(--ease-state),
+    background-color var(--dur-micro) var(--ease-state),
+    border-color var(--dur-micro) var(--ease-state),
+    box-shadow var(--dur-micro) var(--ease-state);
+}
+.team-card:hover {
+  transform: translateY(-2px);
+  background: var(--color-card);
+  border-color: var(--color-line);
+  box-shadow: var(--shadow-e2);
+}
+.team-card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.team-card__photo {
+  flex: none;
+  width: 3.25rem;
+  height: 3.25rem;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 14px;
+  background: var(--color-line);
+  transition: transform var(--dur-micro) var(--ease-state);
+}
+.team-card:hover .team-card__photo { transform: scale(1.04); }
+.team-card__meta { display: block; min-width: 0; }
+.team-card__name {
+  display: block;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  font-weight: 650;
+  color: var(--color-ink);
+}
+.team-card__role {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--color-ink-3);
+}
+.team-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  margin-top: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  color: var(--color-accent-ink);
+}
+.team-card__arrow { transition: transform var(--dur-micro) var(--ease-state); }
+.team-card:hover .team-card__arrow { transform: translate(2px, -2px); }
+
+/* Native dialog: margin:auto is required — the UA stylesheet sets it, and an
+   author margin of 0 would pin the modal to the top-left corner. */
+.team-dialog {
+  margin: auto;
+  width: min(44rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  overflow: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-shell);
+  background: var(--color-card);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-e3);
+}
+.team-dialog::backdrop { background: rgba(15, 39, 71, 0.55); }
+.team-dialog__inner { position: relative; padding: 1.5rem; }
+.team-dialog__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-card);
+  color: var(--color-ink-2);
+  transition: border-color var(--dur-micro) var(--ease-state), color var(--dur-micro) var(--ease-state);
+}
+.team-dialog__close:hover { border-color: var(--color-ink-3); color: var(--color-ink); }
+.team-dialog__close:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.team-dialog__grid {
+  display: grid;
+  gap: 1.25rem;
+}
+.team-dialog__photo {
+  width: 100%;
+  max-width: 13rem;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--radius-soft);
+  background: var(--color-line);
+}
+.team-dialog__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  line-height: 1.15;
+  font-weight: 650;
+  color: var(--color-deep);
+  padding-right: 2.5rem;
+}
+.team-dialog__meta {
+  display: grid;
+  gap: 0.625rem;
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--color-line);
+}
+.team-dialog__meta dt {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+.team-dialog__meta dd {
+  margin-top: 0.125rem;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  color: var(--color-ink);
+}
+.team-dialog__bio {
+  margin-top: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--color-ink-2);
+}
+
+@media (min-width: 40rem) {
+  .team-dialog__inner { padding: 1.75rem; }
+  .team-dialog__grid { grid-template-columns: 12.5rem minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .team-dialog__bio { margin-top: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-card,
+  .team-card__photo,
+  .team-card__arrow { transition: none; }
+  .team-card:hover,
+  .team-card:hover .team-card__photo,
+  .team-card:hover .team-card__arrow { transform: none; }
+}

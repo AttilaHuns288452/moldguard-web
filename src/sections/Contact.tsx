@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { CONTACT, TEAM, CONTACT_PAGE } from '../content'
+import { CONTACT, CONTACT_PAGE } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
+import TeamProfiles from '../components/TeamProfiles'
 import { ArrowRight, Lock } from 'lucide-react'
 
 /**
@@ -269,24 +270,7 @@ export default function Contact() {
             </h2>
             <p className="mt-2 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2">{CONTACT_PAGE.teamLede}</p>
           </Reveal>
-          <ul className="mt-7 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
-            {TEAM.map((m, i) => (
-              <Reveal as="li" key={m.name} delay={i * 40}>
-                <div className="flex items-start gap-3">
-                  <span
-                    className="grid size-10 shrink-0 place-items-center rounded-full bg-[#e4eaf2] text-[0.75rem] font-bold text-deep"
-                    aria-hidden="true"
-                  >
-                    {m.initials}
-                  </span>
-                  <div>
-                    <p className="text-[13.5px] leading-snug font-[650] text-ink">{m.name}</p>
-                    <p className="mt-0.5 text-[11px] leading-snug text-ink-3">{m.role}</p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </ul>
+          <TeamProfiles />
         </div>
 
         {/* ── Ready when you are. ── */}

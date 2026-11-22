@@ -278,15 +278,70 @@ export const CONTACT_PAGE = {
   closing: { title: 'Ready when you are.', primary: 'Send a message', secondary: 'Email us directly' },
 }
 
-export const TEAM = [
-  { initials: 'LB', name: 'Louie Jein D. Banting', role: 'Project Manager / Firmware Dev' },
-  { initials: 'JC', name: 'Jeremy V. Cabuntas', role: 'Quality Assurance / Research Dev' },
-  { initials: 'MF', name: 'Maron E. Fajardo', role: 'Backend Lead Dev' },
-  { initials: 'MA', name: 'Mcraven Akira S. Fernandez', role: 'Full Stack Dev' },
-  { initials: 'BL', name: 'Bernadette B. Lalata', role: 'Hardware Engineer / UI-UX' },
-  { initials: 'ML', name: 'Michael T. Litang', role: 'Hardware Lead Dev' },
-  { initials: 'JP', name: 'Jessica Mae T. Palma', role: 'Frontend Dev / UI-UX' },
-  { initials: 'AS', name: 'Attila P. Sabiniano', role: 'Frontend Lead Dev' },
+export type TeamMember = {
+  id: string
+  name: string
+  initials: string
+  role: string
+  /** Work area, not a job title: the row the profile sits under. */
+  section: string
+  photo: string
+  firstName: string
+  bio: string
+}
+
+/** Order follows the supplied team sheet (photo grid, left to right, top row first).
+ *  Bios are first-person and role-grounded only — no background or credentials
+ *  that the team sheet does not state. */
+export const TEAM: TeamMember[] = [
+  {
+    id: 'louie-banting', name: 'Louie Jein D. Banting', initials: 'LB',
+    role: 'Project Manager / Firmware Developer', section: 'Leadership & Firmware',
+    photo: '/team/louie-banting.webp', firstName: 'Louie',
+    bio: "Hello, I'm Louie. I manage the MoldGuard project and work on its firmware, keeping the build on schedule and the device logic dependable.",
+  },
+  {
+    id: 'jeremy-cabuntas', name: 'Jeremy V. Cabuntas', initials: 'JC',
+    role: 'Quality Assurance / Research Developer', section: 'Quality & Research',
+    photo: '/team/jeremy-cabuntas.webp', firstName: 'Jeremy',
+    bio: "Hello, I'm Jeremy. I look after quality assurance and research, testing what we ship and checking the questions behind each decision.",
+  },
+  {
+    id: 'maron-fajardo', name: 'Maron E. Fajardo', initials: 'MF',
+    role: 'Backend Lead / Database', section: 'Backend & Data',
+    photo: '/team/maron-fajardo.webp', firstName: 'Maron',
+    bio: "Hello, I'm Maron. I lead the backend and database work, making sure every reading from the device lands somewhere reliable.",
+  },
+  {
+    id: 'akira-fernandez', name: 'Mcraven Akira S. Fernandez', initials: 'MA',
+    role: 'Full Stack Developer', section: 'Full Stack',
+    photo: '/team/akira-fernandez.webp', firstName: 'Akira',
+    bio: "Hello, I'm Akira. I work across the full stack, connecting the interface, the server, and the device so the whole loop holds together.",
+  },
+  {
+    id: 'bernadette-lalata', name: 'Bernadette B. Lalata', initials: 'BL',
+    role: 'UI/UX / Hardware Specialist', section: 'Design & Hardware',
+    photo: '/team/bernadette-lalata.webp', firstName: 'Bernadette',
+    bio: "Hello, I'm Bernadette. I work on UI/UX and hardware, shaping how MoldGuard looks and how its parts fit together.",
+  },
+  {
+    id: 'michael-litang', name: 'Michael T. Litang', initials: 'ML',
+    role: 'IoT Lead', section: 'IoT & Hardware',
+    photo: '/team/michael-litang.webp', firstName: 'Michael',
+    bio: "Hello, I'm Michael. I lead IoT, bringing the sensors and connectivity together into one working system.",
+  },
+  {
+    id: 'jessica-palma', name: 'Jessica Mae T. Palma', initials: 'JP',
+    role: 'UI/UX / Frontend Developer', section: 'UI/UX & Frontend',
+    photo: '/team/jessica-palma.webp', firstName: 'Jessica',
+    bio: "Hello, I'm Jessica. I work on UI/UX and the frontend, turning our designs into the screens people actually use.",
+  },
+  {
+    id: 'attila-sabiniano', name: 'Attila P. Sabiniano', initials: 'AS',
+    role: 'Frontend Lead', section: 'UI/UX & Frontend',
+    photo: '/team/attila-sabiniano.webp', firstName: 'Attila',
+    bio: "Hello, I'm Attila. I lead MoldGuard's frontend and UI/UX, turning our designs into clear, responsive screens and making the interface easy to use.",
+  },
 ]
 
 /** PAGE 2 — the alert + automation copy, verbatim. */

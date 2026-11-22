@@ -46,7 +46,7 @@ export default function GetApp() {
             heavy, "unfinished"). Now the left carries the promise + the store
             badges + the primary action, and the two columns start on the same line
             at lg. Below lg it stacks: copy, badges, then the scan card. */}
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] lg:items-start lg:gap-16">
+        <div className="grid max-w-[1180px] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:items-start lg:gap-8">
           <div>
             <LineReveal
               as="h1"
@@ -87,7 +87,7 @@ export default function GetApp() {
           </div>
 
           <Reveal delay={140}>
-            <div className="rounded-shell border border-line bg-card p-6 shadow-e1">
+            <div className="rounded-shell border border-line bg-card p-7 shadow-e1">
               {/* The QR encodes THIS page's URL, not a separate artifact, so the
                   caption must not promise an app. It is a "open this page on your
                   phone" convenience; the access path is the request button and the
@@ -97,13 +97,11 @@ export default function GetApp() {
                 <img
                   src="/download-qr.svg"
                   alt="QR code that opens the MoldGuard download page"
-                  width={220}
-                  height={220}
-                  className="mx-auto size-[180px] rounded-tight"
+                  width={250}
+                  height={250}
+                  className="mx-auto aspect-square h-auto w-[250px] max-w-full rounded-tight"
                 />
-                {/* Side-by-side with the QR at ≥420px: the card was a single tall
-                    ribbon that packed a label, a 220px code and four text blocks
-                    into 360px, so the prose wrapped into short dense lines. */}
+                {/* Keep the code square even on the narrowest supported screens. */}
                 <div className="min-w-0">
                   <p className="text-[12.5px] leading-relaxed text-ink-2">
                     Scan to open this page on the phone you want it on.
