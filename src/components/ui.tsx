@@ -105,7 +105,7 @@ export function MagButton({
 }: { href: string; children: ReactNode; variant?: 'solid' | 'ghost'; icon?: ReactNode }) {
   const cls =
     variant === 'solid'
-      ? 'bg-accent-ink text-white hover:bg-deep hover:shadow-[0_10px_30px_-12px_rgba(30,54,128,.5)]'
+      ? 'bg-accent-ink text-white hover:bg-deep hover:shadow-e2'
       : 'bg-card text-ink border border-[#b9cde4] hover:border-ink-2 hover:bg-[#f7fbff]'
   return (
     <a href={href} className={`btn-mag ${cls}`}>

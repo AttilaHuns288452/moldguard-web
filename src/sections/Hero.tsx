@@ -68,7 +68,7 @@ export default function Hero() {
         {/* the artboard's hero visual: visitor-facing 3D stage + readout overlay */}
         <div className="relative">
           <div
-            className="relative mx-auto overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
+            className="relative mx-auto overflow-hidden rounded-shell border border-line bg-white p-2 shadow-e2"
             // Square, per the PDF frame, but the SIDE is capped on wide viewports.
             // Measured on the grid: the columns balance within 24px at 1440, but at
             // 1920 the square stage reaches 822px against a 624px copy column — a
@@ -110,7 +110,7 @@ export default function Hero() {
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
               the photo's right edge into the white frame, as the PDF does —
               narrow enough that it clips the frame corner, not the unit. */}
-          <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-[0_22px_50px_-26px_rgba(15,39,71,.55)] backdrop-blur-sm sm:absolute sm:-right-4 sm:bottom-3 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
+          <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-e3 backdrop-blur-sm sm:absolute sm:-right-4 sm:bottom-3 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
             <p className="mt-2.5 text-[10px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
             <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">

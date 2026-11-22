@@ -30,7 +30,7 @@ export default function Capabilities() {
           </div>
 
           <Reveal delay={110}>
-            <figure className="overflow-hidden rounded-shell border border-line bg-card shadow-[0_1px_2px_rgba(21,56,94,.05),0_20px_44px_-30px_rgba(21,56,94,.45)]">
+            <figure className="overflow-hidden rounded-shell border border-line bg-card shadow-e2">
               <img
                 src="/condensation.webp"
                 alt="Warm air meeting a cold stone bath, where condensation forms"

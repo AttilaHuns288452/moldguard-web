@@ -19,7 +19,7 @@ export default function RiskGaugeCard() {
   const ny = cy - r * Math.sin(angle)
 
   return (
-    <figure className="w-full max-w-[212px] overflow-hidden rounded-soft border border-line bg-card shadow-[0_1px_2px_rgba(21,56,94,.06),0_16px_36px_-28px_rgba(21,56,94,.5)]">
+    <figure className="w-full max-w-[212px] overflow-hidden rounded-soft border border-line bg-card shadow-e1">
       <svg viewBox="0 0 160 92" className="mx-auto mt-4 block w-[160px]" role="img" aria-label="Mold Risk Index dial showing 38 out of 100, in the Safe band">
         {/* three zones: safe, watch, act - the PDF's blue / light blue / navy */}
         <path d="M10 74a70 70 0 0 1 46.7 -66.4" fill="none" stroke="var(--color-accent, #2563eb)" strokeWidth="9" strokeLinecap="round" />

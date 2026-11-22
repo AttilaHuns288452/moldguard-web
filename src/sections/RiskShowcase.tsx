@@ -69,7 +69,7 @@ export default function RiskShowcase() {
           </div>
 
           <Reveal delay={100}>
-            <div className="rounded-shell border border-line bg-card p-6 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-28px_rgba(21,56,94,.35)]">
+            <div className="rounded-shell border border-line bg-card p-6 shadow-e2">
               <div className="flex items-center justify-between border-b border-line pb-3">
                 <span className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Mold Risk Index</span>
                 <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 text-[11.5px] font-[650] tracking-[0.1em] text-ink-3 uppercase">

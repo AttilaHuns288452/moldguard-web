@@ -86,7 +86,7 @@ export default function Loop() {
                       : n === 1
                       ? <RiskGaugeCard />
                       : (
-                        <figure className="overflow-hidden rounded-soft border border-line bg-white shadow-[0_1px_2px_rgba(21,56,94,.06),0_16px_36px_-28px_rgba(21,56,94,.5)]">
+                        <figure className="overflow-hidden rounded-soft border border-line bg-white shadow-e1">
                           <div className="h-[240px] w-[111px] overflow-hidden md:h-[196px] md:w-[91px] lg:h-[262px] lg:w-[121px] xl:h-[302px] xl:w-[140px]">
                             <div className="origin-top-left scale-[0.285] md:scale-[0.233] lg:scale-[0.31] xl:scale-[0.358] [width:390px] [height:844px]">
                               {(() => { const F = STAGE_FRAME[n]; return <F /> })()}

@@ -40,7 +40,7 @@ function AppleGlyph() {
 function Badge({ store, glyph, soon }: { store: string; glyph: ReactNode; soon?: boolean }) {
   return (
     <span
-      className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-[0_10px_26px_-16px_rgba(11,18,32,.9)]"
+      className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-floating"
       // Non-interactive by design: no listing exists yet. aria-disabled + the
       // visible "Soon" chip describe it honestly to sighted and screen-reader users.
       aria-disabled="true"

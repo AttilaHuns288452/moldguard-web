@@ -87,7 +87,7 @@ export default function GetApp() {
           </div>
 
           <Reveal delay={140}>
-            <div className="rounded-shell border border-line bg-card p-6 shadow-[0_1px_2px_rgba(21,56,94,.05),0_16px_36px_-24px_rgba(21,56,94,.35)]">
+            <div className="rounded-shell border border-line bg-card p-6 shadow-e1">
               {/* The QR encodes THIS page's URL, not a separate artifact, so the
                   caption must not promise an app. It is a "open this page on your
                   phone" convenience; the access path is the request button and the
@@ -146,7 +146,7 @@ export default function GetApp() {
               <Reveal>
                 {/* group scaling: the frames are authored at 390x844 and must not
                     be re-laid-out, so they are zoomed as a whole */}
-                <figure className="overflow-hidden rounded-shell border border-line bg-white shadow-[0_1px_2px_rgba(21,56,94,.06),0_20px_44px_-30px_rgba(21,56,94,.5)]">
+                <figure className="overflow-hidden rounded-shell border border-line bg-white shadow-e2">
                   {/* the frame is authored at 390x844 and must not be re-laid-out,
                       so it is scaled as a whole. The wrapper must carry the SCALED
                       footprint: transform does not affect layout, so leaving it at
