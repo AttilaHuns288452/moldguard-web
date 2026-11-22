@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
-import { PARTS, PART_NO, type PartId } from './parts'
+import { PARTS, PART_BY_ID, PART_NO, type PartId } from './parts'
 
 /**
  * The shipped GLB is meshopt-compressed (EXT_meshopt_compression, 2.3 MB instead
@@ -106,6 +106,10 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
   }, [model, scene])
   const ready = useRef(false)
   const settle = useRef(0)
+  /** 0..1 blend of the camera toward the selected part; driven in the frame loop. */
+  const focus = useRef(0)
+  const focusAt = useRef(new THREE.Vector3())
+  const focusR = useRef(1)
   // Initial yaw. Every `face: 'front'` part in parts.ts sits at +Z (the display,
   // sensor, buzzer, audio amp), so the camera must start near yaw 0 to look at
   // the product's front. 0.42 rad keeps a 3/4 angle so the depth reads too.
@@ -326,17 +330,75 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
     // 0.12 is low enough to see through and high enough to keep the unit's outline
     // legible; 0.02 was below the visibility cut-off, so the whole body vanished.
     const want = mode === 'explode' || active !== null ? 0.12 : 1
+    // Everything except the selected component ghosts as well, so the chosen part
+    // is the only solid thing on the stage. Membership is a Set because a mesh
+    // can fall inside two part boxes; toggling per part flickered with order.
+    const keep = active ? new Set(partMeshesRef.current.get(active) ?? []) : null
     for (const mesh of Object.values(meshes.current)) {
-      if (!mesh.userData.isShell) continue
       const mat = mesh.material as THREE.MeshStandardMaterial
-      mat.opacity += (want - mat.opacity) * k
-      // An opaque shell must NOT be in the transparent pass: transparent objects
-      // are depth-sorted per object, not per fragment, so a solid box would show
-      // its own interior through its front face.
-      const solid = mat.opacity > 0.98
-      mat.transparent = !solid
-      mat.depthWrite = solid
-      mat.visible = mat.opacity > 0.02
+      if (!mat) continue
+      const picked = keep ? keep.has(mesh) : false
+      if (mesh.userData.isShell) {
+        // The shell can BE the selected part (the enclosure row exists), and then
+        // it must stay solid - fading it would hide the very thing you clicked.
+        //
+        // When a DIFFERENT part is selected the shell has to go almost entirely,
+        // not just ghost: most parts sit behind the front panel, so even 12%
+        // shell in front of them washed the subject out to nothing (measured: the
+        // stage's dark-pixel floor lifted from 138 to 192, i.e. the whole body
+        // including the picked part turned pale). 0.02 is under the visibility
+        // cut-off below, so the panels drop out of the draw entirely and the
+        // picked part is finally unobstructed. Exploded view keeps the 0.12 ghost:
+        // there the shell IS part of what you are looking at.
+        const shellWant = picked ? 1 : (active ? 0.02 : want)
+        mat.opacity += (shellWant - mat.opacity) * k
+        // An opaque shell must NOT be in the transparent pass: transparent objects
+        // are depth-sorted per object, not per fragment, so a solid box would show
+        // its own interior through its front face.
+        const solid = mat.opacity > 0.98
+        mat.transparent = !solid
+        mat.depthWrite = solid
+        mat.visible = mat.opacity > 0.02
+        continue
+      }
+      if (picked) {
+        // Solid again, restoring the flags captured on the way down. Materials are
+        // cloned per stage but mutated in place, so a stale 0.14 would otherwise
+        // survive deselect and leave the model permanently ghosted.
+        if (!mesh.userData.dimmed) continue
+        mat.opacity += (1 - mat.opacity) * k
+        if (mat.opacity > 0.98) {
+          mat.opacity = 1
+          mat.transparent = mesh.userData.baseTransparent ?? false
+          mat.depthWrite = mesh.userData.baseDepthWrite ?? true
+          mesh.userData.dimmed = false
+        }
+        continue
+      }
+      if (!keep) {
+        if (!mesh.userData.dimmed) continue
+        mat.opacity += (1 - mat.opacity) * k
+        if (mat.opacity > 0.98) {
+          mat.opacity = 1
+          mat.transparent = mesh.userData.baseTransparent ?? false
+          mat.depthWrite = mesh.userData.baseDepthWrite ?? true
+          mesh.userData.dimmed = false
+        }
+        continue
+      }
+      if (!mesh.userData.dimmed) {
+        // The exported materials are all OPAQUE, but store the real flags instead
+        // of assuming - emissive LEDs and glass are the obvious future breakage.
+        mesh.userData.baseTransparent = mat.transparent
+        mesh.userData.baseDepthWrite = mat.depthWrite
+        mesh.userData.dimmed = true
+      }
+      // 0.14 reads as a silhouette for context while the picked part stays the
+      // only subject. Below ~0.1 the neighbours vanish and the push-in looks like
+      // it simply cropped the unit.
+      mat.opacity += (0.14 - mat.opacity) * k
+      mat.transparent = true
+      mat.depthWrite = false
     }
   })
 
@@ -367,13 +429,35 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
       hy / Math.tan(halfFov) / 0.84,
       hx / (Math.tan(halfFov) * cam.aspect) / 0.82,
     )
-    const r = (fitR.current / zoom) * explodePad * (1 + (1 - ease) * 0.16)
-    camera.position.set(
-      r * Math.sin(yaw) * Math.cos(pitch),
-      target.current.y + r * Math.sin(pitch),
-      r * Math.cos(yaw) * Math.cos(pitch),
+    // Selecting a part pushes in on it: hold the camera close enough that the
+    // part fills ~62% of the viewport height, and blend the aim point from the
+    // unit's centre to that part. Both are lerped by `focus`, so picking a pin
+    // reads as a zoom rather than a cut.
+    focus.current += ((active ? 1 : 0) - focus.current) * Math.min(1, dt * 3.2)
+    const part = active ? PART_BY_ID[active] : null
+    if (part) {
+      focusAt.current.set(part.at[0] + nudgeX, part.at[1], part.at[2])
+      // The visible half-height at distance r is r*tan(halfFov), so a part of
+      // `span` filling fraction f needs r = span/(2*f*tan). Two traps here, both
+      // hit while building this: clamping against fitR pins the camera at the
+      // full-unit distance (a part is always smaller, so the zoom does nothing),
+      // and dividing by f instead of multiplying by 1/(2f) pushes it BACK.
+      const span = Math.max(part.size[0], part.size[1], part.size[2])
+      // Floor of 20% of the fit radius: a 5 mm LED would otherwise put the
+      // camera inside the enclosure.
+      focusR.current = Math.max(span / (2 * 0.62 * Math.tan(halfFov)), fitR.current * 0.2)
+    }
+    const look = target.current.clone().lerp(focusAt.current, focus.current)
+    const radius = THREE.MathUtils.lerp(
+      (fitR.current / zoom) * explodePad, focusR.current / zoom, focus.current,
     )
-    camera.lookAt(target.current)
+    const r = radius * (1 + (1 - ease) * 0.16)
+    camera.position.set(
+      look.x + r * Math.sin(yaw) * Math.cos(pitch),
+      look.y + r * Math.sin(pitch),
+      look.z + r * Math.cos(yaw) * Math.cos(pitch),
+    )
+    camera.lookAt(look)
   })
 
   return null
