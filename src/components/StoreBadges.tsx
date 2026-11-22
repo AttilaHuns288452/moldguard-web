@@ -64,7 +64,7 @@ export default function StoreBadges() {
         <Badge store="Google Play" glyph={<PlayGlyph />} soon />
         <Badge store="App Store" glyph={<AppleGlyph />} soon />
       </div>
-      <p className="mt-3 text-[12px] leading-relaxed text-ink-3">
+      <p className="mt-3 max-w-[56ch] text-[12px] leading-relaxed text-ink-3">
         No store listing yet — these are placeholders for launch. The prototype is
         shared directly by the team.
       </p>

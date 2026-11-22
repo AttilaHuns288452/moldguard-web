@@ -44,7 +44,7 @@ export default function PartsTrust() {
                     </svg>
                   </span>
                 </summary>
-                <p className="px-5 pb-5 text-[14.5px] leading-relaxed text-ink-2 md:px-6 md:pl-[3.4rem]">{r.body}</p>
+                <p className="max-w-[78ch] px-5 pb-5 text-[14.5px] leading-relaxed text-ink-2 md:px-6 md:pl-[3.4rem]">{r.body}</p>
               </details>
             ))}
           </div>

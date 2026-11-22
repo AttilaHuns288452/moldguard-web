@@ -153,7 +153,7 @@ export default function Meet() {
                 </div>
                 {selected && (
                   <>
-                    <p className="mt-3 text-[13.5px] leading-relaxed text-ink-2">{selected.what}</p>
+                    <p className="mt-3 max-w-[62ch] text-[13.5px] leading-relaxed text-ink-2">{selected.what}</p>
                     <p className="mt-2.5 border-l border-line-hi pl-3 text-[13.5px] leading-relaxed text-ink">
                       {selected.role}
                     </p>

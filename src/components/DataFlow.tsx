@@ -164,7 +164,7 @@ export default function DataFlow() {
         </div>
       </Seq>
 
-      <p className="border-t border-line px-5 py-3.5 text-center text-[12.5px] leading-relaxed text-ink-2">{MEET.flowLede}</p>
+      <p className="mx-auto max-w-[70ch] border-t border-line px-5 py-3.5 text-center text-[12.5px] leading-relaxed text-ink-2">{MEET.flowLede}</p>
     </figure>
   )
 }

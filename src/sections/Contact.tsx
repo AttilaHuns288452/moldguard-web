@@ -106,7 +106,7 @@ export default function Contact() {
           {/* ── Start the conversation ── */}
           <Reveal>
             <div className="mb-4 rounded-soft border border-line-hi bg-paper-deep px-4 py-3">
-              <p className="text-[12.5px] leading-relaxed text-ink-2">
+              <p className="max-w-[68ch] text-[12.5px] leading-relaxed text-ink-2">
                 <span className="font-[650] text-deep">Prototype, not a store product.</span>{' '}
                 Tell us about your space, ask about the hardware, or request app access. We usually reply within one to two business days.
               </p>
@@ -236,7 +236,9 @@ export default function Contact() {
         {/* ── From message to quote in three steps ── */}
         <div className="mt-14 border-t border-line pt-10">
           <Reveal>
-            <h2 className="max-w-[22ch] text-[clamp(1.5rem,2.8vw,2.1rem)] font-[650] text-deep">
+            {/* 22ch = 478px at 33.6px, but this heading needs ~517px: "reach out."
+                orphaned onto a 58px final line. 26ch sets it on one line. */}
+            <h2 className="max-w-[26ch] text-[clamp(1.5rem,2.8vw,2.1rem)] font-[650] text-deep">
               {CONTACT_PAGE.steps.title}
             </h2>
             <p className="mt-3 max-w-[66ch] text-[13px] leading-relaxed text-ink-3">

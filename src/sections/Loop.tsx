@@ -64,7 +64,7 @@ export default function Loop() {
                   </div>
                   <div>
                     <h2 className="text-[clamp(1.125rem,2vw,1.375rem)] font-[650] text-deep">{stg.head}</h2>
-                    <p className="mt-2 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2 md:max-w-none">{stg.body}</p>
+                    <p className="mt-2 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2">{stg.body}</p>
                     <p className="mt-2.5 text-[12.5px] text-ink-3">{stg.meta}</p>
                   </div>
                   {/* the approved Figma frame for this stage of the loop. The frame is

@@ -68,8 +68,14 @@ export default function Hero() {
         {/* the artboard's hero visual: visitor-facing 3D stage + readout overlay */}
         <div className="relative">
           <div
-            className="relative overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
-            style={{ aspectRatio: '1 / 1.01' }}
+            className="relative mx-auto overflow-hidden rounded-shell border border-line bg-white p-2 shadow-[0_1px_2px_rgba(21,56,94,.05),0_18px_40px_-26px_rgba(21,56,94,.35)]"
+            // Square, per the PDF frame, but the SIDE is capped on wide viewports.
+            // Measured on the grid: the columns balance within 24px at 1440, but at
+            // 1920 the square stage reaches 822px against a 624px copy column — a
+            // 99px overhang each way. max-height cannot shrink an aspect-ratio box
+            // (the width still drives the height), so cap the width instead: 680px
+            // gives a 687px-tall stage, which is within ~60px of the copy column.
+            style={{ aspectRatio: '1 / 1.01', maxWidth: 'min(100%, 680px)' }}
           >
             {/* Stage tone sampled from the artboard's hero product card: the device
                 sits on a WARM, LIGHT surface (beige/cream studio), not a cool blue
@@ -95,7 +101,7 @@ export default function Hero() {
                   hero read as crowded. Keep ONE line (the bottom one, which also
                   names the parts) and drop the "OPEN VIEW" pill — the open view is
                   self-evident once the model is on screen. */}
-              <p className="mt-2 px-1 text-center text-[11px] leading-snug text-ink-3 sm:pointer-events-none sm:absolute sm:bottom-4 sm:left-4 sm:right-[188px] sm:mt-0 sm:rounded-tight sm:bg-card/92 sm:px-3 sm:py-2 sm:text-[11.5px] sm:text-ink-2 sm:backdrop-blur-sm">
+              <p className="mt-2 px-1 text-center text-[11px] leading-snug text-ink-3 sm:pointer-events-none sm:absolute sm:bottom-4 sm:left-4 sm:right-[188px] sm:mt-0 sm:rounded-tight sm:bg-card sm:px-3 sm:py-2 sm:text-[12px] sm:text-ink sm:backdrop-blur-sm">
                 Open cutaway &middot; {HERO.stageNote}
               </p>
             </div>
@@ -104,7 +110,7 @@ export default function Hero() {
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
               the photo's right edge into the white frame, as the PDF does —
               narrow enough that it clips the frame corner, not the unit. */}
-          <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-[0_22px_50px_-26px_rgba(15,39,71,.55)] backdrop-blur-sm sm:absolute sm:-right-6 sm:-bottom-5 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
+          <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-[0_22px_50px_-26px_rgba(15,39,71,.55)] backdrop-blur-sm sm:absolute sm:-right-4 sm:bottom-3 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
             <p className="mt-2.5 text-[10px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
             <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">

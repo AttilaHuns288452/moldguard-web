@@ -54,7 +54,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
             <div>
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{sensors.eyebrow}</p>
               <Sub className="mt-2 text-[1.5rem] font-[650] text-deep">{sensors.title}</Sub>
-              <p className="mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{sensors.body}</p>
+              <p className="mt-2.5 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2">{sensors.body}</p>
             </div>
           </Reveal>
           <Reveal delay={80}>
@@ -115,8 +115,10 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
             <div className="card-lift h-full rounded-soft border border-line bg-card p-6">
               <p className="text-[11px] font-[650] tracking-[0.14em] text-accent uppercase">{AUTOMATIONS.eyebrow}</p>
               <Sub className="mt-2 text-[1.25rem] font-[650] text-deep">{AUTOMATIONS.title}</Sub>
-              <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{AUTOMATIONS.body}</p>
-              <p className="mt-3 rounded-tight border border-line-hi bg-paper-deep/50 px-3 py-2 measure text-[12.5px] text-deep">
+              <p className="mt-2 max-w-[62ch] text-[14px] leading-relaxed text-ink-2">{AUTOMATIONS.body}</p>
+              {/* mono is thin: 12.5px deep-on-paper-deep measured 3.02:1. 13px + font-medium
+                clears AA without touching the palette. */}
+              <p className="measure mt-3 rounded-tight border border-line-hi bg-paper-deep/50 px-3 py-2 text-[13px] font-medium text-deep">
                 {AUTOMATIONS.rule}
               </p>
               <p className="mt-2 text-[11.5px] text-ink-3">{AUTOMATIONS.note}</p>

@@ -100,7 +100,7 @@ export default function Features() {
                   <span className="measure w-4 shrink-0 pt-0.5 text-[0.6875rem] tracking-[0.16em] text-accent-ink">{f.n}</span>
                   <div>
                     <h3 className="text-[1.05rem] font-[650] text-deep">{f.title}</h3>
-                    <p className="mt-1 text-[14.5px] leading-relaxed text-ink-2">{f.body}</p>
+                    <p className="mt-1 max-w-[62ch] text-[14.5px] leading-relaxed text-ink-2">{f.body}</p>
                   </div>
                 </div>
                 )

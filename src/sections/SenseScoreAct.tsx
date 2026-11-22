@@ -1,7 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { SENSE_SCORE_ACT } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
-import { splitTitle } from '../lib/motion'
 
 /**
  * PDF page 1, band 4: "Sense. Score. Act."
@@ -32,9 +31,13 @@ export default function SenseScoreAct() {
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <Reveal>
+            {/* ONE line, not three. splitTitle() breaks on sentence boundaries,
+                so "Sense. Score. Act." became three stacked lines in a 136px
+                column — the PDF sets it as a single 30-character line beside a
+                CTA 1,000px away. Pass it as one line. */}
             <LineReveal
-              lines={splitTitle(SENSE_SCORE_ACT.title)}
-              className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-deep"
+              lines={[SENSE_SCORE_ACT.title]}
+              className="text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.1] font-[650] text-deep"
             />
           </Reveal>
           <Reveal delay={60}>
@@ -52,10 +55,10 @@ export default function SenseScoreAct() {
             thin vertical lines, list rows separated by thin horizontal lines.
             Delete the card wrapper — the PDF has no card here, and a card was what
             made this read as a fourth "box" on a page that already has enough. */}
-        <div className="mt-10 grid gap-px overflow-hidden border-t border-line bg-line sm:grid-cols-3">
+        <div className="mt-10 grid overflow-hidden border-t border-line sm:grid-cols-3 sm:divide-x sm:divide-line">
           {SENSE_SCORE_ACT.steps.map((s, i) => (
             <Reveal key={s.n} delay={i * 70}>
-              <div className="h-full bg-white">
+              <div className="h-full bg-white pb-3">
                 <div className="flex items-baseline gap-3 px-6 pt-7">
                   <span className="measure text-[11px] tracking-[0.16em] text-accent-ink">{s.n}</span>
                   <h3 className="text-[1.13rem] font-[650] text-deep">{s.title}</h3>
