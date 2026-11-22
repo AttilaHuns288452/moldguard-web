@@ -199,7 +199,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
               aria-label="Zoom out">
               <ZoomOut className="size-4" strokeWidth={1.9} />
             </button>
-            <button type="button" onClick={() => { setZoom(1); setResetKey((k) => k + 1) }}
+            <button type="button" onClick={() => { onSelect(null); setZoom(1); setResetKey((k) => k + 1) }}
               className="grid size-10 place-items-center rounded-full border border-line bg-card/80 text-ink-2 shadow-sm transition-colors hover:bg-card hover:text-ink"
               aria-label="Reset the view">
               <RotateCcw className="size-3.5" strokeWidth={1.9} />

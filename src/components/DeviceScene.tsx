@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
-import { PARTS, PART_BY_ID, PART_NO, type PartId } from './parts'
+import { PARTS, PART_NO, type PartId } from './parts'
 
 /**
  * The shipped GLB is meshopt-compressed (EXT_meshopt_compression, 2.3 MB instead
@@ -70,8 +70,36 @@ type Props = {
   nudgeX?: number
 }
 
-function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: Props) {
-  const { camera, scene } = useThree()
+const PART_NODE_MATCHERS: Partial<Record<PartId, RegExp>> = {
+  // These names are the export's actual semantic groups. Matching them avoids
+  // selecting a wall just because its bounding box happens to cross a hotspot.
+  sensor: /dht11|vl53l0x/i,
+  controller: /esp32/i,
+  relay: /relay_module/i,
+  peltier: /peltier_thermoelectric_cooler/i,
+  heatsink: /aluminium_extruded_heatsink/i,
+  fan: /generic_80mm_computer_fan/i,
+  display: /display/i,
+  buzzer: /buzzer/i,
+  audio: /adafruit_tpa2016d2/i,
+  usb: /usb_micro_port/i,
+  // Root Layer0 nodes are the enclosure panels and their status indicators.
+  enclosure: /^mesh_\d+_root_layer0_/i,
+}
+
+function matsOf(mesh: THREE.Mesh): THREE.MeshStandardMaterial[] {
+  const m = mesh.material
+  return (Array.isArray(m) ? m : [m]).filter(Boolean) as THREE.MeshStandardMaterial[]
+}
+
+/** Tint the selected group is pushed toward. Allocated once: the highlight used to
+ *  construct a Color per mesh per frame. */
+const HIGHLIGHT = new THREE.Color('#3a7bff')
+/** Exploded view travels this many world metres outward, per part. */
+const EXPLODE_WORLD = 0.035
+
+function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0, onSelect, hotspots }: Props) {
+  const { camera, scene, gl } = useThree()
   const { scene: cached } = useGLTF('/moldguard.glb', true, true, extendLoader) as unknown as { scene: THREE.Group }
   /**
    * useGLTF caches by URL, so the hero and the Meet explorer were handed the
@@ -106,10 +134,10 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
   }, [model, scene])
   const ready = useRef(false)
   const settle = useRef(0)
-  /** 0..1 blend of the camera toward the selected part; driven in the frame loop. */
-  const focus = useRef(0)
-  const focusAt = useRef(new THREE.Vector3())
-  const focusR = useRef(1)
+  /** Smoothed camera aim/radius: both are lerped every frame, so switching from
+   *  one part to another glides instead of snapping once focus is already 1. */
+  const aim = useRef(new THREE.Vector3(0, 0.41, 0))
+  const aimR = useRef(1.9)
   // Initial yaw. Every `face: 'front'` part in parts.ts sits at +Z (the display,
   // sensor, buzzer, audio amp), so the camera must start near yaw 0 to look at
   // the product's front. 0.42 rad keeps a 3/4 angle so the depth reads too.
@@ -120,9 +148,25 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
   const fitR = useRef(1.9)
   const halfExtent = useRef(new THREE.Vector3(0.15, 0.12, 0.08))
   const target = useRef(new THREE.Vector3(0, 0.41, 0))
-  const meshes = useRef<Record<string, THREE.Mesh>>({})
+  const partCentersRef = useRef<Map<PartId, THREE.Vector3>>(new Map())
+  const partSizesRef = useRef<Map<PartId, THREE.Vector3>>(new Map())
+  /** Measured body centre in world metres: the origin exploded offsets radiate from. */
+  const modelCtr = useRef(new THREE.Vector3())
+  const meshList = useRef<THREE.Mesh[]>([])
   const partMeshesRef = useRef<Map<PartId, THREE.Mesh[]>>(new Map())
-  const basePos = useRef<Record<string, THREE.Vector3>>({})
+  /** Local units per world metre (the export root is scaled ~0.001). */
+  const worldPerLocalRef = useRef(1)
+  /** Raycast picking state: a click that did not drag selects the component under it. */
+  const clickPick = useRef(false)
+  const raycaster = useRef(new THREE.Raycaster())
+  const pointer = useRef(new THREE.Vector2())
+  /** Mesh -> owning semantic part, so a pick can resolve to the part the user means. */
+  const meshPart = useRef<Map<THREE.Mesh, PartId>>(new Map())
+  /** Latest onSelect, so rebinding the pointer listeners does not depend on an
+   *  inline callback's identity (Meet passes a fresh lambda every render). */
+  const selectRef = useRef(onSelect)
+  selectRef.current = onSelect
+
 
   useEffect(() => {
     model.traverse((o) => {
@@ -187,13 +231,23 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
     model.updateWorldMatrix(true, true)
     scene.add(model)
 
+    const list: THREE.Mesh[] = []
     model.traverse((o) => {
       const m = o as THREE.Mesh
       if (!m.isMesh) return
-      meshes.current[m.name] = m
-      basePos.current[m.name] = m.position.clone()
-      m.userData.baseEmissive = (m.material as THREE.MeshStandardMaterial)?.emissive?.clone?.()
+      list.push(m)
+      m.userData.basePos = m.position.clone()
+      // Cache the material slots once: walking 278 meshes x Array.isArray x filter
+      // every frame allocated ~280 throwaway arrays per frame.
+      m.userData.mats = matsOf(m)
     })
+    meshList.current = list
+    // Meshes sit under the export root, which is scaled ~0.001, so a WORLD metre
+    // is 1/scale local units. Read it from the mesh's PARENT: getWorldScale on
+    // the gltf.scene Group returns 1 (the 0.001 is on its child) and on a mesh it
+    // folds in that mesh's own size, which is not the space its position lives in.
+    const parentScale = list[0]?.parent?.getWorldScale(new THREE.Vector3()).x ?? 1
+    worldPerLocalRef.current = parentScale ? 1 / parentScale : 1
 
     // The GLB's own node transforms are NOT centred: measured base sits at
     // y = -0.015 and the body's centre is off origin in x/z. Recompute the box
@@ -218,55 +272,90 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
     halfExtent.current.set(sz.x / 2, sz.y / 2, sz.z / 2)
     target.current.set(ctr.x, bb.min.y + sz.y * 0.5, ctr.z)
     target.current.x += nudgeX
+    modelCtr.current.copy(ctr)
+    // Seed the smoothed pose at the fit so the first paint does not glide in from
+    // a hard-coded guess.
+    aim.current.copy(target.current)
 
-    // Map each declared part to the meshes that actually live inside its box.
-    // PARTS knows a world centre and size; the GLB knows node names. Those two
-    // never share a key, so the previous `meshes.current[part.id]` lookup matched
-    // nothing and the whole highlight/explode path was dead. Spatial membership
-    // is the honest join, and it is what makes a pin point at a real part.
+    // Map each declared part to the meshes that actually belong to it. The GLB
+    // export preserves semantic names for the real hardware groups, so the names
+    // ARE the join. `misc` is then whatever no named part claimed: exclusive by
+    // construction, which is what the old spatial probe could not guarantee (one
+    // wall mesh landed in several parts and the last loop pass won).
     const partMeshes = new Map<PartId, THREE.Mesh[]>()
-    const scratch = new THREE.Box3()
+    const owner = new Map<THREE.Mesh, PartId>()
     for (const part of PARTS) {
-      const [px, py, pz] = part.at
-      const [sx, sy, szp] = part.size
-      const box = new THREE.Box3(
-        new THREE.Vector3(px + nudgeX - sx / 2, py - sy / 2, pz - szp / 2),
-        new THREE.Vector3(px + nudgeX + sx / 2, py + sy / 2, pz + szp / 2),
-      )
-      const hits: THREE.Mesh[] = []
-      model.traverse((o) => {
-        const m = o as THREE.Mesh
-        if (!m.isMesh) return
-        scratch.setFromObject(m)
-        if (box.intersectsBox(scratch)) hits.push(m)
-      })
-      partMeshes.set(part.id, hits)
+      if (part.id === 'misc') continue
+      const rx = PART_NODE_MATCHERS[part.id]
+      if (!rx) { partMeshes.set(part.id, []); continue }
+      const group = list.filter((m) => !owner.has(m) && rx.test(m.name))
+      partMeshes.set(part.id, group)
+      for (const m of group) if (!owner.has(m)) owner.set(m, part.id)
+    }
+    const leftovers = list.filter((m) => !owner.has(m))
+    partMeshes.set('misc', leftovers)
+    for (const m of leftovers) owner.set(m, 'misc')
+
+    for (const [id, hits] of partMeshes) {
+      const bounds = new THREE.Box3()
+      for (const mesh of hits) bounds.union(new THREE.Box3().setFromObject(mesh))
+      if (bounds.isEmpty()) continue
+      const centre = bounds.getCenter(new THREE.Vector3())
+      partCentersRef.current.set(id, centre)
+      partSizesRef.current.set(id, bounds.getSize(new THREE.Vector3()))
+      // Explode direction is per PART, so remember which part owns each mesh.
+      for (const mesh of hits) mesh.userData.partCentre = centre
     }
     partMeshesRef.current = partMeshes
-
+    meshPart.current = owner
     ready.current = true
     onLoaded()
-  }, [model, scene, onLoaded, camera])
+  }, [model, scene, onLoaded])
 
   useEffect(() => {
     if (!ready.current) return
     drag.current.yaw = -0.62
     drag.current.pitch = 0
     spin.current = 0.42
+    // Recentre also drops any focus, so "reset the view" cannot leave the camera
+    // parked on a component.
+    aim.current.copy(target.current)
   }, [resetKey])
 
-  // Pointer drag
+  // Pointer drag, bound to THIS stage's canvas. document.querySelector grabbed the
+  // first canvas on the page, so the hero and the explorer stole each other's orbit.
   useEffect(() => {
-    const dom = document.querySelector<HTMLElement>('[data-device-canvas]')
+    const dom = gl.domElement
     if (!dom) return
-    const down = (e: PointerEvent) => { drag.current.down = true; drag.current.x = e.clientX; drag.current.y = e.clientY }
+    // Orbit works on both stages; only the explorer picks by clicking geometry,
+    // because in the hero the whole canvas is a hover target for the hotspot pins.
+    const pickable = hotspots !== false
+    const down = (e: PointerEvent) => {
+      drag.current.down = true; drag.current.x = e.clientX; drag.current.y = e.clientY
+      clickPick.current = true
+    }
     const move = (e: PointerEvent) => {
       if (!drag.current.down) return
+      if (Math.abs(e.clientX - drag.current.x) + Math.abs(e.clientY - drag.current.y) > 3) clickPick.current = false
       drag.current.yaw += (e.clientX - drag.current.x) * 0.0075
       drag.current.pitch = THREE.MathUtils.clamp(drag.current.pitch + (e.clientY - drag.current.y) * 0.0045, -0.42, 0.5)
       drag.current.x = e.clientX; drag.current.y = e.clientY
     }
-    const up = () => { drag.current.down = false }
+    const up = (e: PointerEvent) => {
+      if (!drag.current.down) return
+      drag.current.down = false
+      // Click a component to focus it. A drag that moved is an orbit, not a pick.
+      if (!pickable || !clickPick.current) return
+      clickPick.current = false
+      const r = gl.domElement.getBoundingClientRect()
+      pointer.current.set(
+        ((e.clientX - r.left) / r.width) * 2 - 1,
+        -((e.clientY - r.top) / r.height) * 2 + 1,
+      )
+      raycaster.current.setFromCamera(pointer.current, camera)
+      const hit = raycaster.current.intersectObjects(meshList.current, false)[0]
+      selectRef.current((hit && meshPart.current.get(hit.object as THREE.Mesh)) ?? null)
+    }
     dom.addEventListener('pointerdown', down)
     dom.addEventListener('pointermove', move)
     dom.addEventListener('pointerup', up)
@@ -281,124 +370,116 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
 
   // Emissive highlight + exploded offsets, applied per frame so a mode change
   // animates rather than snapping.
+  const goal = useRef(new THREE.Vector3())
+  const dirV = useRef(new THREE.Vector3())
+  const liveBox = useRef(new THREE.Box3())
+  const scratchBox = useRef(new THREE.Box3())
+  const liveCtr = useRef(new THREE.Vector3())
+  const liveSize = useRef(new THREE.Vector3())
+  /** Cache key so the group's box is measured on selection change, not per frame. */
+  const liveKey = useRef('')
+  /** Seconds left in which offsets may still be settling, so the box is re-measured. */
+  const settleBox = useRef(0)
+
   useFrame((_, dt) => {
     if (!ready.current) return
     const k = Math.min(1, dt * 6)
-    for (const part of PARTS) {
-      // A part is a GROUP of meshes (see the spatial map built at load), not one.
-      const group = partMeshesRef.current.get(part.id)
-      if (!group || !group.length) continue
-      const selected = active === part.id
-      for (const m of group) {
-      const mat = m.material as THREE.MeshStandardMaterial
-      if (!mat?.emissive) continue
-      // Seed BOTH values together and guard on the intensity field, not on
-      // baseEmissive (which the setup pass already sets). Guarding on the wrong
-      // field left baseEmissiveI undefined -> wantI became NaN -> emissiveIntensity
-      // was poisoned to NaN and the material rendered pure black.
-      if (typeof m.userData.baseEmissiveI !== 'number') {
-        m.userData.baseEmissive = mat.emissive.clone()
-        m.userData.baseEmissiveI = mat.emissiveIntensity ?? 0
+    const explode = mode === 'explode'
+    // A part that resolved to no meshes must not ghost the whole unit: an empty
+    // Set is still truthy, so `dimmed` would be true for every mesh on stage.
+    const group = active ? partMeshesRef.current.get(active) : null
+    const keep = group && group.length ? new Set(group) : null
+    const worldPerLocal = worldPerLocalRef.current
+    const meshes = meshList.current
+
+    for (const m of meshes) {
+      const mats = m.userData.mats as THREE.MeshStandardMaterial[]
+      const picked = keep ? keep.has(m) : false
+      const dimmed = Boolean(keep) && !picked
+
+      // Highlight: only the selected group emits; everything else keeps its own.
+      for (const mat of mats) {
+        if (!mat.emissive) continue
+        if (typeof mat.userData.baseEmissiveI !== 'number') {
+          mat.userData.baseEmissive = mat.emissive.clone()
+          mat.userData.baseEmissiveI = mat.emissiveIntensity ?? 0
+        }
+        const baseI = mat.userData.baseEmissiveI as number
+        const wantI = picked ? baseI + 0.85 : baseI
+        mat.emissiveIntensity += (wantI - mat.emissiveIntensity) * k
+        mat.emissive.lerp(picked ? HIGHLIGHT : mat.userData.baseEmissive as THREE.Color, k)
       }
-      const baseI = m.userData.baseEmissiveI as number
-      const wantI = selected ? baseI + 0.85 : baseI
-      mat.emissiveIntensity += (wantI - mat.emissiveIntensity) * k
-      mat.emissive.lerp(selected ? new THREE.Color('#3a7bff') : m.userData.baseEmissive as THREE.Color, k)
-      // exploded view: push each part outward along its own offset from centre
-      const base = basePos.current[m.name]
-      if (base) {
-        // Offsets are measured from the real body centre (y = 0.127), not the
-        // old fake-tower value, and scaled to the 0.25 m body so the parts
-        // actually separate instead of nudging.
-        const c = new THREE.Vector3(0, 0.127, 0)
-        const dir = new THREE.Vector3(part.at[0], part.at[1], part.at[2]).sub(c).normalize()
-        const goal = mode === 'explode'
-          ? base.clone().add(dir.multiplyScalar(0.075))
-          : base.clone()
-        m.position.lerp(goal, k)
+
+      // Exploded offsets are authored in WORLD metres; mesh positions are local
+      // units under the ~0.001 root scale, so convert or the parts never move.
+      const base = m.userData.basePos as THREE.Vector3 | undefined
+      if (!base) continue
+      goal.current.copy(base)
+      if (explode && m.userData.partCentre) {
+        const c = m.userData.partCentre as THREE.Vector3
+        dirV.current.set(c.x - modelCtr.current.x, c.y - modelCtr.current.y, c.z - modelCtr.current.z)
+        if (dirV.current.lengthSq() > 1e-8) {
+          goal.current.addScaledVector(dirV.current.normalize(), EXPLODE_WORLD * worldPerLocal)
+        }
       }
+      m.position.lerp(goal.current, k)
+
+      // Opacity: the picked group stays solid, everything else ghosts including
+      // the enclosure panels (they used to lose because each mesh was looped once
+      // per part and the last pass overwrote the selection).
+      for (const mat of mats) {
+        const u = mat.userData
+        if (typeof u.baseOpacity !== 'number') {
+          u.baseOpacity = mat.opacity
+          u.baseTransparent = mat.transparent
+          u.baseDepthWrite = mat.depthWrite
+        }
+        const baseOpacity = u.baseOpacity as number
+        const want = picked
+          ? baseOpacity
+          : m.userData.isShell
+            ? (active ? 0.06 : explode ? 0.12 : baseOpacity)
+            : dimmed ? 0.12 : baseOpacity
+        mat.opacity += (want - mat.opacity) * k
+        // Only a fully solid frame may go back into the opaque pass: keeping
+        // transparent=true while it fades avoids the pop where the renderer
+        // ignores opacity and the mesh snaps back to solid.
+        const restored = Math.abs(mat.opacity - baseOpacity) < 0.001
+        if (restored) mat.opacity = baseOpacity
+        mat.transparent = restored ? (u.baseTransparent as boolean) : true
+        mat.depthWrite = restored ? (u.baseDepthWrite as boolean) : false
       }
     }
-  })
 
-  // Shell opacity is independent of PARTS: the presentation skin has no part
-  // entry, so it must be driven from the mesh map or it never fades.
-  useFrame((_, dt) => {
-    if (!ready.current) return
-    const k = Math.min(1, dt * 6)
-    // Selecting a part ghosts the wrapper so the chosen component reads clearly.
-    // 0.12 is low enough to see through and high enough to keep the unit's outline
-    // legible; 0.02 was below the visibility cut-off, so the whole body vanished.
-    const want = mode === 'explode' || active !== null ? 0.12 : 1
-    // Everything except the selected component ghosts as well, so the chosen part
-    // is the only solid thing on the stage. Membership is a Set because a mesh
-    // can fall inside two part boxes; toggling per part flickered with order.
-    const keep = active ? new Set(partMeshesRef.current.get(active) ?? []) : null
-    for (const mesh of Object.values(meshes.current)) {
-      const mat = mesh.material as THREE.MeshStandardMaterial
-      if (!mat) continue
-      const picked = keep ? keep.has(mesh) : false
-      if (mesh.userData.isShell) {
-        // The shell can BE the selected part (the enclosure row exists), and then
-        // it must stay solid - fading it would hide the very thing you clicked.
-        //
-        // When a DIFFERENT part is selected the shell has to go almost entirely,
-        // not just ghost: most parts sit behind the front panel, so even 12%
-        // shell in front of them washed the subject out to nothing (measured: the
-        // stage's dark-pixel floor lifted from 138 to 192, i.e. the whole body
-        // including the picked part turned pale). 0.02 is under the visibility
-        // cut-off below, so the panels drop out of the draw entirely and the
-        // picked part is finally unobstructed. Exploded view keeps the 0.12 ghost:
-        // there the shell IS part of what you are looking at.
-        const shellWant = picked ? 1 : (active ? 0.02 : want)
-        mat.opacity += (shellWant - mat.opacity) * k
-        // An opaque shell must NOT be in the transparent pass: transparent objects
-        // are depth-sorted per object, not per fragment, so a solid box would show
-        // its own interior through its front face.
-        const solid = mat.opacity > 0.98
-        mat.transparent = !solid
-        mat.depthWrite = solid
-        mat.visible = mat.opacity > 0.02
-        continue
+    // Live world bounds of the selected group, offsets included, so the camera
+    // targets where the meshes actually are rather than their rest position.
+    // Re-measured while offsets settle (1 s), then cached per selection: `relay`
+    // is 115 meshes and a per-frame box union was the expensive path.
+    if (keep) {
+      const key = `${active}|${explode}`
+      if (liveKey.current !== key) {
+        liveKey.current = key
+        settleBox.current = 1
+        // Seed from the load-time measured bounds so frame one already has a
+        // target, even if setFromObject comes back empty for a degenerate group.
+        const seedCtr = partCentersRef.current.get(active!)
+        const seedSize = partSizesRef.current.get(active!)
+        if (seedCtr) liveCtr.current.copy(seedCtr)
+        if (seedSize) liveSize.current.copy(seedSize)
       }
-      if (picked) {
-        // Solid again, restoring the flags captured on the way down. Materials are
-        // cloned per stage but mutated in place, so a stale 0.14 would otherwise
-        // survive deselect and leave the model permanently ghosted.
-        if (!mesh.userData.dimmed) continue
-        mat.opacity += (1 - mat.opacity) * k
-        if (mat.opacity > 0.98) {
-          mat.opacity = 1
-          mat.transparent = mesh.userData.baseTransparent ?? false
-          mat.depthWrite = mesh.userData.baseDepthWrite ?? true
-          mesh.userData.dimmed = false
+      settleBox.current = Math.max(0, settleBox.current - dt)
+      if (settleBox.current > 0) {
+        liveBox.current.makeEmpty()
+        for (const m of keep) {
+          liveBox.current.union(scratchBox.current.setFromObject(m))
         }
-        continue
-      }
-      if (!keep) {
-        if (!mesh.userData.dimmed) continue
-        mat.opacity += (1 - mat.opacity) * k
-        if (mat.opacity > 0.98) {
-          mat.opacity = 1
-          mat.transparent = mesh.userData.baseTransparent ?? false
-          mat.depthWrite = mesh.userData.baseDepthWrite ?? true
-          mesh.userData.dimmed = false
+        if (!liveBox.current.isEmpty()) {
+          liveBox.current.getCenter(liveCtr.current)
+          liveBox.current.getSize(liveSize.current)
         }
-        continue
       }
-      if (!mesh.userData.dimmed) {
-        // The exported materials are all OPAQUE, but store the real flags instead
-        // of assuming - emissive LEDs and glass are the obvious future breakage.
-        mesh.userData.baseTransparent = mat.transparent
-        mesh.userData.baseDepthWrite = mat.depthWrite
-        mesh.userData.dimmed = true
-      }
-      // 0.14 reads as a silhouette for context while the picked part stays the
-      // only subject. Below ~0.1 the neighbours vanish and the push-in looks like
-      // it simply cropped the unit.
-      mat.opacity += (0.14 - mat.opacity) * k
-      mat.transparent = true
-      mat.depthWrite = false
+    } else {
+      liveKey.current = ''
     }
   })
 
@@ -429,29 +510,23 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0 }: P
       hy / Math.tan(halfFov) / 0.84,
       hx / (Math.tan(halfFov) * cam.aspect) / 0.82,
     )
-    // Selecting a part pushes in on it: hold the camera close enough that the
-    // part fills ~62% of the viewport height, and blend the aim point from the
-    // unit's centre to that part. Both are lerped by `focus`, so picking a pin
-    // reads as a zoom rather than a cut.
-    focus.current += ((active ? 1 : 0) - focus.current) * Math.min(1, dt * 3.2)
-    const part = active ? PART_BY_ID[active] : null
-    if (part) {
-      focusAt.current.set(part.at[0] + nudgeX, part.at[1], part.at[2])
-      // The visible half-height at distance r is r*tan(halfFov), so a part of
-      // `span` filling fraction f needs r = span/(2*f*tan). Two traps here, both
-      // hit while building this: clamping against fitR pins the camera at the
-      // full-unit distance (a part is always smaller, so the zoom does nothing),
-      // and dividing by f instead of multiplying by 1/(2f) pushes it BACK.
-      const span = Math.max(part.size[0], part.size[1], part.size[2])
-      // Floor of 20% of the fit radius: a 5 mm LED would otherwise put the
-      // camera inside the enclosure.
-      focusR.current = Math.max(span / (2 * 0.62 * Math.tan(halfFov)), fitR.current * 0.2)
-    }
-    const look = target.current.clone().lerp(focusAt.current, focus.current)
-    const radius = THREE.MathUtils.lerp(
-      (fitR.current / zoom) * explodePad, focusR.current / zoom, focus.current,
-    )
-    const r = radius * (1 + (1 - ease) * 0.16)
+    // Selecting a part pushes in on it. The aim point and radius are their own
+    // smoothed state (not a scalar blend of two fixed poses): that way A -> B
+    // glides from the current frame instead of snapping once focus is already 1,
+    // and deselect glides back to the fit.
+    const wantAim = active ? liveCtr.current : target.current
+    const wantR = active
+      ? Math.max(
+          Math.max(liveSize.current.x, liveSize.current.y, liveSize.current.z) /
+            (2 * 0.62 * Math.tan(halfFov)),
+          // A 5 mm connector would otherwise put the camera inside the enclosure.
+          fitR.current * 0.18,
+        )
+      : fitR.current * explodePad
+    aim.current.lerp(wantAim, Math.min(1, dt * 4.2))
+    aimR.current += (wantR - aimR.current) * Math.min(1, dt * 4.2)
+    const look = aim.current
+    const r = (aimR.current / zoom) * (1 + (1 - ease) * 0.16)
     camera.position.set(
       look.x + r * Math.sin(yaw) * Math.cos(pitch),
       look.y + r * Math.sin(pitch),

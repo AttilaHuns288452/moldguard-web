@@ -115,7 +115,7 @@ export default function Meet() {
                 <span className="measure text-[11px] tracking-[0.08em] text-ink-3 uppercase">{mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[1])} &times; {mm(MODEL_SIZE[2])} mm</span>
               </div>
               <div className="relative h-[clamp(400px,58vh,560px)] w-full bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
-                <DeviceViewer active={active} onSelect={(id) => { if (id) pick(id) }} autoSpin={autoSpin} mode={mode} />
+                <DeviceViewer active={active} onSelect={(id) => { if (id) pick(id); else setActive(null) }} autoSpin={autoSpin} mode={mode} />
               </div>
               <div className="flex items-center justify-between gap-2 border-t border-line px-4 py-2.5">
                 <span className="text-[11px] text-ink-3">
