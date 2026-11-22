@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Header from './components/Header'
 import Footer from './sections/Footer'
 import { ScrollProgress } from './components/ui'
-import { applyHead, pageFromLocation, type Location_ } from './lib/route'
+import { applyHead, navigate, pageFor, pageFromLocation, type Location_ } from './lib/route'
+import { prefersReducedMotion } from './lib/motion'
 
 // page 1 of the PDF
 import Hero from './sections/Hero'
@@ -59,12 +60,39 @@ export default function App() {
   // Tab skip the skip link. A route comparison is idempotent, so the double
   // mount changes nothing.
   const lastPage = useRef(page)
-  useEffect(() => {
+  const routeFade = useRef<Animation | null>(null)
+  // Layout effect, not effect: React has already swapped the route's markup but
+  // the browser has not painted it yet, so the fade starts from opacity 0 and
+  // the new page never flashes at full opacity for one frame.
+  useLayoutEffect(() => {
     applyHead(page)
     if (lastPage.current === page) return
     lastPage.current = page
-    document.getElementById('main')?.focus({ preventScroll: false })
+    const main = document.getElementById('main')
+    main?.focus({ preventScroll: false })
+    // Route change: fade the content in once, on the new markup, opacity only.
+    // Never a transform on `main` — a transformed ancestor becomes the containing
+    // block for fixed overlays and breaks their positioning. Cancel the previous
+    // fade so a fast double-navigation cannot stack two effect layers, and skip
+    // entirely under reduced motion (main keeps its CSS opacity of 1).
+    routeFade.current?.cancel()
+    if (!main || prefersReducedMotion()) return
+    routeFade.current = main.animate(
+      [{ opacity: 0 }, { opacity: 1 }],
+      { duration: 220, easing: 'cubic-bezier(.22,1,.36,1)' },
+    )
   }, [page])
+  // A live reduced-motion flip must not strand a half-finished fade: cancel it
+  // (cancel() leaves the element at opacity 1) the moment the preference lands.
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const on = () => { if (mq.matches) routeFade.current?.cancel() }
+    mq.addEventListener('change', on)
+    return () => {
+      mq.removeEventListener('change', on)
+      routeFade.current?.cancel()
+    }
+  }, [])
 
   useEffect(() => {
     const sync = () => setPage(pageFromLocation())
@@ -74,6 +102,30 @@ export default function App() {
       window.removeEventListener('popstate', sync)
       window.removeEventListener('routechange', sync)
     }
+  }, [])
+
+  // One delegated handler makes every plain anchor to a known route a client-side
+  // navigation, so the Footer/body links get the same fast fade as the Header
+  // instead of a full document reload. Header links already call preventDefault
+  // (defaultPrevented check skips them). Modified clicks, target/download,
+  // external origins, mailto/tel and hash links keep native behaviour, and an
+  // unknown path is not a route — it stays a real request and a real 404.
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0) return
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+      const target = event.target
+      const anchor = target instanceof Element ? target.closest('a[href]') : null
+      if (!(anchor instanceof HTMLAnchorElement)) return
+      if (anchor.hasAttribute('download') || (anchor.target && anchor.target !== '_self')) return
+      if (anchor.origin !== window.location.origin || anchor.hash) return
+      const next = pageFor(anchor.pathname)
+      if (!next) return
+      event.preventDefault()
+      navigate(next)
+    }
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
   }, [])
 
   return (

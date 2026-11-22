@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { useInView, prefersReducedMotion } from '../lib/motion'
+import { useInView, useReducedMotion } from '../lib/motion'
 
 /** Viewport-driven reveal. Never mount-driven: content below the fold would
  *  otherwise animate off-screen and read as an abrupt pop. */
@@ -122,25 +122,42 @@ export function MagButton({
 /** Scroll progress hairline — the single scroll-linked indicator on the page. */
 export function ScrollProgress() {
   const ref = useRef<HTMLDivElement>(null)
+  const reduced = useReducedMotion()
   useEffect(() => {
     const el = ref.current
-    if (!el || prefersReducedMotion()) return
-    let last = 0
+    if (!el) return
+    if (reduced) { el.style.setProperty('--p', '0'); return }
     const paint = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
       const p = max > 0 ? Math.min(1, window.scrollY / max) : 0
       el.style.setProperty('--p', String(p))
     }
-    const onScroll = () => {
-      const now = performance.now()
-      if (now - last < 60) return      // ponytail: ~16Hz is plenty for a hairline
-      last = now
-      paint()
+    // One write per frame, coalesced: the old 16Hz throttle stepped the hairline
+    // in visible 60ms jumps. rAF keeps it in step with the compositor and still
+    // costs at most one style write per frame. A pending frame is cancelled on
+    // unmount, a route change (new document height) and a resize.
+    let frame = 0
+    const schedule = () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => { frame = 0; paint() })
     }
+    const cancel = () => { if (frame) cancelAnimationFrame(frame); frame = 0 }
+    // A route change swaps the document height and scrolls to top AFTER the
+    // event, so repaint on the next frame — measuring synchronously here would
+    // read the outgoing page's scroll position.
+    const onRoute = () => { cancel(); schedule() }
     paint()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', paint, { passive: true })
-    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', paint) }
-  }, [])
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule, { passive: true })
+    window.addEventListener('routechange', onRoute)
+    window.addEventListener('popstate', onRoute)
+    return () => {
+      cancel()
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      window.removeEventListener('routechange', onRoute)
+      window.removeEventListener('popstate', onRoute)
+    }
+  }, [reduced])
   return <div ref={ref} className="scroll-progress" aria-hidden="true" />
 }

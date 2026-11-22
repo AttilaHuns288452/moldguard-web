@@ -82,6 +82,26 @@
   color: var(--color-ink);
   box-shadow: var(--shadow-e3);
 }
+/* Enter/exit. The dialog stays modal (top layer, focus trap, page inert) until
+   the exit finishes — see requestClose in TeamProfiles.tsx. Animation, not
+   transition: showModal() puts the node on screen, which is the swap an
+   animation starts on. The end state is `transform: none`, so a finished
+   entrance leaves no containing block behind for a fixed child. */
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes dialog-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(6px) scale(0.99); }
+}
+@keyframes backdrop-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+
+.team-dialog[open] { animation: dialog-in var(--dur-panel) var(--ease-out) both; }
+.team-dialog[open]::backdrop { animation: backdrop-in var(--dur-panel) var(--ease-out) both; }
+.team-dialog[open].is-closing { animation: dialog-out var(--dur-panel) var(--ease-state) both; }
+.team-dialog[open].is-closing::backdrop { animation: backdrop-out var(--dur-panel) var(--ease-state) both; }
 .team-dialog::backdrop { background: rgba(15, 39, 71, 0.55); }
 .team-dialog__inner { position: relative; padding: 1.5rem; }
 .team-dialog__close {
@@ -160,4 +180,8 @@
   .team-card:hover,
   .team-card:hover .team-card__photo,
   .team-card:hover .team-card__arrow { transform: none; }
+  /* the dialog closes natively under reduced motion, so both states render
+     final and no timer runs */
+  .team-dialog[open],
+  .team-dialog[open]::backdrop { animation: none; opacity: 1; transform: none; }
 }

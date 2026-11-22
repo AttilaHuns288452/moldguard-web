@@ -3,6 +3,7 @@ import { Menu, X, ArrowRight } from 'lucide-react'
 import { Logo } from './Marks'
 
 import { navigate, pathFor, type Page, type Location_ } from '../lib/route'
+import { usePresence } from '../lib/motion'
 
 const NAV: { id: Page; label: string }[] = [
   { id: 'features', label: 'Features' },
@@ -13,6 +14,10 @@ const NAV: { id: Page; label: string }[] = [
 
 export default function Header({ page }: { page: Location_ }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  // Keep the panel mounted through a short exit; `inert` on the closing panel
+  // takes its links out of the tab order and the a11y tree at once, so a
+  // keyboard user can never land on a link that is halfway off screen.
+  const menu = usePresence(mobileOpen, 190)
   const menuBtn = useRef<HTMLButtonElement>(null)
   // keep anchor jumps clear of the sticky header, whatever height it takes
   useEffect(() => {
@@ -90,13 +95,24 @@ export default function Header({ page }: { page: Location_ }) {
           </a>
         </nav>
 
-        {mobileOpen && (
-          <nav id="mobile-menu" aria-label="Mobile" className="shell border-t border-line pb-4 lg:hidden">
+        {menu.mounted && (
+          <nav
+            id="mobile-menu"
+            aria-label="Mobile"
+            inert={menu.closing || undefined}
+            className={`menu-panel shell border-t border-line pb-4 lg:hidden ${menu.closing ? 'is-closing' : ''}`}
+          >
             {NAV.map((n) => (
               <a
                 key={n.id}
                 href={pathFor(n.id)}
-                onClick={(e) => { e.preventDefault(); setMobileOpen(false); navigate(n.id) }}
+                onClick={(e) => {
+                  // Close on the way out, navigate NOW: the exit animation must
+                  // never sit between the tap and the route change.
+                  e.preventDefault()
+                  setMobileOpen(false)
+                  navigate(n.id)
+                }}
                 aria-current={page === n.id ? 'page' : undefined}
                 className={`flex min-h-12 items-center justify-between border-b border-line text-[16px] transition-colors active:text-deep ${page === n.id ? 'font-[650] text-deep' : 'text-ink-2'}`}
               >

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { ArrowUpRight, X } from 'lucide-react'
 import { TEAM, type TeamMember } from '../content'
 import { Reveal } from './ui'
+import { prefersReducedMotion } from '../lib/motion'
 import './TeamProfiles.css'
 
 /**
@@ -15,13 +16,56 @@ export default function TeamProfiles() {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const [active, setActive] = useState<TeamMember | null>(null)
+  const [exiting, setExiting] = useState(false)
+  const exitTimer = useRef(0)
 
   // Open after the selected profile has rendered, never on a stale/empty dialog.
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog || !active || dialog.open) return
+    setExiting(false)
     dialog.showModal()
   }, [active])
+
+  // Every close path (X, backdrop, Escape) plays the same short exit, and the
+  // dialog STAYS modal until it finishes: closing it first would drop the
+  // backdrop and hand focus back mid-animation. Reduced motion closes at once.
+  const requestClose = () => {
+    const dialog = dialogRef.current
+    if (!dialog?.open) return
+    if (prefersReducedMotion()) {
+      window.clearTimeout(exitTimer.current)
+      setExiting(false)
+      dialog.close()
+      return
+    }
+    if (exiting) return
+    setExiting(true)
+    window.clearTimeout(exitTimer.current)
+    exitTimer.current = window.setTimeout(() => {
+      exitTimer.current = 0
+      setExiting(false)
+      dialog.close()
+    }, 190)
+  }
+
+  // Rapid open/close or unmount must never leave a timer that closes a dialog
+  // that no longer exists.
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => {
+      if (!mq.matches || !exitTimer.current) return
+      window.clearTimeout(exitTimer.current)
+      exitTimer.current = 0
+      setExiting(false)
+      dialogRef.current?.close()
+    }
+    mq.addEventListener('change', onChange)
+    return () => {
+      window.clearTimeout(exitTimer.current)
+      mq.removeEventListener('change', onChange)
+    }
+  }, [])
 
   // Lock page scroll while the modal is up; cleanup runs on close and unmount.
   useEffect(() => {
@@ -72,9 +116,15 @@ export default function TeamProfiles() {
 
       <dialog
         ref={dialogRef}
-        className="team-dialog"
+        className={`team-dialog ${exiting ? 'is-closing' : ''}`}
         aria-labelledby="team-profile-name"
         aria-describedby="team-profile-bio"
+        onCancel={(event) => {
+          // Escape: native close would skip the exit. Keep the dialog modal and
+          // let requestClose own the timing.
+          event.preventDefault()
+          requestClose()
+        }}
         onClose={() => {
           setActive(null)
           triggerRef.current?.focus({ preventScroll: true })
@@ -105,7 +155,7 @@ export default function TeamProfiles() {
           const outside =
             event.clientX < rect.left || event.clientX > rect.right ||
             event.clientY < rect.top || event.clientY > rect.bottom
-          if (outside) dialog.close()
+          if (outside) requestClose()
         }}
       >
         {active ? (
@@ -114,7 +164,7 @@ export default function TeamProfiles() {
               type="button"
               className="team-dialog__close"
               aria-label={`Close ${active.name}'s profile`}
-              onClick={() => dialogRef.current?.close()}
+              onClick={requestClose}
             >
               <X className="size-4" strokeWidth={2.2} aria-hidden="true" />
             </button>

@@ -20,13 +20,19 @@ export function pathFor(page: Page): string {
   return PATHS[page]
 }
 
-export function pageFromLocation(): Location_ {
-  const p = window.location.pathname.replace(/\/+$/, '') || '/'
+/** Path -> known route, or null. One lookup, shared by the initial read and by
+ *  the delegated link handler in App, so an unknown path never becomes a route. */
+export function pageFor(pathname: string): Page | null {
+  const p = pathname.replace(/\/+$/, '') || '/'
   const hit = (Object.entries(PATHS) as [Page, string][]).find(([, v]) => v === p)
+  return hit ? hit[0] : null
+}
+
+export function pageFromLocation(): Location_ {
   // 'not-found', NOT 'home': falling back to the home page served every mistyped
   // URL with HTTP 200 and the home content, so a broken link looked fine to both
   // the visitor and to a crawler.
-  return hit ? hit[0] : 'not-found'
+  return pageFor(window.location.pathname) ?? 'not-found'
 }
 
 export function navigate(page: Page) {

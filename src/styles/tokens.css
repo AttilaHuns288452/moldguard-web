@@ -67,10 +67,18 @@
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
+    /* Durations alone are not enough: a transition-delay or animation-delay
+       still holds the start state (opacity 0) after the duration is zeroed, so
+       a staggered block could sit invisible for half a second. Name, delay and
+       iteration count are all switched off, so the base state IS the final
+       state and every block renders visible. */
     *, *::before, *::after {
+      animation-name: none !important;
       animation-duration: 0.001ms !important;
+      animation-delay: 0s !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
+      transition-delay: 0s !important;
     }
   }
 

@@ -64,7 +64,7 @@ export default function Faq() {
                     <div
                       id={`faq-${i}`}
                       hidden={!isOpen}
-                      className="max-w-[62ch] pb-6 pr-10 text-[14.5px] leading-relaxed text-ink-2 border-b border-line"
+                      className="faq-answer max-w-[62ch] pb-6 pr-10 text-[14.5px] leading-relaxed text-ink-2 border-b border-line"
                     >
                       {item.a}
                     </div>

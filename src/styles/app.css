@@ -13,7 +13,9 @@
 .reveal {
   opacity: 0;
   pointer-events: none;
-  transform: translateY(14px);
+  /* 24px of travel is the threshold where a reveal reads as motion on a phone
+     as well as a desktop; 14px was at the edge of perceptible. */
+  transform: translateY(24px);
   /* Was a hard-coded 0.72s while .seq used var(--dur-reveal) = 0.42s, so two
      entrance animations ran at different speeds on the same page. Entrance is
      one role, so it gets one duration. */
@@ -27,7 +29,7 @@
    revealed yet (e.g. a <details> the user tabs to early) */
 .reveal .reveal { visibility: visible; }
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; visibility: visible; transform: none; transition: none; }
+  .reveal { opacity: 1; visibility: visible; transform: none; transition: none; pointer-events: auto; }
 }
 /* Print / Ctrl+P must render the WHOLE page. Entrance blocks are opacity:0 until
    scrolled into view, and a printed sheet never scrolls — without this the PDF
@@ -98,10 +100,11 @@
 /* ============================================================================
    MOTION SYSTEM — one language, documented once.
    Durations: 180ms micro  (EVERY state change: hover, press, tabs, accordion)
-              420ms reveal (staggered rows / flow stages)
-              700ms media  (section + line entrances)
+              460ms reveal (blocks; 24px travel — perceptible, not a slide)
+              220ms route  (main-content fade on navigation)
+              190ms panel  (menu + dialog enter/exit, loop panel, FAQ answer)
              1100ms instrument (arc gauges filling)
-   Stagger:   80ms between siblings in one sequence.
+   Stagger:   56ms between siblings in one sequence (bounded, 8 max).
    Easing: cubic-bezier(.22,1,.36,1) for entrances (decelerating, no bounce),
            cubic-bezier(.4,0,.2,1) for state changes.
    Only transform/opacity/stroke-dasharray/colour animate. Nothing animates layout.
@@ -110,10 +113,12 @@
   --ease-out: cubic-bezier(.22,1,.36,1);
   --ease-state: cubic-bezier(.4,0,.2,1);
   --dur-micro: 180ms;
-  --dur-reveal: 420ms;
+  --dur-reveal: 460ms;
   --dur-media: 700ms;
+  --dur-panel: 190ms;
+  --dur-route: 220ms;
   --dur-instrument: 1100ms;
-  --stagger: 80ms;
+  --stagger: 56ms;
 }
 
 /* ── the one state-change transition for every control ────────────────────── */
@@ -217,6 +222,32 @@ button, summary, a[href] {
 }
 .nav-grow:hover::after, .nav-grow[aria-current="page"]::after { transform: scaleX(1); }
 
+/* ── panels that appear on a state change, not on viewport entry ──────────── */
+/* Animation rather than transition: the node goes from display:none to laid
+   out, and an animation starts itself on that swap. One 190ms enter, 8px of
+   lift, opacity only after that — a menu or accordion answer should arrive
+   without moving anything around it. */
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes panel-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes lift-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.menu-panel { animation: panel-in var(--dur-panel) var(--ease-out) both; }
+.menu-panel.is-closing { animation: panel-out var(--dur-panel) var(--ease-state) both; }
+/* An exiting menu is inert, so it also must not swallow a click meant for the
+   page: pointer-events off for the 190ms it is fading. */
+.menu-panel.is-closing { pointer-events: none; }
+.faq-answer:not([hidden]) { animation: lift-in var(--dur-panel) var(--ease-out) both; }
+/* the loop rail already has one active panel; it enters the same way */
+.loop-panel:not([hidden]) { animation: lift-in var(--dur-panel) var(--ease-out) both; }
+
 /* ── scroll progress hairline: the one scroll-linked indicator ───────────── */
 .scroll-progress {
   position: fixed; left: 0; top: 0; height: 2px; z-index: 60;
@@ -246,7 +277,7 @@ button, summary, a[href] {
    contract .reveal documents, so a screen shot or Ctrl+F never sees a hole. */
 .seq > * {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(24px);   /* same travel as .reveal: one entrance language */
   transition: opacity var(--dur-reveal) var(--ease-out),
               transform var(--dur-reveal) var(--ease-out);
   transition-delay: calc(var(--n, 0) * var(--stagger) + var(--d, 0ms));
@@ -262,15 +293,35 @@ button, summary, a[href] {
 /* table rows are not reliably transformable; they fade in place instead */
 .seq > tr { transform: none; }
 .seq.is-in > * { opacity: 1; transform: none; }
+/* Keyboard focus must expose its control immediately, not after a reveal delay. */
+.reveal:focus-within, .seq:focus-within > * {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .gauge-arc { transition: none; stroke-dasharray: var(--to, 0) 100; }
   .seq > * { opacity: 1; transform: none; transition: none; }
 }
 
+/* Reduced motion. The global kill switch (animation-name/duration/delay,
+   transition-duration/delay) lives in tokens.css; this block is the
+   per-component fallback state, so a panel or revealed block renders final and
+   stays clickable whatever the cascade says. */
 @media (prefers-reduced-motion: reduce) {
   .lines > .line > span { transform: none; opacity: 1; visibility: visible; transition: none; }
   .btn-mag, .btn-mag .ico, .card-lift, .ph-zoom img, .nav-grow::after,
   .scroll-progress, .dial-fill, .state { transition: none !important; }
   .btn-mag:hover, .card-lift:hover, .ph-zoom:hover img { transform: none; }
+  .menu-panel, .menu-panel.is-closing, .faq-answer, .loop-panel,
+  .team-dialog, .team-dialog::backdrop {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  /* a panel that is fading OUT under reduced motion is not on screen */
+  .menu-panel.is-closing, .team-dialog.is-closing { opacity: 1; }
 }
