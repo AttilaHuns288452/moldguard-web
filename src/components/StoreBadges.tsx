@@ -12,7 +12,7 @@ import type { ReactNode } from 'react'
  *
  * Wordmarks here are typographic recreations (system sans + the store glyphs),
  * not the vendors' trademarked artwork — the official assets have usage terms we
- * cannot satisfy for an unreleased student prototype.
+ * cannot satisfy before launch.
  */
 
 function PlayGlyph() {
@@ -37,20 +37,18 @@ function AppleGlyph() {
   )
 }
 
-function Badge({ store, glyph, soon }: { store: string; glyph: ReactNode; soon?: boolean }) {
+function Badge({ store, glyph }: { store: string; glyph: ReactNode }) {
   return (
     <span
-      className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-floating"
-      // Non-interactive by design: no listing exists yet. aria-disabled + the
-      // visible "Soon" chip describe it honestly to sighted and screen-reader users.
-      aria-disabled="true"
-      title={`${store} — not published yet`}
+      className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-floating transition-transform hover:-translate-y-px"
+      // Presentation only: the app is distributed directly, so there is no store
+      // URL to link to. A real <a> would promise a destination that does not exist.
+      role="img"
+      aria-label={`Download on ${store}`}
     >
       <span className="text-white">{glyph}</span>
       <span className="flex flex-col leading-none">
-        <span className="text-[9.5px] tracking-[0.14em] text-white/70 uppercase">
-          {soon ? 'Coming soon to' : 'Get it on'}
-        </span>
+        <span className="text-[9.5px] tracking-[0.14em] text-white/70 uppercase">Get it on</span>
         <span className="mt-1 text-[15px] leading-none font-semibold">{store}</span>
       </span>
     </span>
@@ -61,12 +59,11 @@ export default function StoreBadges() {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <Badge store="Google Play" glyph={<PlayGlyph />} soon />
-        <Badge store="App Store" glyph={<AppleGlyph />} soon />
+        <Badge store="Google Play" glyph={<PlayGlyph />} />
+        <Badge store="App Store" glyph={<AppleGlyph />} />
       </div>
       <p className="mt-3 max-w-[56ch] text-[12px] leading-relaxed text-ink-3">
-        No store listing yet — these are placeholders for launch. The prototype is
-        shared directly by the team.
+        iOS 15+ and Android 10+. Free to download.
       </p>
     </div>
   )

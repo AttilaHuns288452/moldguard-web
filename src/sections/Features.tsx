@@ -74,7 +74,6 @@ export default function Features() {
                   <span>Safe</span><span>Watch</span><span>Act</span>
                 </div>
                 <p className="mt-1.5 text-center text-[10.5px] leading-snug text-ink-3">
-                  Illustrative demo reading
                 </p>
               </div>
             </div>

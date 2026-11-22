@@ -49,11 +49,6 @@ export default function Header({ page }: { page: Location_ }) {
             <Logo className="size-[34px] text-accent" />
             <span className="font-display text-[1.22rem] font-bold tracking-[-0.02em] text-ink">MoldGuard</span>
           </a>
-          {/* Status badge sits outside the home link: inside it, the extra visible
-              text is not part of the link's accessible name (axe: label-content-name-mismatch). */}
-          <span className="hidden rounded-full border border-line-hi bg-paper-deep px-2 py-1 text-[10px] font-[650] tracking-[0.08em] text-ink-3 uppercase sm:inline-flex">
-            Prototype
-          </span>
 
           {/* desktop links */}
           <div className="order-3 hidden w-full basis-full gap-2 text-[13.5px] font-medium lg:order-none lg:ml-auto lg:flex lg:w-auto lg:basis-auto lg:gap-7 lg:text-[14px]">

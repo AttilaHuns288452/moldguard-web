@@ -9,7 +9,7 @@ import { ArrowRight, Check } from 'lucide-react'
  *   "Start the conversation."                the form (Name / Email / Phone / I am a… / Message)
  *   "Prefer direct?"                         EMAIL / PHONE / QUOTE / APP
  *   "From message to quote in three steps."  01 / 02 / 03
- *   "Eight students. One loop."              the team
+ *   "One team. One loop."                    the team
  *   "Ready when you are."                    closing CTA
  *
  * The previous version rendered only the hero, a 3-field form and the roster under
@@ -107,7 +107,6 @@ export default function Contact() {
           <Reveal>
             <div className="mb-4 rounded-soft border border-line-hi bg-paper-deep px-4 py-3">
               <p className="max-w-[68ch] text-[12.5px] leading-relaxed text-ink-2">
-                <span className="font-[650] text-deep">Prototype, not a store product.</span>{' '}
                 Tell us about your space, ask about the hardware, or request app access. We usually reply within one to two business days.
               </p>
             </div>
@@ -258,7 +257,7 @@ export default function Contact() {
           </ol>
         </div>
 
-        {/* ── Eight students. One loop. ── */}
+        {/* ── One team. One loop. ── */}
         <div className="mt-14 border-t border-line pt-10">
           <Reveal>
             <h2 className="max-w-[24ch] text-[clamp(1.5rem,2.8vw,2.1rem)] font-[650] text-deep">

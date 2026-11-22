@@ -18,7 +18,7 @@ const ROUTES = {
   '': {
     title: 'MoldGuard - know when conditions become mold-friendly',
     description:
-      'MoldGuard watches humidity, temperature and sustained exposure, scores a room-level environmental risk index, and dehumidifies automatically. Student prototype, not a mold diagnostic.',
+      'MoldGuard watches humidity, temperature and sustained exposure, scores a room-level environmental risk index, and dehumidifies automatically.',
   },
   features: {
     title: 'Features - MoldGuard',

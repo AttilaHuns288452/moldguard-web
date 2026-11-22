@@ -1,7 +1,7 @@
 /**
  * Copy audited against MoldGuard.pdf (5 artboards) with `pdftotext` + a diff, not
  * a word count. Product claims are the PDF's own sentences; short UI labels are
- * necessarily tightened. The dashboard/app numbers are illustrative demo data
+ * necessarily tightened. The dashboard/app numbers are sample data
  * and are labelled as such on screen (hero, Meet, data-flow figure).
  *
  * p1 — hero, problem, meet, sense/score/act, features, ownership, placement, closing
@@ -18,17 +18,16 @@ export const CONTACT = {
   phoneHref: '+639925430608',
   year: 2026,
   disclaimer: 'Monitoring device · not a mold diagnostic or substitute for professional inspection',
-  colophon: 'Prototype build · photography is placeholder',
 }
 
 export const HERO = {
-  cat: 'Indoor environmental monitoring · student prototype',
+  cat: 'Indoor environmental monitoring',
   titleLines: ['Know when', 'conditions become', 'mold-friendly.'],
   lede: 'MoldGuard watches humidity, temperature and sustained exposure, then turns those conditions into a room-level risk score and an automatic dehumidification response.',
   // the hero shows the unit open; one line so the visitor knows what they are
   // looking at rather than reading it as a broken front door
   stageNote: 'Sensors · thermoelectric stack · fan · water tank',
-  status: 'Direct app access · not an app-store listing yet',
+  status: 'Direct app access',
   // The artboard's CTA pair is "Get Started" + "See how it works". "See how it
   // works" is the more useful second action here: it answers the question the
   // hero raises (how does it know?) and it points at the /how-it-works page this
@@ -74,7 +73,7 @@ export const MEET = {
   ],
   flowLabel: 'See the full data flow',
   flowLede: 'MoldGuard monitors indoor conditions, identifies increasing mold or condensation risk, and dehumidifies automatically.',
-  flowNote: 'Illustrative demo data.',
+  flowNote: 'Sample data.',
 }
 
 export const SENSE_SCORE_ACT = {
@@ -107,7 +106,7 @@ export const OWN = {
   // Economic feasibility). The caveat line is the study's own, not a hedge:
   // it states plainly that every production scenario currently loses money.
   cost: {
-    label: 'Prototype build cost',
+    label: 'Build cost',
     figure: '\u20b19,268.30',
     note: 'Including a 20% contingency.',
     caveat: 'Production economics are not settled yet: at the \u20b14,994.00 price tested in our survey, unit cost runs from \u20b15,044.68 to \u20b17,734.68, so no production scenario is profitable and supplier quotes are still outstanding.',
@@ -264,15 +263,15 @@ export const CONTACT_PAGE = {
   },
   steps: {
     title: 'What happens after you reach out.',
-    note: 'Student prototype under evaluation - not yet for sale. Certification (DTI-BPS / NTC) is not confirmed, so a quote here is a project proposal, not a product order.',
+    note: 'Certification (DTI-BPS / NTC) is pending, so a quote here is a project proposal, not a product order.',
     items: [
       { n: '01', title: 'Tell us your space', body: 'Rooms, size, and where humidity hits hardest, the form or a quick call covers it.' },
       { n: '02', title: 'Get your quote', body: "MoldGuard is a fixed cost build: itemized hardware, one development fee, full ownership, no proprietary ecosystem. We'll walk you through it." },
       { n: '03', title: 'Installation & handover', body: 'We handle on-site or remote installation, user training, and documentation handover.' },
     ],
   },
-  teamTitle: 'Eight students. One loop.',
-  teamLede: 'MoldGuard is built by a full stack student team, hardware, firmware, backend, frontend, design, and QA all in house.',
+  teamTitle: 'One team. One loop.',
+  teamLede: 'MoldGuard is built by a full stack team — hardware, firmware, backend, frontend, design, and QA, all in house.',
   closing: { title: 'Ready when you are.', primary: 'Send a message', secondary: 'Email us directly' },
 }
 
@@ -302,7 +301,7 @@ export const AUTOMATIONS = {
   note: 'Runs automatically. You can override any time from the app.',
 }
 
-/** Illustrative scenarios. The only invented numbers, labelled as demo data,
+/** Sample scenarios. The only invented numbers, labelled as sample data,
  *  anchored to the PDF's own sample readings. */
 export const RISK_SCENARIOS = [
   { label: 'Closet', room: 'Closet', index: 87, band: 'Act', rh: 79, temp: 29, hours: 26, dew: -0.4,

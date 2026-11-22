@@ -10,7 +10,7 @@ import { splitTitle } from '../lib/motion'
  */
 export default function ClosingCta({ onDownloadPage = false }: { onDownloadPage?: boolean }) {
   // The download page already contains the QR and direct URL above. Its closing
-  // action therefore offers the honest next step available to this prototype:
+  // action therefore offers the honest next step available here:
   // request the link from the team instead of scrolling the user back upward.
   const primary = onDownloadPage
     ? { label: 'Request the app link', href: `mailto:${CONTACT.email}?subject=MoldGuard%20app%20link` }

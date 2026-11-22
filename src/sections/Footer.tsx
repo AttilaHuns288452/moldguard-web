@@ -40,7 +40,6 @@ export default function Footer() {
 
       <div className="shell flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-t border-[#eaf2fc1f] py-5 text-[11.5px] leading-relaxed text-on-dark-2">
         <span>&copy; {CONTACT.year} MoldGuard Team</span>
-        <span>Prototype build &middot; photography is placeholder</span>
         <span>Monitoring device &middot; not a mold diagnostic or substitute for professional inspection</span>
       </div>
     </footer>

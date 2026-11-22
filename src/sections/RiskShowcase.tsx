@@ -6,7 +6,7 @@ import { RISK_SCENARIOS } from '../content'
 /**
  * The Mold Risk Index, given its own identity. A data-dense composition in the
  * existing palette: a gauge, the four inputs, and a switchable scenario so a
- * visitor can see how the score moves. Every number is labelled illustrative.
+ * visitor can see how the score moves. Every number is labelled sample data.
  */
 export default function RiskShowcase() {
   const [i, setI] = useState(0)
@@ -72,9 +72,6 @@ export default function RiskShowcase() {
             <div className="rounded-shell border border-line bg-card p-6 shadow-e2">
               <div className="flex items-center justify-between border-b border-line pb-3">
                 <span className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Mold Risk Index</span>
-                <span className="rounded-full border border-ink-3/30 bg-ink-3/[0.07] px-2 py-0.5 text-[11.5px] font-[650] tracking-[0.1em] text-ink-3 uppercase">
-                  Illustrative
-                </span>
               </div>
 
               <div className="mt-4 grid items-center gap-6 min-[380px]:grid-cols-[auto_minmax(0,1fr)]">

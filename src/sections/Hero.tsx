@@ -51,7 +51,7 @@ export default function Hero() {
             </MagButton>
           </div>
           <p className="mt-4 max-w-[42ch] border-l-2 border-accent pl-3 text-[12.5px] leading-relaxed text-ink-2">
-            {HERO.status}. Demo scores show environmental conditions only; MoldGuard is not a mold diagnostic.
+            {HERO.status}. Risk scores reflect environmental conditions only; MoldGuard is not a mold diagnostic.
           </p>
 
           {/* the hero is tall enough that the fold can read as the end of the page;
@@ -118,7 +118,6 @@ export default function Hero() {
             </p>
             <p className="mt-1 flex items-center justify-between gap-2 whitespace-nowrap text-[11px] text-on-dark-2">
               <span>Conditions steady</span>
-              <span className="shrink-0 rounded-full border border-[#eaf2fc33] px-1.5 py-0.5 text-[9px] tracking-[0.04em] uppercase">Demo</span>
             </p>
             {/* ONE room, not three. content.ts is explicit that multi-room is a
                 planned premium tier and not in the base product, so a hero card

@@ -50,10 +50,9 @@ export default function Comparison() {
                       {r.option}
                       {r.ours && (
                         // whitespace-nowrap: at the table's 1st-column width this
-                        // pill used to break "MOLDGUARD PROTOTYPE" across two lines
+                        // pill used to break across two lines
                         // inside a tight rounded blob. One short word instead.
                         <span className="mt-1.5 inline-flex items-center rounded-full bg-accent-ink px-2 py-0.5 text-[11px] font-[650] tracking-[0.06em] whitespace-nowrap text-white uppercase">
-                          Prototype
                         </span>
                       )}
                     </th>

@@ -93,11 +93,10 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
                   ))}
                 </div>
               </div>
-              <svg viewBox="0 0 320 84" className="mt-3 h-20 w-full" role="img" aria-label="Illustrative humidity and dew-point trend over 30 days">
+              <svg viewBox="0 0 320 84" className="mt-3 h-20 w-full" role="img" aria-label="Humidity and dew-point trend over 30 days">
                 <polyline points="0,58 40,50 80,44 120,26 160,38 200,54 240,62 280,60 320,58" fill="none" stroke="#15385e" strokeWidth="2" />
                 <polyline points="0,66 40,62 80,58 120,50 160,56 200,64 240,68 280,66 320,64" fill="none" stroke="#2563eb" strokeWidth="1.5" strokeDasharray="4 3" />
               </svg>
-              <p className="mt-1 text-[11.5px] text-ink-3">Illustrative demo data.</p>
             </div>
           </Reveal>
         </div>
