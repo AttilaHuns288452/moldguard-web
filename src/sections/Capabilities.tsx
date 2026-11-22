@@ -1,108 +1,144 @@
+import { ArrowRight, CloudSun, House, SlidersHorizontal } from 'lucide-react'
 import { Reveal, LineReveal, Gauge } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 import { CAPABILITIES } from '../content'
+import '../styles/features-page.css'
 
 /**
- * PDF page 2 opening: "Mold-specific intelligence, end to end." The two long
- * capability blocks with their real readings — the risk engine at 38 Low, and
- * the predictive-weather block.
+ * /features opening: fact-led capability pair. The condensation photo stays as
+ * the editorial anchor, but the two cards below now balance: one compact
+ * instrument (score + band scale) against one process diagram (forecast → room
+ * → decision) at the same optical weight. Both carry sample registers.
  */
+const FLOW = [
+  { icon: CloudSun, label: 'Forecast', note: 'Humidity trend for the next hours' },
+  { icon: House, label: 'Room', note: 'Current + historical readings' },
+  { icon: SlidersHorizontal, label: 'Decision', note: 'Pre-empt the rise, not react to it' },
+]
+
+const BANDS = [
+  { label: 'Safe', range: '0–39' },
+  { label: 'Watch', range: '40–69' },
+  { label: 'Act', range: '70–100' },
+]
+
 export default function Capabilities() {
   const [engine, second] = CAPABILITIES.blocks
+  // Same 40/70 thresholds RiskShowcase draws on its scale.
+  const index = engine.index ?? 0
+  const band = index >= 70 ? 'Act' : index >= 40 ? 'Watch' : 'Safe'
 
   return (
     <section id="capabilities" className="section band-white">
       <div className="shell">
-        {/* PDF page 2 opens with a two-column hero: the copy on the left and a
-            photo on the right carrying the caption banner
-            "WARM AIR MEETS COLD STONE - AND CONDENSATION WANTS TO FORM."
-            The site had the copy alone, which is why the page felt like text. */}
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
+        <div className="fx-hero">
           <div className="max-w-[780px]">
             <LineReveal
               as="h1"
               lines={splitTitle(CAPABILITIES.title)}
-              className="max-w-[24ch] text-[clamp(2.2rem,4.1vw,3.9rem)] leading-[1.08] font-[650] text-deep"
+              className="max-w-[24ch] text-[clamp(2.2rem,4.1vw,3.9rem)] leading-[1.06] font-[650] text-deep"
             />
             <Reveal delay={70}>
-              <p className="lede mt-3 max-w-[66ch]">{CAPABILITIES.lede}</p>
+              <p className="lede mt-4 max-w-[62ch]">{CAPABILITIES.lede}</p>
+            </Reveal>
+            <Reveal delay={120}>
+              <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
+                <a className="fx-link" href="/how-it-works">
+                  See the full sense → respond loop
+                  <ArrowRight className="size-4" strokeWidth={2} aria-hidden="true" />
+                </a>
+                <span className="fx-tag">Illustrative readings below</span>
+              </div>
             </Reveal>
           </div>
 
           <Reveal delay={110}>
-            <figure className="overflow-hidden rounded-shell border border-line bg-card shadow-e2">
+            <figure className="fx-photo overflow-hidden rounded-shell border border-line bg-card shadow-e2">
               <img
                 src="/condensation.webp"
                 alt="Warm air meeting a cold stone bath, where condensation forms"
                 width={1100}
                 height={733}
-                className="aspect-[3/2] w-full object-cover"
-                style={{ height: 'auto' }}
               />
               <figcaption className="bg-deep px-5 py-3.5 text-[11px] font-[650] tracking-[0.1em] text-on-dark uppercase">
-                Warm air meets cold stone &mdash; and condensation wants to form.
+                <span>Warm air meets cold stone &mdash; and condensation wants to form.</span>
+                <span className="measure text-[10px] font-normal tracking-[0.08em] text-on-dark-2">Fig. 01</span>
               </figcaption>
             </figure>
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          {/* 01 — the risk engine, with its real reading */}
-          <Reveal >
-            <article className="card-lift flex h-full flex-col rounded-soft border border-line bg-card p-6 md:p-7">
-              <div>
+        <div className="fx-cap-grid">
+          {/* 01 — risk engine: instrument + its own scale, no full-width gauge */}
+          <Reveal>
+            <article className="fx-cap-card card-lift">
+              <div className="flex items-baseline justify-between gap-4">
                 <span className="measure text-[11px] tracking-[0.14em] text-accent">{engine.n}</span>
-                <h2 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{engine.eyebrow}</h2>
+                <span className="fx-tag">Sample reading</span>
               </div>
+              <h2 className="mt-2">{engine.eyebrow}</h2>
+              <p className="fx-cap-body">{engine.body}</p>
 
-              {/* The PDF draws this reading as an arc gauge with 38 centred and
-                  Low / Elevated / High on the arc. A bare "38" with "LOW" under
-                  it was a flattened copy of a real instrument and read as a
-                  decorative KPI.
-
-                  Fill = stroke-dasharray on the same path as the track, so it is
-                  exactly value% of the arc by construction (no sweep flags or
-                  hand-computed endpoints to get backwards).
-                  Semicircle arc length = pi * r = pi * 40 = 125.66. */}
-              <div className="mt-5">
-                <Gauge value={engine.index ?? 0} className="block w-full" />
-                <div className="-mt-[2.6rem] text-center">
-                  <p className="measure text-[1.85rem] leading-none font-semibold text-deep">{engine.index}</p>
-                  <p className="mt-0.5 text-[11.5px] tracking-[0.12em] text-ink-3 uppercase">/ 100</p>
+              <div className="fx-cap-visual">
+                <div className="fx-gauge" role="img" aria-label={`Illustrative Mold Risk Index reading: ${index} of 100, ${band} band`}>
+                  <Gauge value={index} className="block w-full" />
+                  <div className="fx-gauge-value">
+                    <p className="measure text-[2.1rem] leading-none font-semibold text-deep">{index}</p>
+                    <p className="measure mt-1 text-[10.5px] tracking-[0.1em] text-ink-3 uppercase">of 100</p>
+                  </div>
                 </div>
-                <div className="mt-2 flex justify-between text-[11.5px] tracking-[0.1em] text-ink-3 uppercase">
-                  <span>Safe</span><span>Watch</span><span>Act</span>
+
+                <div>
+                  <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Current band</p>
+                  <p className="mt-1 text-[1.05rem] font-[650] text-deep">
+                    {band} <span className="text-[12px] font-normal text-ink-2">— illustrated room</span>
+                  </p>
+                  <ul className="fx-bands mt-2">
+                    {BANDS.map((b) => (
+                      <li key={b.label} className="fx-band" data-active={b.label === band}>
+                        <span className="fx-band-dot" aria-hidden="true" />
+                        <span>{b.label}</span>
+                        <span className="measure">{b.range}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a className="fx-link mt-1 text-[12.5px]" href="#risk">
+                    See the four inputs
+                    <ArrowRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
+                  </a>
                 </div>
               </div>
-
-              <p className="mt-3 text-[14.5px] leading-relaxed text-ink-2">{engine.body}</p>
             </article>
           </Reveal>
 
-          {/* 02 — predictive weather, per the proposal's objective */}
-          <Reveal delay={80} >
-            <article className="card-lift flex h-full flex-col rounded-soft border border-line bg-card p-6 md:p-7">
-              <span className="measure text-[11px] tracking-[0.14em] text-accent">{second.n}</span>
-              <h2 className="mt-1.5 text-[1.25rem] font-[650] text-deep">{second.eyebrow}</h2>
-              <p className="mt-4 text-[14.5px] leading-relaxed text-ink-2">{second.body}</p>
-              {/* Visual parity with card 01's gauge. This is the proposal's own
-                  anticipation chain (Section: Objectives), drawn as three steps
-                  rather than invented artwork. */}
-              <ol className="mt-6 space-y-0 border-t border-line">
-                {[
-                  ['Forecast', 'Humidity trend for the next hours'],
-                  ['Room', 'Current + historical readings'],
-                  ['Decision', 'Pre-empt the rise, not react to it'],
-                ].map(([k, v], i) => (
-                  <li key={k} className="flex items-baseline gap-3 border-b border-line py-2.5 last:border-b-0">
-                    <span className="measure w-4 shrink-0 text-[10.5px] tracking-[0.14em] text-accent-ink">0{i + 1}</span>
-                    <div>
-                      <p className="text-[13px] font-[650] text-deep">{k}</p>
-                      <p className="mt-0.5 text-[12.5px] leading-snug text-ink-2">{v}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
+          {/* 02 — predictive weather: the same visual weight, as a chain not prose */}
+          <Reveal delay={80}>
+            <article className="fx-cap-card card-lift">
+              <div className="flex items-baseline justify-between gap-4">
+                <span className="measure text-[11px] tracking-[0.14em] text-accent">{second.n}</span>
+                <span className="fx-tag">Forecast pipeline</span>
+              </div>
+              <h2 className="mt-2">{second.eyebrow}</h2>
+              <p className="fx-cap-body">{second.body}</p>
+
+              <div className="fx-cap-visual fx-cap-visual--stack">
+                <ol className="fx-flow">
+                  {FLOW.map(({ icon: Icon, label, note }) => (
+                    <li key={label} className="fx-flow-node">
+                      <Icon className="size-4" strokeWidth={1.75} aria-hidden="true" />
+                      <p>{label}</p>
+                      <span>{note}</span>
+                    </li>
+                  ))}
+                </ol>
+                <div>
+                  <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Why it matters</p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink-2">
+                    Outdoor trend plus indoor history lets the loop act on the rise <em>before</em> the room
+                    crosses its threshold, instead of chasing a spike that already happened.
+                  </p>
+                </div>
+              </div>
             </article>
           </Reveal>
         </div>

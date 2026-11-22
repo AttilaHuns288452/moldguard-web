@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Reveal, LineReveal } from '../components/ui'
-import { splitTitle } from '../lib/motion'
+import { splitTitle, prefersReducedMotion } from '../lib/motion'
 import { RISK_SCENARIOS } from '../content'
+import '../styles/features-page.css'
 
 /**
  * The Mold Risk Index, given its own identity. A data-dense composition in the
@@ -16,6 +17,8 @@ export default function RiskShowcase() {
 
   useEffect(() => {
     cancelAnimationFrame(raf.current)
+    // Reduced motion: land on the final score instead of animating the dial.
+    if (prefersReducedMotion()) { setShown(sc.index); return }
     const from = shown
     const start = performance.now()
     const tick = (t: number) => {
@@ -31,7 +34,7 @@ export default function RiskShowcase() {
   const R = 78, SWEEP = 250, C = 2 * Math.PI * R
 
   return (
-    <section id="risk" className="section band-white">
+    <section id="risk" className="section band-pale">
       <div className="shell">
         <div className="grid gap-9 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
           <div>

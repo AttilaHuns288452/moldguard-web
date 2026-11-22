@@ -1,0 +1,33 @@
+/* Scoped to the /how-it-works loop walkthrough. The approved Figma frames are
+   authored at 390x844 and scaled as a whole, so the wrapper carries the SCALED
+   footprint: 390 * 0.55 = 214.5 and 844 * 0.55 = 464.2. Larger than the old
+   140px thumbnails, so the control and analytics rows are legible. */
+.loop-phone {
+  width: 215px;
+  height: 465px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--color-line);
+  background: #fff;
+}
+.loop-phone-inner {
+  width: 390px;
+  height: 844px;
+  transform: scale(0.55);
+  transform-origin: top left;
+}
+@media (max-width: 767px) {
+  .loop-phone { width: 176px; height: 381px; }
+  .loop-phone-inner { transform: scale(0.4513); }
+}
+
+/* The inactive panels carry the `hidden` attribute but also Tailwind's `grid`
+   utility, and an author `display` beats the UA sheet's [hidden] rule. Say it
+   here so only the selected stage panel is shown. */
+.loop-panel[hidden] { display: none; }
+
+/* Print has no tabs, so a paper copy must carry all four stages: un-hide every
+   panel, the same contract app.css documents for .reveal. */
+@media print {
+  .loop-panel[hidden] { display: grid !important; }
+}
