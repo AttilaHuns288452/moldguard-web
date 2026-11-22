@@ -52,7 +52,7 @@ const HEAD: Record<Location_, { title: string; description: string }> = {
   features: {
     title: 'Features - MoldGuard',
     description:
-      'Mold Risk Index engine, environmental and VOC monitoring, automatic dehumidification, analytics, alerts and automations. How MoldGuard compares with passive absorbers and commercial dehumidifiers.',
+      'Mold Risk Index engine, predictive weather integration, automatic dehumidification, analytics, alerts and automations. How MoldGuard compares with passive absorbers and commercial dehumidifiers.',
   },
   'how-it-works': {
     title: 'How it works - MoldGuard',

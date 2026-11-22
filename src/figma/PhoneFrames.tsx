@@ -183,9 +183,9 @@ export function FrameDetail() {
             </div>
           ))}
           <div className="kpi">
-            <div className="hstack between"><span className="kl">Air Quality VOC</span><I d={P.wind} s={15} /></div>
+            <div className="hstack between"><span className="kl">Dew point</span><I d={P.drop} s={15} /></div>
             <div className="kv">105 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--safe)' }}>Normal</span></div>
-            <div className="ku">SGP40 VOC index</div>
+            <div className="ku">Surface condensation margin</div>
           </div>
         </div>
 
@@ -319,7 +319,7 @@ export function FrameAnalytics() {
         </div>
 
         <div className="mt-auto" style={{ textAlign: 'center', fontSize: 11, color: '#8a8f98' }}>
-          Runtime &amp; VOC charts on next frame
+          Humidity &amp; dew point on next frame
         </div>
       </div>
       <Nav active="Analytics" />

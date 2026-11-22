@@ -5,7 +5,7 @@
  * and are labelled as such on screen (hero, Meet, data-flow figure).
  *
  * p1 — hero, problem, meet, sense/score/act, features, ownership, placement, closing
- * p2 — capabilities: risk engine, VOC monitoring, dehumidification, sensors, analytics
+ * p2 — capabilities: risk engine, predictive weather, dehumidification, sensors, analytics
  * p3 — closed loop, four stages, setup, FAQ, closing
  * p4 — contact, quote steps, team
  * p5 — app download
@@ -90,8 +90,8 @@ export const FEATURES = {
   title: 'Built for mold, not just moisture.',
   cta: { label: 'Explore the features', href: '/features' },
   items: [
-    { n: '1', title: 'Mold Risk Index Engine', body: 'Risk scoring based on humidity, temperature and exposure duration.' },
-    { n: '2', title: 'Early detection', body: 'Humidity, temperature and sustained exposure catch the risky window before mold becomes visible. VOC sensing adds context alongside them, never a verdict on its own.' },
+    { n: '1', title: 'Mold Risk Index Engine', body: 'A VTT-based model scores risk from relative humidity, temperature and sustained exposure duration, not a fixed humidity threshold.' },
+    { n: '2', title: 'Early detection', body: 'Humidity, temperature and sustained exposure catch the risky window before mold becomes visible.' },
     { n: '3', title: 'Auto-Dehumidification', body: 'Responds automatically when risk rises.' },
     { n: '4', title: 'Dashboard & Analytics', body: 'Historical trends for the room; multi-room visibility is planned as an optional premium tier.' },
     { n: '5', title: 'Mobile Alerts & Control', body: 'Know when something changes and act remotely.' },
@@ -102,20 +102,22 @@ export const FEATURES = {
 export const OWN = {
   title: "Own it, don't rent it.",
   lede: 'Standard, individually sourced parts inside one unit: sensors, a thermoelectric stack and a water tank. The hardware is yours, with no proprietary ecosystem.',
-  // Every figure below is from the MTELOS Feasibility Study (Section V,
-  // Economic feasibility). The caveat line is the study's own, not a hedge:
-  // it states plainly that every production scenario currently loses money.
+  // The proposal (Section 5, Budgetary Risks) states the hardware cost as "a
+  // fixed, itemized total of ₱4,363" from its own component table. The site had
+  // been quoting ₱9,268.30 from the feasibility study instead, which contradicts
+  // the document the project is assessed against.
   cost: {
     label: 'Build cost',
-    figure: '\u20b19,268.30',
-    note: 'Including a 20% contingency.',
-    caveat: 'Production economics are not settled yet: at the \u20b14,994.00 price tested in our survey, unit cost runs from \u20b15,044.68 to \u20b17,734.68, so no production scenario is profitable and supplier quotes are still outstanding.',
-    source: 'MTELOS Feasibility Study, Section V',
+    figure: '\u20b14,363',
+    note: 'Itemised hardware total.',
+    caveat: 'Development cost is separate. Supplier quotes and certification (DTI-BPS / NTC) are still pending, so a figure here is a project proposal, not a product order.',
+    source: 'Software Development Proposal, Section 5',
   },
   points: [
     { title: 'Open hardware', body: 'Individually sourced, standard parts.' },
     { title: 'Fixed cost', body: 'One development cost, no monthly fees.' },
     { title: 'Your unit', body: 'Senses, scores and dehumidifies in one device.' },
+    { title: 'Works offline', body: 'Bluetooth LE local control when Wi-Fi or cloud is down; automation keeps running either way.' },
   ],
 }
 
@@ -147,8 +149,8 @@ export const CAPABILITIES = {
     },
     {
       n: '02',
-      eyebrow: 'Environmental & VOC monitoring',
-      body: 'A VOC sensor adds supplementary air-quality context alongside humidity, temperature, and duration. We treat VOC as context, never standalone proof: research shows microbial VOC levels are often too low for reliable detection and easily confounded by household sources.',
+      eyebrow: 'Predictive weather integration',
+      body: 'The backend pulls external forecasts and combines them with current and historical indoor readings, so the system anticipates a humidity surge instead of only reacting to one.',
     },
   ],
 }
@@ -169,12 +171,11 @@ export const WHAT_IT_DOES = {
   sensors: {
     eyebrow: 'Environmental Sensors',
     title: 'Every number the risk engine needs.',
-    body: 'Temperature, humidity, and air quality measured together, continuously, so the risk score is built on the full picture, not one input.',
+    body: 'Temperature and relative humidity measured continuously, alongside a dew-point estimate for cold surfaces, so the risk score is built on the full picture, not one input.',
     pod: 'Living Room Pod',
     readings: [
       { k: 'Temperature', v: '28.0°C' },
       { k: 'Humidity', v: '55% RH' },
-      { k: 'VOC', v: 'Normal' },
     ],
   },
   analytics: {
@@ -191,7 +192,7 @@ export const LOOP = {
   lede: 'MoldGuard runs one continuous loop: monitor the room, analyze the real mold risk, respond on its own, and protect your home around the clock.',
   label: 'The closed loop: sense → analyze → respond → protect',
   rail: [
-    { n: '01', name: 'SENSE', meta: 'Humidity, temperature, VOC' },
+    { n: '01', name: 'SENSE', meta: 'Humidity, temperature, dew point' },
     { n: '02', name: 'ANALYZE', meta: 'The Mold Risk Index engine' },
     { n: '03', name: 'RESPOND', meta: 'Dehumidifier on auto' },
     { n: '04', name: 'PROTECT', meta: 'History, alerts, control' },
@@ -199,7 +200,7 @@ export const LOOP = {
   stages: [
     {
       n: '01', kicker: 'SENSE', head: 'Sense the room, continuously.',
-      body: "A compact sensor pod watches the conditions mold actually cares about: relative humidity, temperature, and volatile organic compounds (VOCs). Humidity and temperature feed the risk engine's core inputs. VOCs add context, read together with everything else rather than as a verdict.",
+      body: "A compact sensor pod watches the conditions mold actually cares about: relative humidity and temperature, read continuously. Those two feed the risk engine's core inputs, and an air dew-point calculation estimates condensation risk at cold surfaces a single ambient sensor cannot see.",
       meta: 'Readings stream in around the clock',
     },
     {
@@ -209,7 +210,7 @@ export const LOOP = {
     },
     {
       n: '03', kicker: 'RESPOND · AUTO', head: 'Act: dehumidify, no hands.',
-      body: "When the index crosses the risk threshold, the thermoelectric stack starts and pulls moisture back down, closing the loop without you touching anything. Extracted water collects in a removable tank, monitored so you're told before it's full.",
+      body: "When the index crosses the risk threshold, the thermoelectric stack starts and pulls moisture back down, closing the loop without you touching anything. Extracted water collects in a removable 1-litre reservoir, monitored so you're told before it's full.",
       meta: 'Dry air out · Dehumidifier running on auto',
     },
     {
@@ -238,10 +239,12 @@ export const FAQ = {
     { q: 'Is it a dehumidifier?', a: 'Yes, it is one. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses the threshold it starts pulling moisture down by itself.' },
     { q: 'What does the app show?', a: 'Live status and history: the room, the readings behind the score, and humidity, temperature and dew-point trends over time (multi-room and multi-unit views are planned as a premium tier). You can step in with manual override from anywhere, any time.' },
     { q: 'Can I monitor more than one room?', a: 'Not in the base product. Multi-room and multi-unit views are planned as an optional premium tier for larger households, dormitories or property managers.' },
-    { q: 'How do I set it up?', a: 'Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to WiFi, and watch the loop run.' },
+    { q: 'How do I set it up?', a: 'Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to Wi-Fi, and watch the loop run.' },
+    { q: 'What happens if the internet goes down?', a: 'Bluetooth Low Energy keeps local monitoring and manual control working, and the dehumidification logic keeps running autonomously either way. One phone at a time over Bluetooth; several devices can connect over Wi-Fi.' },
     { q: 'What maintenance does it need?', a: "Emptying the removable tank. Extracted water collects there, monitored so you're told before it's full." },
     { q: 'Does it work without the internet?', a: 'The loop runs on the device. Live status and history, alerts, and manual override are the parts that travel through the app and web dashboard.' },
     { q: 'How much does it cost?', a: 'One development cost, no monthly fees. Standard, individually sourced parts inside one unit: sensors, a thermoelectric stack and a water tank. The hardware is yours, with no proprietary ecosystem.' },
+    { q: 'What room size does it handle?', a: 'One small enclosed room, about 30 m\u00b3 (roughly 2.9 \u00d7 4.2 \u00d7 2.4 m), which is what the 1-litre reservoir is sized for. Larger or open-plan spaces are outside scope.' },
     { q: 'Who is it for?', a: 'Renters and small property owners, larger households, dormitories, and property managers.' },
   ],
 }
@@ -334,7 +337,7 @@ export const COMPARISON = {
     },
     {
       option: 'MoldGuard (ours)',
-      does: 'Mold Risk Index (humidity + temperature + duration), supplementary VOC context, predictive weather integration, closed-loop auto-dehumidification, water-tank monitoring, web + mobile dashboard.',
+      does: 'Mold Risk Index (humidity + temperature + duration), predictive weather integration, closed-loop auto-dehumidification, water-tank monitoring, web + mobile dashboard.',
       cost: 'Fixed development fee.',
       drawbacks: 'Requires dedicated power source; periodic water-tank emptying.',
       ours: true,
@@ -360,8 +363,8 @@ export const PARTS_TRUST = {
     },
     {
       n: '02',
-      title: 'VOC / air-quality sensing',
-      body: 'SGP40 volatile-organic-compound sensor, plus a VL53L0X time-of-flight sensor beside it. VOC is treated as supplementary context, never as standalone proof of mold.',
+      title: 'Condensate reservoir sensing',
+      body: 'VL53L0X time-of-flight ranging measures the distance to the water surface to estimate fill level, and a normally-closed magnetic reed switch confirms the removable reservoir is properly seated.',
     },
     {
       n: '03',
@@ -371,12 +374,12 @@ export const PARTS_TRUST = {
     {
       n: '04',
       title: 'Brain & connectivity',
-      body: 'ESP32-WROOM microcontroller running the risk engine and the automation rule, publishing over WiFi to the app. Standard MQTT broker and open backend - no vendor-locked ecosystem.',
+      body: 'ESP32-S3 N16R8 running the risk engine and the automation rule, publishing over Wi-Fi to the app. Standard MQTT broker and open backend - no vendor-locked ecosystem.',
     },
     {
       n: '05',
       title: 'Enclosure & placement',
-      body: 'ABS enclosure, 318 × 255 × 159 mm, standing on a tabletop or mounted to a wall. The lower bay holds the removable water tank; the upper bay holds the electronics and the LCD.',
+      body: 'ABS enclosure, approximately 28 × 28 × 40 cm, standing on a tabletop or mounted to a wall. The lower bay holds the removable 1-litre reservoir; the upper bay holds the electronics and the LCD.',
     },
     {
       n: '06',

@@ -15,7 +15,7 @@ import RiskGaugeCard from '../figma/RiskGaugeCard'
 const STAGE_FRAME = [FrameHome, FrameDetail, FrameControl, FrameAnalytics]
 const STAGE_FRAME_LABEL = [
   'Both pods, live status',
-  'Risk reading and VOC detail',
+  'Risk reading and dew point',
   'Auto-pilot and manual override',
   'Humidity and dew-point history',
 ]

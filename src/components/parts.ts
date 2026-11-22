@@ -30,21 +30,21 @@ export type Part = {
 
 export const PARTS: Part[] = [
   {
-    id: 'sensor', name: 'Humidity & temperature sensor',
+    id: 'sensor', name: 'SHT41 sensor',
     what: 'SHT41 relative-humidity and temperature sensor, with the VL53L0X time-of-flight sensor beside it.',
     role: 'Two of the four Mold Risk Index inputs. Humidity and temperature are the core of the score, not a side reading.',
     at: [-0.0752, 0.154, -0.204], size: [0.0315, 0.0477, 0.1151],
     face: 'front',
   },
   {
-    id: 'controller', name: 'ESP32 controller',
-    what: 'The ESP32 board that runs the risk engine and the automation rule.',
+    id: 'controller', name: 'ESP32-S3 N16R8',
+    what: 'The ESP32-S3 N16R8 board that runs the risk engine and the automation rule.',
     role: 'Turns raw readings into a Mold Risk Index and decides when the dehumidifier should run.',
     at: [-0.0498, 0.19, -0.2285], size: [0.0048, 0.0224, 0.011],
     face: 'side',
   },
   {
-    id: 'relay', name: 'Relay module',
+    id: 'relay', name: '4-channel relay module',
     what: 'A single-channel relay board that switches the unit\u2019s own thermoelectric stack.',
     role: 'The part that makes the response physical: it closes the circuit so the stack actually runs.',
     at: [-0.0559, 0.1589, -0.2288], size: [0.0096, 0.0119, 0.0229],
@@ -72,7 +72,7 @@ export const PARTS: Part[] = [
     face: 'side',
   },
   {
-    id: 'display', name: 'Status display',
+    id: 'display', name: '16x2 LCD display',
     what: 'The unit\u2019s own readout on the front face.',
     role: 'Shows the current risk state and the automation rule on the device itself, not only in the app.',
     at: [-0.2178, 0.2172, -0.2307], size: [0.0094, 0.0301, 0.0853],

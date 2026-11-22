@@ -47,7 +47,15 @@
       "name": "How do I set it up?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to WiFi, and watch the loop run."
+        "text": "Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to Wi-Fi, and watch the loop run."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if the internet goes down?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bluetooth Low Energy keeps local monitoring and manual control working, and the dehumidification logic keeps running autonomously either way. One phone at a time over Bluetooth; several devices can connect over Wi-Fi."
       }
     },
     {
@@ -69,6 +77,14 @@
     {
       "@type": "Question",
       "name": "How much does it cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One small enclosed room, about 30 m\\u00b3 (roughly 2.9 \\u00d7 4.2 \\u00d7 2.4 m), which is what the 1-litre reservoir is sized for. Larger or open-plan spaces are outside scope."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What room size does it handle?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Renters and small property owners, larger households, dormitories, and property managers."
