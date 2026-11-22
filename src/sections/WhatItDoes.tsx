@@ -96,12 +96,14 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
                         )}
                         {r.k}
                       </dt>
-                      <dd>{r.v}</dd>
-                      {r.k === 'Humidity' && (
-                        <div className="fx-meter" role="presentation">
-                          <i style={{ width: `${parseFloat(r.v)}%` }} />
-                        </div>
-                      )}
+                      <dd>
+                        {r.v}
+                        {r.k === 'Humidity' && (
+                          <div className="fx-meter" aria-hidden="true">
+                            <i style={{ width: `${parseFloat(r.v)}%` }} />
+                          </div>
+                        )}
+                      </dd>
                     </div>
                   ))}
                 </dl>

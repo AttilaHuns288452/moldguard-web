@@ -310,11 +310,30 @@ for (const vp of VIEWPORTS) {
   record('features: parts accordion has six rows', (await page.locator('#parts details').count()) === 6)
   record('features: hero caption banner present', await page.locator('#capabilities figcaption').first().textContent().then((t) => /cold stone/i.test(t)))
 
-  // /how-it-works — Sense. Score. Act. is three columns; the loop is four stages
+  // Four stage tabs share one visible detail panel. Check the interaction,
+  // not the list-row markup of the previous static walkthrough.
   await open(page, base + '/how-it-works', 600)
   await page.evaluate(() => document.getElementById('how').scrollIntoView())
   await page.waitForTimeout(600)
-  record('how: loop has four stages', (await page.locator('#how li h2').count()) === 4)
+  const stageTabs = page.locator('#how [role="tab"]')
+  const stagePanels = page.locator('#how [role="tabpanel"]')
+  record('how: loop has four stages', await stageTabs.count() === 4 && await stagePanels.count() === 4)
+  for (const stage of ['sense', 'analyze', 'respond', 'protect']) {
+    await page.locator(`[data-how-stage="${stage}"]`).click()
+    await page.waitForFunction((name) =>
+      document.querySelector(`[data-how-stage="${name}"]`)?.getAttribute('aria-selected') === 'true', stage)
+    record(`how: ${stage} opens its detail`,
+      await page.locator(`[data-how-panel="${stage}"]`).isVisible() &&
+      await page.locator('#how [role="tabpanel"]:visible').count() === 1)
+  }
+  await stageTabs.first().focus()
+  await page.keyboard.press('ArrowRight')
+  await page.waitForFunction(() => document.querySelector('[data-how-stage="analyze"]')?.getAttribute('aria-selected') === 'true')
+  await page.keyboard.press('End')
+  await page.waitForFunction(() => document.querySelector('[data-how-stage="protect"]')?.getAttribute('aria-selected') === 'true')
+  await page.keyboard.press('Home')
+  await page.waitForFunction(() => document.querySelector('[data-how-stage="sense"]')?.getAttribute('aria-selected') === 'true')
+  record('how: keyboard navigation returns to Sense', await stageTabs.first().evaluate((tab) => document.activeElement === tab))
 
   // /contact — real channels
   await open(page, base + '/contact', 600)
