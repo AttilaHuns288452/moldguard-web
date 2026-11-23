@@ -12,7 +12,7 @@ import { splitTitle } from '../lib/motion'
  */
 export default function PartsTrust() {
   return (
-    <section id="parts" className="section band-white">
+    <section id="parts" className="section band-pale">
       <div className="shell">
         <div className="max-w-[720px]">
           <LineReveal

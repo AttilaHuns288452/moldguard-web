@@ -286,7 +286,16 @@
   display: grid;
   gap: 18px;
   padding: 30px 0;
-  border-bottom: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line-hi);
+}
+/* Four long rows in one white band read as a single block. The alternating
+   tint gives each row its own surface without turning them into cards. */
+/* Each row is wrapped in its own Reveal <section>, so the tint goes on the
+   wrapper; .fx-row itself is always the first (and only) child. */
+#what .fx-groups > section:nth-of-type(even) {
+  background: #f4f8fd;
+  box-shadow: 0 0 0 100vmax #f4f8fd;
+  clip-path: inset(0 -100vmax);
 }
 @media (min-width: 1024px) {
   .fx-row {
