@@ -276,8 +276,11 @@ for (const vp of VIEWPORTS) {
   // product explorer: selecting a component changes the info panel
   const title = () => page.locator('#meet h3').first().textContent()
   const t0 = await title()
-  await page.locator('#meet li button').filter({ hasText: 'Relay' }).first().click()
-  await page.waitForTimeout(500)
+  const relay = page.locator('#meet li button').filter({ hasText: 'Relay' }).first()
+  await relay.waitFor({ state: 'visible' })
+  await relay.scrollIntoViewIfNeeded()
+  await relay.evaluate((el) => el.click())
+  await page.waitForFunction((before) => document.querySelector('#meet h3')?.textContent !== before, t0)
   record('explorer: component selection updates panel', (await title()) !== t0,
     `${t0} -> ${await title()}`)
   // guided tour moves forward
