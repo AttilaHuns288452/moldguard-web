@@ -39,14 +39,16 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="shell flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-t border-[#eaf2fc1f] py-5 text-[11.5px] leading-relaxed text-on-dark-2">
-        <span>&copy; {CONTACT.year} MoldGuard Team</span>
+      <div className="shell flex flex-wrap items-end justify-between gap-x-10 gap-y-3 border-t border-[#eaf2fc1f] py-6 text-[10.5px] leading-relaxed tracking-[0.1em] text-on-dark-2 uppercase">
+        <div className="grid gap-1.5">
+          <span>&copy; {CONTACT.year} MoldGuard Team</span>
+          <span className="max-w-[46ch] normal-case tracking-normal text-[11px]">{CONTACT.disclaimer}</span>
+        </div>
         {/* Data statement instead of inventing Privacy/Terms pages: the form has
             no backend, so there is no stored personal data to write a policy
             about. This states what actually happens, which is the trust signal a
             legal-link row would otherwise stand in for. */}
         <span>We use only what you send us, to reply to you.</span>
-        <span>Monitoring device &middot; not a mold diagnostic or substitute for professional inspection</span>
       </div>
     </footer>
   )
