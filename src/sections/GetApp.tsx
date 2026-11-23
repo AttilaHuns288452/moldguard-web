@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, ArrowRight, Pause, Play } from 'lucide-react'
+import { useState } from 'react'
+import { Pause, Play } from 'lucide-react'
 import { Reveal, LineReveal } from '../components/ui'
 import { splitTitle, useReducedMotion } from '../lib/motion'
 import { navigate } from '../lib/route'
@@ -24,53 +24,11 @@ const FRAMES = [
 ]
 
 export default function GetApp() {
-  // The right-edge fade is only honest when there IS more to scroll. At 1440 the
-  // row overflows by ~40px, so an unconditional 64px fade sat on top of a fully
-  // visible card and dimmed 24px of it permanently.
-  const rowRef = useRef<HTMLUListElement>(null)
-  const [more, setMore] = useState(false)
-  const [activeFrame, setActiveFrame] = useState(0)
-  const frameCount = FRAMES.length
-  // Autoplay is opt-out (WCAG 2.2.2 needs a pause mechanism for moving content),
-  // pauses on hover/focus so reading is never interrupted, and is disabled
-  // entirely for reduced-motion users.
+  // A continuous ticker: the track holds the four screens twice and drifts by
+  // exactly one copy, so it never visibly resets. Pausing is available (WCAG
+  // 2.2.2) and the whole thing is off for reduced-motion users.
   const reduced = useReducedMotion()
   const [autoplay, setAutoplay] = useState(true)
-  const frameIndex = useRef(0)
-  const goFrame = (index: number) => {
-    const next = (index + frameCount) % frameCount
-    frameIndex.current = next
-    setActiveFrame(next)
-    const el = rowRef.current
-    const child = el?.children[next] as HTMLElement | undefined
-    // Scroll the strip itself; scrollIntoView can drag the whole page when the
-    // carousel is partly off-screen during autoplay.
-    if (el && child) el.scrollTo({ left: child.offsetLeft, behavior: 'smooth' })
-  }
-  useEffect(() => { frameIndex.current = activeFrame }, [activeFrame])
-  useEffect(() => {
-    if (reduced || !autoplay || !more) return
-    const id = window.setInterval(() => {
-      if (document.hidden) return
-      goFrame(frameIndex.current + 1)
-    }, 4800)
-    return () => window.clearInterval(id)
-  }, [reduced, autoplay, more, frameCount])
-  useEffect(() => {
-    const el = rowRef.current
-    if (!el) return
-    const check = () => setMore(el.scrollWidth - el.clientWidth > 8)
-    const onScroll = () => {
-      const items = [...el.children] as HTMLElement[]
-      const left = el.scrollLeft
-      let next = 0; let distance = Infinity
-      items.forEach((item, i) => { const d = Math.abs(item.offsetLeft - left); if (d < distance) { distance = d; next = i } })
-      setActiveFrame(next)
-    }
-    check(); el.addEventListener('scroll', onScroll, { passive: true })
-    const ro = new ResizeObserver(check); ro.observe(el)
-    return () => { el.removeEventListener('scroll', onScroll); ro.disconnect() }
-  }, [])
   return (
     <section id="app" className="section band-white">
       <div className="shell">
@@ -171,16 +129,18 @@ export default function GetApp() {
         </Reveal>
         <div className="relative mt-4">
         <div className="mb-3 flex items-center justify-between gap-3">
-          <p className="measure text-[11px] text-ink-3" aria-live="polite">Screen {String(activeFrame + 1).padStart(2, '0')} / {String(frameCount).padStart(2, '0')}</p>
-          <div className="flex items-center gap-2">
-            <button type="button" onClick={() => setAutoplay((v) => !v)} aria-label={autoplay ? 'Pause automatic app screen rotation' : 'Start automatic app screen rotation'} aria-pressed={autoplay} disabled={reduced} className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink disabled:opacity-40">{autoplay && !reduced ? <Pause className="size-3.5" aria-hidden="true" /> : <Play className="size-3.5" aria-hidden="true" />}</button>
-            <button type="button" onClick={() => goFrame(activeFrame - 1)} aria-label="Previous app screen" className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink"><ArrowLeft className="size-4" aria-hidden="true" /></button>
-            <button type="button" onClick={() => goFrame(activeFrame + 1)} aria-label="Next app screen" className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink"><ArrowRight className="size-4" aria-hidden="true" /></button>
-          </div>
+          <p className="text-[11px] text-ink-3">Four screens from the companion app, scrolling.</p>
+          <button type="button" onClick={() => setAutoplay((v) => !v)} aria-label={autoplay ? 'Pause the app screen ticker' : 'Resume the app screen ticker'} aria-pressed={autoplay} disabled={reduced} className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink disabled:opacity-40">{autoplay && !reduced ? <Pause className="size-3.5" aria-hidden="true" /> : <Play className="size-3.5" aria-hidden="true" />}</button>
         </div>
-        <ul ref={rowRef} tabIndex={0} aria-label="MoldGuard app screens carousel" onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); goFrame(activeFrame + 1) } if (e.key === 'ArrowLeft') { e.preventDefault(); goFrame(activeFrame - 1) } }} className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 pr-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">
-          {FRAMES.map(({ el: Frame, label, note }) => (
-            <li key={label} className="snap-start">
+        {/* Continuous ticker, not a slide-stepper: the track is rendered twice and
+            translated by exactly one copy, so it loops with no visible seam. */}
+        <div
+          className="group/ticker relative overflow-hidden pt-2 pb-4"
+        >
+        <ul aria-label="MoldGuard app screens ticker" style={{ animationPlayState: autoplay ? 'running' : 'paused' }}
+          className="flex w-max gap-5 will-change-transform [animation:app-marquee_38s_linear_infinite] group-hover/ticker:[animation-play-state:paused] motion-reduce:!animate-none">
+          {[...FRAMES, ...FRAMES].map(({ el: Frame, label, note }, idx) => (
+            <li key={`${label}-${idx}`} aria-hidden={idx >= FRAMES.length ? 'true' : undefined}>
               <Reveal>
                 {/* group scaling: the frames are authored at 390x844 and must not
                     be re-laid-out, so they are zoomed as a whole */}
@@ -202,13 +162,7 @@ export default function GetApp() {
             </li>
           ))}
         </ul>
-        <div className="mt-2 flex justify-center gap-1.5" role="tablist" aria-label="Choose app screen">
-          {FRAMES.map(({ label }, i) => <button key={label} type="button" role="tab" aria-selected={activeFrame === i} aria-label={`Show ${label} app screen`} onClick={() => goFrame(i)} className={`h-1.5 rounded-full transition-all ${activeFrame === i ? 'w-6 bg-accent-ink' : 'w-1.5 bg-line-hi hover:bg-accent'}`} />)}
         </div>
-        {/* fades the right edge so a clipped frame reads as "more to scroll" */}
-        {more && (
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent" aria-hidden="true" />
-        )}
         </div>
       </div>
     </section>

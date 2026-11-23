@@ -91,9 +91,13 @@ try {
     assert.match(priceAnswer, /₱9,994/)
     assert.ok(!priceAnswer.includes('\\u20b1'), 'schema contains decoded currency, not a literal escape')
     await page.goto(base + '/download', { waitUntil: 'load' })
-    assert.equal(await page.locator('#app .mg').count(), 4, 'all original app screens remain')
+    // The ticker renders the four screens twice for a seamless loop, so count
+    // the unique captions rather than the DOM nodes.
+    const captions = await page.locator('#app figcaption').allTextContents()
+    const unique = new Set(captions.map((c) => c.split('·')[0].trim()))
+    assert.equal(unique.size, 4, 'all four app screens remain')
     assert.equal(await page.locator('#app img[alt*="QR"]').count(), 1)
-    assert.equal(await page.getByRole('button', { name: 'Next app screen', exact: true }).count(), 1)
+    assert.equal(await page.getByRole('button', { name: /app screen ticker/i }).count(), 1)
     assert.match(await page.locator('#app').innerText(), /companion|hardware|device/i)
     assert.deepEqual(errors, [])
     evidence.push({ width, status: 'pass', inquiryIntercepted: true })
