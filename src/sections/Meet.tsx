@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, ArrowRight, Boxes, Eye, Layers, Play } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Boxes, Eye, Layers, RefreshCw } from 'lucide-react'
 import DeviceViewer from '../components/DeviceViewer'
 import DataFlow from '../components/DataFlow'
 import { PARTS, PART_BY_ID, TOUR, MODEL_SIZE, type PartId } from '../components/parts'
@@ -52,9 +52,9 @@ export default function Meet() {
   return (
     <section id="meet" className="section band-pale">
       <div className="shell">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-[620px]">
-            <LineReveal
+          <LineReveal
               lines={splitTitle(MEET.title)}
               className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.08] font-[650] text-deep"
             />
@@ -81,28 +81,15 @@ export default function Meet() {
               ))}
             </ol>
           </div>
-          <Reveal delay={110}>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => { setMode('tour'); setActive(null) }}
-                aria-pressed={mode === 'tour' && active === null}
-                className={`inline-flex min-h-11 items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
-                  mode === 'tour' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
-                }`}
-              >
-                <Eye className="size-3.5" strokeWidth={2} /> Assembled
-              </button>
-              <button
-                type="button"
-                onClick={() => { setMode('explode'); setAutoSpin(false); setActive(null) }}
-                aria-pressed={mode === 'explode'}
-                className={`inline-flex min-h-11 items-center gap-1.5 rounded-tight border px-3 py-2 text-[12.5px] transition-colors ${
-                  mode === 'explode' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
-                }`}
-              >
-                <Layers className="size-3.5" strokeWidth={2} /> Exploded
-              </button>
+
+          {/* Balances the half-empty header: the four steps occupied the left 620px
+              of a 1260px row, leaving a large blank right side above the cards. */}
+          <Reveal delay={150}>
+            <div className="rounded-soft border border-line bg-card px-5 py-4 lg:max-w-[300px]">
+              <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">In this section</p>
+              <p className="mt-2 text-[13.5px] leading-relaxed text-ink-2">
+                The device below is the real assembly — 12 parts, each listed. Pick one to read what it does, or take the guided tour.
+              </p>
             </div>
           </Reveal>
         </div>
@@ -118,20 +105,46 @@ export default function Meet() {
               <div className="relative h-[clamp(400px,58vh,560px)] w-full bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
                 <DeviceViewer active={active} onSelect={(id) => { if (id) pick(id); else setActive(null) }} autoSpin={autoSpin} mode={mode} />
               </div>
-              <div className="flex items-center justify-between gap-2 border-t border-line px-4 py-2.5">
+              {/* The view toggle belongs to the model it changes, so it sits in the
+                  card footer beside the view name it controls. */}
+              <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5">
                 <span className="text-[11px] text-ink-3">
-                  {mode === 'explode' ? 'Exploded view — parts offset along their own axis' : 'Assembled view'}
+                  {mode === 'explode' ? 'Parts offset along their own axis' : 'Select a part to inspect it'}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => setAutoSpin((v) => !v)}
-                  aria-pressed={autoSpin}
-                  className={`min-h-11 rounded-tight border px-3 py-2 text-[11px] transition-colors ${
-                    autoSpin ? 'border-accent-ink bg-[#2563eb0f] text-deep' : 'border-line text-ink-3 hover:border-line-hi'
-                  }`}
-                >
-                  Auto-rotate
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => { setMode('tour'); setActive(null) }}
+                    aria-pressed={mode === 'tour'}
+                    className={`inline-flex min-h-9 items-center gap-1.5 rounded-tight border px-2.5 py-1.5 text-[11.5px] transition-colors ${
+                      mode === 'tour' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
+                    }`}
+                  >
+                    <Eye className="size-3.5" strokeWidth={2} aria-hidden="true" /> Assembled
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setMode('explode'); setAutoSpin(false); setActive(null) }}
+                    aria-pressed={mode === 'explode'}
+                    className={`inline-flex min-h-9 items-center gap-1.5 rounded-tight border px-2.5 py-1.5 text-[11.5px] transition-colors ${
+                      mode === 'explode' ? 'border-accent-ink bg-[#2563eb0f] font-[650] text-deep' : 'border-line text-ink-2 hover:border-line-hi'
+                    }`}
+                  >
+                    <Layers className="size-3.5" strokeWidth={2} aria-hidden="true" /> Exploded
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAutoSpin((v) => !v)}
+                    aria-pressed={autoSpin}
+                    aria-label={autoSpin ? 'Stop auto-rotating the model' : 'Auto-rotate the model'}
+                    title={autoSpin ? 'Stop auto-rotation' : 'Auto-rotate'}
+                    className={`grid size-9 place-items-center rounded-tight border transition-colors ${
+                      autoSpin ? 'border-accent-ink bg-[#2563eb0f] text-deep' : 'border-line text-ink-3 hover:border-line-hi'
+                    }`}
+                  >
+                    <RefreshCw className="size-3.5" strokeWidth={2} aria-hidden="true" />
+                  </button>
+                </div>
               </div>
             </div>
           </Reveal>
@@ -143,7 +156,9 @@ export default function Meet() {
               <div className="border-b border-line p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-[11px] font-[650] tracking-[0.12em] text-accent uppercase">Selected component</p>
+                    <p className="text-[11px] font-[650] tracking-[0.12em] text-accent uppercase">
+                      {selected ? 'Selected component' : 'Components'}
+                    </p>
                     <h3 className="mt-1.5 text-[1.25rem] font-[650] leading-tight text-deep">
                       {selected ? selected.name : 'Pick a component'}
                     </h3>
@@ -172,13 +187,12 @@ export default function Meet() {
                 )}
               </div>
 
-              {/* guided walkthrough */}
-              <div className="flex items-center justify-between gap-2 border-b border-line bg-paper-deep/50 px-4 py-2.5">
-                <span className="flex items-center gap-1.5 text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">
-                  <Play className="size-3.5" strokeWidth={2} /> How it works
-                </span>
+              {/* Header row carries only the tour controls; the eyebrow above
+                  already names the list, so a second "Components" label here was
+                  the same word twice in one card. */}
+              <div className="flex items-center justify-end gap-2 border-b border-line bg-paper-deep/50 px-4 py-2.5">
                 <div className="flex items-center gap-1">
-                  <span className="measure mr-1.5 text-[11px] text-ink-3">{active ? `Step ${tourStep + 1} of ${TOUR.length}` : `${TOUR.length}-step tour`}</span>
+                  <span className="measure mr-1.5 text-[11px] text-ink-3">{active ? `Step ${tourStep + 1} of ${TOUR.length}` : 'Guided tour'}</span>
                   <button type="button" onClick={() => step(-1)} aria-label="Previous component"
                     className="grid size-10 place-items-center rounded-full border border-line text-ink-2 transition-colors hover:border-line-hi hover:text-ink">
                     <ArrowLeft className="size-3.5" strokeWidth={2} />
@@ -235,8 +249,12 @@ export default function Meet() {
             stated ONCE, as the diagram, with a link to the full walkthrough. */}
         {/* Buy CTA: the explorer ends ~5,900px before the next call to action,
             so a reader who has just inspected the hardware had no way to act. */}
+        {/* Divides the interactive explorer from the automated walkthrough that
+            follows it. Without a rule the CTA and data-flow band read as more
+            content inside the same two cards above. */}
+        <div className="mt-12 border-t border-line pt-10">
         <Reveal delay={40}>
-          <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3 rounded-soft border border-line bg-card px-5 py-4">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 rounded-soft border border-line bg-card px-5 py-4">
             <p className="text-[14px] text-ink-2">
               <span className="font-[650] text-deep">{OFFER.price}</span> proposed one-time price. One small room, one device.
             </p>
@@ -267,6 +285,7 @@ export default function Meet() {
         <Reveal delay={80}>
           <DataFlow />
         </Reveal>
+        </div>
       </div>
     </section>
   )
