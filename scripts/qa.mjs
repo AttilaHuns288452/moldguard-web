@@ -360,8 +360,11 @@ for (const vp of VIEWPORTS) {
   // built, then dropped from /download, and only a QR code was left — so this is
   // the check that would have caught it.
   await open(page, base + '/download', 800)
-  const frames = await page.locator('#app .mg').count()
-  record('download: four Figma app frames render', frames === 4, `${frames} frames`)
+  // The ticker duplicates the track for a seamless loop, so count the unique
+  // screens rather than the DOM nodes.
+  const caps = await page.locator('#app figcaption').allTextContents()
+  const screens = new Set(caps.map((c) => c.split('·')[0].trim()))
+  record('download: four Figma app frames render', screens.size === 4, `${screens.size} screens`)
 
   // keyboard: from a clean load, the first tab stop must be the skip link
   await open(page, URL, 700)
@@ -405,7 +408,9 @@ for (const vp of VIEWPORTS) {
   await bp.evaluate(() => document.getElementById('meet')?.scrollIntoView())
   await bp.waitForTimeout(3500)
   const survive = await bp.evaluate(() => (document.body.innerText || '').length)
-  const fallback = await bp.evaluate(() => /3D unavailable/i.test(document.body.innerText || ''))
+  // The fallback explains itself rather than saying "3D unavailable": it names the
+  // static view and points at the parts list beside it.
+  const fallback = await bp.evaluate(() => /static view|cannot run the interactive 3d/i.test(document.body.innerText || ''))
   const hero = await bp.evaluate(() => !!document.querySelector('#top h1'))
   record('GLB blocked: page survives', survive > 800, `${survive} chars`)
   record('GLB blocked: shows the fallback', fallback)
