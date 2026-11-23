@@ -101,7 +101,7 @@ export default function DataFlow() {
             </div>
             <p className="mt-2.5">
               Humidity, temperature, exposure duration and dew-point margin combine into one Mold Risk
-              Index — not a single humidity threshold.
+              Index. It does not use a single humidity threshold.
             </p>
           </Region>
 

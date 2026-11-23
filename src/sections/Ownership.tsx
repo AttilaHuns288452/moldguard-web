@@ -30,9 +30,7 @@ export default function Ownership() {
               <div className="mt-7 rounded-soft border border-[#eaf2fc26] bg-[#eaf2fc08] p-5">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                   <p className="text-[13px] font-semibold text-on-dark">{price.label}</p>
-                  <p className="rounded-full border border-[#eaf2fc33] px-2.5 py-0.5 text-[10.5px] font-[650] tracking-[0.08em] text-on-dark uppercase">
-                    No subscription
-                  </p>
+                  <p className="text-[11px] text-on-dark-2">One-time payment. No subscription.</p>
                 </div>
                 <p className="measure mt-2 text-[2.4rem] leading-none font-semibold text-white">{price.figure}</p>
 

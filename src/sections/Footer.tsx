@@ -18,7 +18,7 @@ export default function Footer() {
             <span className="font-display text-[1.22rem] font-bold tracking-[-0.02em] text-on-dark">MoldGuard</span>
           </span>
           <p className="mt-1.5 text-[14px] text-on-dark-2">Room monitoring &amp; automatic dehumidification</p>
-          <p className="mt-1 text-[12.5px] text-on-dark-2">{OFFER.priceLabel}: {OFFER.price} &middot; No subscription</p>
+          <p className="mt-1 text-[12.5px] text-on-dark-2">{OFFER.priceLabel}: {OFFER.price}</p>
         </div>
 
         <nav aria-label="Footer" className="grid gap-2 text-[14px]">

@@ -71,9 +71,6 @@ export default function Hero() {
               </li>
             ))}
           </ul>
-          <p className="mt-3 max-w-[52ch] text-[11.5px] leading-relaxed text-ink-3">
-            {OFFER.terms}
-          </p>
 
           {/* the hero is tall enough that the fold can read as the end of the page;
               one quiet cue down to the next section fixes that */}
@@ -120,7 +117,7 @@ export default function Hero() {
               the photo's right edge into the white frame, as the PDF does. */}
           <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-e3 backdrop-blur-sm sm:absolute sm:-right-4 sm:bottom-3 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
-            <p className="fx-tag mt-2 w-fit border-[#eaf2fc44] bg-[#eaf2fc12] text-on-dark-2">Illustrative reading</p>
+            <p className="fx-tag mt-2 w-fit border-[#eaf2fc44] bg-[#eaf2fc12] text-on-dark-2">Sample data</p>
             <p className="mt-2.5 text-[10px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
             <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">
               38<span className="text-[13px] text-on-dark-2">/100</span>

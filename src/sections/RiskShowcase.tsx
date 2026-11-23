@@ -139,7 +139,7 @@ export default function RiskShowcase() {
                             style={{ width: `${pct}%` }} />
                         </div>
                         {belowDew && (
-                          <p className="mt-1 text-[11px] leading-snug text-[#bf2d2a]">Below dew point — condensing</p>
+                          <p className="mt-1 text-[11px] leading-snug text-[#bf2d2a]">Below dew point, so it condenses</p>
                         )}
                       </li>
                     )

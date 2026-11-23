@@ -129,7 +129,7 @@ export function FrameHome() {
 
         <div className="banner info mt-auto">
           <CloudRain s={16} />
-          <span><b>Infiltration watch:</b> outdoor humidity is high today — keep windows closed.</span>
+          <span><b>Infiltration watch:</b> outdoor humidity is high today. Keep windows closed.</span>
         </div>
       </div>
       <Nav active="Home" />

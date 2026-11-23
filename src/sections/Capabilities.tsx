@@ -61,7 +61,7 @@ export default function Capabilities() {
                 height={733}
               />
               <figcaption className="bg-deep px-5 py-3.5 text-[11px] font-[650] tracking-[0.1em] text-on-dark uppercase">
-                <span>Warm air meets cold stone &mdash; and condensation wants to form.</span>
+                <span>Warm air meets cold stone, and condensation wants to form.</span>
                 <span className="measure text-[10px] font-normal tracking-[0.08em] text-on-dark-2">Fig. 01</span>
               </figcaption>
             </figure>
@@ -91,7 +91,7 @@ export default function Capabilities() {
                 <div>
                   <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Current band</p>
                   <p className="mt-1 text-[1.05rem] font-[650] text-deep">
-                    {band} <span className="text-[12px] font-normal text-ink-2">— illustrated room</span>
+                    {band} <span className="text-[12px] font-normal text-ink-2">· illustrated room</span>
                   </p>
                   <ul className="fx-bands mt-2">
                     {BANDS.map((b) => (

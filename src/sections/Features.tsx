@@ -48,7 +48,7 @@ export default function Features() {
           <article className="fx-feature-panel card-lift mt-8" data-feature-overview>
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-6 py-4">
               <p className="text-[11px] font-[650] tracking-[0.13em] text-ink-3 uppercase">System capability index</p>
-              <span className="fx-tag">One unit · no subscription</span>
+              <span className="fx-tag">One unit · one room</span>
             </div>
             <div className="fx-feature-grid">
               {FEATURES.items.map((f) => {
