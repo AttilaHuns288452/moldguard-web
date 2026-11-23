@@ -95,7 +95,7 @@ export default function Hero() {
                 sits on a WARM, LIGHT surface (beige/cream studio), not a cool blue
                 field. That contrast direction is what makes a white product read as
                 a product: warm light ground, cool white object. */}
-            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_95%_at_50%_20%,#fdfbf7_0%,#efe7db_55%,#d9cdbb_100%)]">
+            <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
               <DeviceViewer
                 active={active}
                 onSelect={setActive}
