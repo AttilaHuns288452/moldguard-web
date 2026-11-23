@@ -6,6 +6,7 @@ import { PARTS, PART_BY_ID, TOUR, MODEL_SIZE, type PartId } from '../components/
 import { MEET } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
 import { prefersReducedMotion, splitTitle } from '../lib/motion'
+import { navigate } from '../lib/route'
 
 /**
  * "Explore MoldGuard" — the signature section. A real component explorer:
@@ -157,6 +158,16 @@ export default function Meet() {
                     <p className="mt-2.5 border-l border-line-hi pl-3 text-[13.5px] leading-relaxed text-ink">
                       {selected.role}
                     </p>
+                    {/* The explorer explained internals but offered no next step;
+                        a reader who got this far is deciding on the device. */}
+                    <a
+                      href="/contact"
+                      onClick={(e) => { e.preventDefault(); navigate('contact') }}
+                      className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-[13px] font-[650] text-accent-ink underline-offset-2 hover:underline"
+                    >
+                      Ask if this fits your room
+                      <ArrowRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
+                    </a>
                   </>
                 )}
               </div>

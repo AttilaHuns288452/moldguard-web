@@ -36,6 +36,22 @@
     },
     {
       "@type": "Question",
+      "name": "What about warranty and returns?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Warranty, returns and service coverage are set out in your written quotation before you commit, because they depend on the final build and where you are. Nothing is charged on this site, so you can review those terms first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does it cost to run?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Electricity to run the unit and the effort of emptying the 1-litre tank. There is no monitoring fee. Exact power draw depends on how often the dehumidifier runs, which depends on the room."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "How long until I get it?",
       "acceptedAnswer": {
         "@type": "Answer",

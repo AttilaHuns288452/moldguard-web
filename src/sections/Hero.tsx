@@ -42,10 +42,8 @@ export default function Hero() {
           {/* price + CTA together: the number a buyer asks for, beside the action */}
           <div className="mt-6 flex flex-wrap items-end gap-x-6 gap-y-4 sm:mt-7">
             <div>
-              <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{OFFER.priceLabel}</p>
-              <p className="measure mt-1 flex items-baseline gap-2 text-[1.9rem] leading-none font-semibold text-deep">
-                {OFFER.price}
-              </p>
+              <p className="measure text-[1.9rem] leading-none font-semibold text-deep">{OFFER.price}</p>
+              <p className="mt-1 text-[12.5px] text-ink-2">proposed one-time price</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <MagButton href={HERO.primary.href} icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
@@ -56,6 +54,17 @@ export default function Hero() {
               </MagButton>
             </div>
           </div>
+
+          {/* The first qualifying questions a buyer asks, answered where the
+              price is, instead of buried three sections down. */}
+          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-[12.5px] text-ink-2">
+            {OFFER.specs.map((sp) => (
+              <li key={sp} className="flex items-center gap-1.5">
+                <span className="size-1 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                {sp}
+              </li>
+            ))}
+          </ul>
 
           <p className="mt-5 max-w-[52ch] border-l-2 border-accent pl-3 text-[13px] leading-relaxed text-ink-2">
             {HERO.compare}

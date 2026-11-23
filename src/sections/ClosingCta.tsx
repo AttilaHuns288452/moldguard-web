@@ -1,4 +1,4 @@
-import { CTA } from '../content'
+import { CTA, OFFER } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 
@@ -24,6 +24,7 @@ export default function ClosingCta({ onDownloadPage = false }: { onDownloadPage?
                   className="max-w-[22ch] text-[clamp(1.5rem,2.9vw,2.4rem)] leading-[1.12] font-[650] text-white"
                 />
                 <p className="mt-2.5 max-w-[52ch] text-[14.5px] leading-relaxed text-on-dark-2">{CTA.lede}</p>
+                <p className="mt-3 text-[12.5px] leading-relaxed text-on-dark-2">{OFFER.reassurance}</p>
               </div>
               <div className="flex flex-wrap gap-3 lg:justify-end">
                 <a

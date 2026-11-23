@@ -32,11 +32,15 @@ export const CONTACT = {
 export const OFFER = {
   price: '\u20b19,994',
   priceLabel: 'Proposed one-time price',
+  // The buyer's first qualifying question, answered beside the price.
+  specs: ['One small enclosed room', 'About 28 × 28 × 40 cm', '1-litre removable tank'],
   priceNote: 'One payment. The device and its companion app are yours; nothing renews.',
   source: 'Proposed price from the feasibility study, Section 3.4',
-  cta: { label: 'Request a quotation', href: '/contact' },
+  cta: { label: 'Check it fits my room', href: '/contact' },
   terms:
     'Price is proposed. Availability, delivery, warranty and service terms are confirmed in your quotation before any commitment; no payment is taken on this site.',
+  // Reassurance at the decision point: what happens after the click.
+  reassurance: 'No payment now. We reply with fit and the proposed price, usually within one to two business days.',
 }
 
 export const HERO = {
@@ -52,7 +56,7 @@ export const HERO = {
     { title: 'It runs the dehumidifier', body: 'Starts when the score crosses its threshold, stops once conditions settle.' },
     { title: 'Status from your phone', body: 'Alerts and manual control in the companion app while the device is online.' },
   ],
-  primary: { label: 'Request a quotation', href: '/contact' },
+  primary: { label: 'Check it fits my room', href: '/contact' },
   secondary: { label: 'See how it works', href: '/how-it-works' },
   // One comparison a buyer makes immediately, answered before the FAQ.
   compare: 'A cheap dehumidifier dries when you switch it on. This one decides when to dry, from humidity, temperature and how long the room has stayed damp.',
@@ -270,6 +274,8 @@ export const FAQ = {
     { q: 'How does it detect mold risk?', a: 'It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature and how long those conditions persist, instead of a single humidity threshold, plus a dew-point estimate for condensation on cold surfaces.' },
     { q: 'Is it a dehumidifier?', a: 'Yes. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses its threshold it starts pulling moisture from the air, and stops once conditions return to range.' },
     { q: 'Why not just buy a cheap dehumidifier?', a: 'A dehumidifier dries when you switch it on. MoldGuard also decides when that should happen, using humidity, temperature and how long the room has stayed damp rather than one humidity reading. You are paying for the sensing and the automatic response in the same unit. If you only need a fan and a compressor on a manual switch, a cheaper unit covers that.' },
+    { q: 'What about warranty and returns?', a: 'Warranty, returns and service coverage are set out in your written quotation before you commit, because they depend on the final build and where you are. Nothing is charged on this site, so you can review those terms first.' },
+    { q: 'What does it cost to run?', a: 'Electricity to run the unit and the effort of emptying the 1-litre tank. There is no monitoring fee. Exact power draw depends on how often the dehumidifier runs, which depends on the room.' },
     { q: 'How long until I get it?', a: 'MoldGuard is built to order rather than shipped from stock. Your quotation confirms build time, delivery and any service coverage before you commit. No payment is taken on this site.' },
     { q: 'What does the app show?', a: 'Live status for the room: the readings behind the score, humidity and temperature history, alerts, and manual override when the device is online. The app is a companion to the device; monitoring and dehumidification run on the unit itself.' },
     { q: 'Can I monitor more than one room?', a: 'One MoldGuard is scoped to one small enclosed room. Multi-room and multi-unit views are not part of this offer; ask about multiple units in your quotation.' },
