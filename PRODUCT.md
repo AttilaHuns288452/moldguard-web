@@ -2,7 +2,22 @@
 
 ## Purpose
 
-MoldGuard is a student prototype for indoor mold-risk prevention and detection. It combines room sensing, a Mold Risk Index, a thermoelectric dehumidification response, and app/web status views into one product story.
+MoldGuard is a prototype-level IoT device sold as one-time hardware: room sensing, a Mold Risk Index, a thermoelectric dehumidification response, and a companion app. The site is a sales funnel: every path ends at a quotation request (`/contact`), never a checkout.
+
+## Offer
+
+- One business model: a one-time hardware sale. No subscriptions, no premium tiers, no development fees on customer surfaces.
+- Proposed selling price: **PHP 9,994**, one payment. Source: feasibility study Section 3.4 and `moldguard-defense/cba/MoldGuard_Cost_Benefit_Analysis.md` (product summary and selling-price input).
+- The price is **proposed**. Retail availability, certification, delivery, warranty and service terms are not confirmed; the quotation confirms them. No stock, shipping, warranty or payment claims are made on the site.
+- The device is scoped to **one small enclosed room**. Numeric room coverage is deliberately omitted (source documents conflict: 9.7 m³ vs 30 m³); suitability is confirmed in the inquiry.
+- Not a mold diagnostic, no guaranteed prevention. Existing mold requires professional remediation.
+- App/dashboard values remain illustrative and labelled. No app-store listing exists; the build is sent on request.
+
+## Copy and claims
+
+- Visible copy: `src/content.ts` (`OFFER`, `HERO`, `PROBLEM`, `FEATURES`, `OWN`, `FAQ`, `CONTACT_PAGE`). `OFFER` is the single source of the price and CTA used by the hero, ownership band, closing CTA and header.
+- Internal component cost is not a customer price and must not appear on customer surfaces.
+- The contact form keeps its Google Forms transport (entry ids unchanged) and its mailto fallback; a sent submission is reported as *sent by the browser*, not as confirmed received.
 
 ## Users
 
@@ -17,10 +32,10 @@ MoldGuard is presented as a system that reasons about humidity, temperature, and
 
 | Route | Purpose |
 |---|---|
-| `/` | Product introduction, problem, real hardware explorer, core features, ownership, placement, closing CTA |
+| `/` | Outcome-led hero with the proposed price, problem, real hardware explorer, outcomes, purchase offer, placement, buyer FAQ, closing CTA |
 | `/features` | Mold-specific intelligence, risk engine, comparison, parts, and product capabilities |
 | `/how-it-works` | Sense → analyze → respond → protect loop, setup, FAQ, closing CTA |
-| `/contact` | Inquiry form, direct contact, quote steps, team, and FAQ |
+| `/contact` | Quotation request (form first on mobile), direct contact, three steps from room to quote, team, and FAQ |
 | `/download` | QR/direct app link, illustrative app screens, and prototype disclosure |
 
 ## Technical status

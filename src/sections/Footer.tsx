@@ -1,4 +1,4 @@
-import { CONTACT } from '../content'
+import { CONTACT, OFFER } from '../content'
 import { Logo } from '../components/Marks'
 
 const LINKS = [
@@ -17,7 +17,8 @@ export default function Footer() {
             <Logo className="size-[34px] text-on-dark" />
             <span className="font-display text-[1.22rem] font-bold tracking-[-0.02em] text-on-dark">MoldGuard</span>
           </span>
-          <p className="mt-1.5 text-[14px] text-on-dark-2">IoT mold risk prevention &amp; detection</p>
+          <p className="mt-1.5 text-[14px] text-on-dark-2">Room monitoring &amp; automatic dehumidification</p>
+          <p className="mt-1 text-[12.5px] text-on-dark-2">{OFFER.priceLabel}: {OFFER.price} &middot; No subscription</p>
         </div>
 
         <nav aria-label="Footer" className="grid gap-2 text-[14px]">

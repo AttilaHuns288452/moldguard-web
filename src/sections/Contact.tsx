@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CONTACT, CONTACT_PAGE } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
+import { splitTitle } from '../lib/motion'
 import TeamProfiles from '../components/TeamProfiles'
 import { ArrowRight, Lock } from 'lucide-react'
 
@@ -95,8 +96,8 @@ export default function Contact() {
         <div className="max-w-[720px]">
           <LineReveal
             as="h1"
-            lines={["Let's keep your space", 'ahead of mold.']}
-            className="max-w-[24ch] text-[clamp(2.2rem,4.1vw,3.9rem)] leading-[1.1] font-[650] text-deep"
+            lines={splitTitle(CONTACT_PAGE.title)}
+            className="max-w-[26ch] text-[clamp(2.1rem,3.9vw,3.6rem)] leading-[1.1] font-[650] text-deep"
           />
           <Reveal delay={70}>
             <p className="lede mt-3">{CONTACT_PAGE.lede}</p>
@@ -108,14 +109,15 @@ export default function Contact() {
           <Reveal>
             <div className="mb-4 rounded-soft border border-line-hi bg-paper-deep px-4 py-3">
               <p className="max-w-[68ch] text-[12.5px] leading-relaxed text-ink-2">
-                Tell us about your space, ask about the hardware, or request app access. We usually reply within one to two business days.
+                Tell us the room, roughly how big it is, and where condensation shows up. The team can discuss suitability, the proposed one-time price and availability. No payment is taken here, and a request is not an order.
               </p>
             </div>
             {state === 'sent' ? (
               <div role="status" aria-live="polite" className="rounded-soft border border-[#177069]/30 bg-[#1770690d] p-7 text-center md:p-8">
-                <p className="text-[1.15rem] font-[650] text-[#177069]">Thank you — your message is on its way.</p>
+                <p className="text-[1.15rem] font-[650] text-[#177069]">Your quotation request has been submitted.</p>
                 <p className="mt-2 text-[13.5px] leading-relaxed text-ink-2">
-                  We reply to {email}. If it is urgent, call {CONTACT.phone}.
+                  The form sends the request; this page cannot confirm that the team inbox received it. We reply to {email}. If you do not hear back within two business days, email us directly at{' '}
+                  <a href={`mailto:${CONTACT.email}`} className="font-[650] text-accent-ink underline-offset-2 hover:underline">{CONTACT.email}</a>.
                 </p>
                 <button
                   type="button"
@@ -159,7 +161,7 @@ export default function Contact() {
                 </Field>
                 <Field id="c-about" label="Message" error={touched.about ? errs.about : ''}>
                   <textarea id="c-about" required rows={4} value={about} onChange={(e) => setAbout(e.target.value)}
-                    placeholder="Tell us about your space, or ask us anything..."
+                    placeholder="Which room, roughly how big, and where condensation or damp shows up..."
                     className="input resize-y"
                     aria-invalid={touched.about && !!errs.about}
                     aria-describedby={touched.about && errs.about ? 'c-about-err' : undefined} />
@@ -169,7 +171,10 @@ export default function Contact() {
               <>
               {state === 'error' && (
                 <p role="alert" className="mt-4 rounded-tight border border-[#bf2d2a]/30 bg-[#bf2d2a0a] px-3 py-2 text-[13px] text-[#bf2d2a]">
-                  That did not send. Email us directly at {CONTACT.email} and we will pick it up.
+                  That did not send. Email us directly at {CONTACT.email} and we will pick it up, or{' '}
+                  <a href={`${FORM_ACTION.replace(/formResponse$/, 'viewform')}`} target="_blank" rel="noreferrer" className="font-[650] underline underline-offset-2">
+                    fill in the form directly
+                  </a>.
                 </p>
               )}
               <button
@@ -177,7 +182,7 @@ export default function Contact() {
                 disabled={!valid || state === 'sending'}
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-btn bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#3f5670] disabled:opacity-100"
               >
-                {state === 'sending' ? 'Sending...' : 'Send message'}
+                {state === 'sending' ? 'Sending...' : 'Request a quotation'}
                 <ArrowRight className="size-4" strokeWidth={2} />
               </button>
               </>
@@ -186,10 +191,10 @@ export default function Contact() {
                   past tense "Sent straight to..." — a false confirmation of a send,
                   directly under a disabled button. It now only states what will
                   happen when you press it. */}
-              <p className="mt-3 flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink-3">
+              <p className="mt-3 flex max-w-[72ch] items-start gap-1.5 text-[12.5px] leading-relaxed text-ink-3">
                 <Lock className="mt-0.5 size-3 shrink-0 text-ink-3" strokeWidth={2} />
                 {useForm
-                  ? 'Goes straight to our team inbox. We never share your details.'
+                  ? 'Your request is submitted through Google Forms. Use the email option if you need to follow up.'
                   : `Opens your own mail app with the message ready, addressed to ${CONTACT.email}.`}
               </p>
             </form>
@@ -197,10 +202,9 @@ export default function Contact() {
           </Reveal>
 
           {/* ── Prefer direct? ── */}
-          <Reveal delay={80} className="order-first lg:order-none">
-            {/* Below lg the direct channels are the first actionable alternative after
-                the intro, not buried below the full form. The order class has to sit
-                on the grid child; on the inner div it reordered nothing. */}
+          <Reveal delay={80}>
+            {/* The form comes first on mobile: a buyer is here to request a quote,
+                and the direct channels sit below it. */}
             <div className="rounded-soft border border-line bg-card p-7 md:p-8 lg:flex lg:h-full lg:flex-col">
               <h2 className="text-[1.15rem] font-[650] text-deep">{CONTACT_PAGE.directTitle}</h2>
               <ul className="mt-5 divide-y divide-line lg:flex lg:flex-1 lg:flex-col">

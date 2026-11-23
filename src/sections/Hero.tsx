@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { ArrowRight } from 'lucide-react'
-import { HERO } from '../content'
+import { ArrowRight, BadgeCheck } from 'lucide-react'
+import { HERO, OFFER } from '../content'
 import { LineReveal, MagButton } from '../components/ui'
 import DeviceViewer from '../components/DeviceViewer'
 import { useReducedMotion } from '../lib/motion'
@@ -10,6 +10,10 @@ import { useReducedMotion } from '../lib/motion'
  * explicit: the 3D model is the hero, not a photo. So the live viewer sits in
  * the primary slot, showing the real SketchUp assembly rather than a render of
  * a device that does not exist. The risk readout card overlays it as before.
+ *
+ * Sales layout: the price sits next to the CTA, and the three bullets under it
+ * are the customer's outcome, not a spec list. Everything routes to /contact —
+ * there is no checkout on this site.
  *
  * Background is the PDF's flat #f7fbff hero band (sampled 105..750pt of page 1),
  * NOT a gradient: an authored gradient is a different design direction.
@@ -21,46 +25,63 @@ export default function Hero() {
 
   return (
     <section id="top" className="relative overflow-hidden bg-[#f7fbff]">
-      {/* Column split measured off the PDF: content 1120pt = text 36.3% ·
-          19.4% gap · photo 41.8%. The photo is SQUARE (468x473pt), not the
-          landscape panel a 50/50 split produces. */}
-      <div className="shell relative grid gap-5 pt-6 pb-8 lg:items-center lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)] lg:gap-[7%] lg:pt-16 lg:pb-10 min-[1352px]:grid-cols-[minmax(0,0.87fr)_minmax(0,1fr)] min-[1352px]:gap-[19%] min-[1352px]:pt-[118px] min-[1352px]:pb-[52px]">
+      {/* Balanced columns: 0.95fr / 1fr with a 6% gutter. The old 19% gutter at
+          1352px+ pushed the copy into a narrow ribbon and split the headline onto
+          four lines; the pitch now has room to read as a paragraph. */}
+      <div className="shell relative grid gap-5 pt-6 pb-8 lg:items-center lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-[6%] lg:pt-14 lg:pb-10 min-[1352px]:pt-[104px] min-[1352px]:pb-[52px]">
         {/* copy */}
         <div className="relative z-10">
           <p className="mb-4 text-[13px] text-ink-3">{HERO.cat}</p>
-          {/* PDF p1 h1 = 110pt on 1280 = 8.59% of page width. Straight-matching
-              that ratio is impossible HERE because the copy is longer than the
-              artboard's ("Know when conditions become mold-friendly." vs "Know mold
-              is coming before it shows.") and the text column is 561px of 1440.
-              Measured: at 1440 any size above ~4.6vw wraps to 4-5 lines, splitting
-              "mold-friendly", which is worse than being smaller. 4.6vw = 66px keeps
-              the artboard's 3-line shape at 1440 (was 72px / 4 lines). */}
           <LineReveal
             as="h1"
-            className="max-w-[15ch] text-[clamp(2.75rem,4.6vw,4.1rem)] leading-[1.02] font-bold tracking-[-0.032em] text-deep"
+            className="max-w-[20ch] text-[clamp(2.4rem,4.2vw,3.85rem)] leading-[1.03] font-bold tracking-[-0.032em] text-deep"
             lines={HERO.titleLines}
           />
-          <p className="lede mt-4 max-w-[34ch] sm:mt-6">{HERO.lede}</p>
+          <p className="lede mt-4 max-w-[36ch] sm:mt-5">{HERO.lede}</p>
 
-          <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
-            <MagButton href={HERO.primary.href} icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
-              {HERO.primary.label}
-            </MagButton>
-            <MagButton href={HERO.secondary.href} variant="ghost" icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
-              {HERO.secondary.label}
-            </MagButton>
+          {/* price + CTA together: the number a buyer asks for, beside the action */}
+          <div className="mt-6 flex flex-wrap items-end gap-x-6 gap-y-4 sm:mt-7">
+            <div>
+              <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{OFFER.priceLabel}</p>
+              <p className="measure mt-1 flex items-baseline gap-2 text-[1.9rem] leading-none font-semibold text-deep">
+                {OFFER.price}
+                <span className="inline-flex items-center gap-1 rounded-full border border-[#177069]/30 bg-[#1770690d] px-2 py-0.5 text-[10.5px] font-[650] tracking-[0.06em] text-[#177069] uppercase">
+                  <BadgeCheck className="size-3" strokeWidth={2} aria-hidden="true" />
+                  No subscription
+                </span>
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <MagButton href={HERO.primary.href} icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
+                {HERO.primary.label}
+              </MagButton>
+              <MagButton href={HERO.secondary.href} variant="ghost" icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
+                {HERO.secondary.label}
+              </MagButton>
+            </div>
           </div>
-          <p className="mt-4 max-w-[42ch] border-l-2 border-accent pl-3 text-[12.5px] leading-relaxed text-ink-2">
-            {HERO.status}. Risk scores reflect environmental conditions only; MoldGuard is not a mold diagnostic.
+
+          <ul className="mt-6 grid max-w-[52ch] gap-y-2 border-t border-line pt-4">
+            {HERO.bullets.map((b) => (
+              <li key={b.title} className="flex gap-3">
+                <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                <p className="text-[13px] leading-relaxed text-ink-2">
+                  <span className="font-[650] text-deep">{b.title}.</span> {b.body}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 max-w-[52ch] text-[11.5px] leading-relaxed text-ink-3">
+            {OFFER.terms}
           </p>
 
           {/* the hero is tall enough that the fold can read as the end of the page;
               one quiet cue down to the next section fixes that */}
           <a
             href="#problem"
-            className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-[13px] sm:mt-8 text-ink-3 transition-colors hover:text-ink"
+            className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-[13px] sm:mt-5 text-ink-3 transition-colors hover:text-ink"
           >
-            Scroll to see the unit
+            See why the room needs more than a meter
             <span aria-hidden="true">&darr;</span>
           </a>
         </div>
@@ -70,21 +91,13 @@ export default function Hero() {
           <div
             className="relative mx-auto overflow-hidden rounded-shell border border-line bg-white p-2 shadow-e2"
             // Square, per the PDF frame, but the SIDE is capped on wide viewports.
-            // Measured on the grid: the columns balance within 24px at 1440, but at
-            // 1920 the square stage reaches 822px against a 624px copy column — a
-            // 99px overhang each way. max-height cannot shrink an aspect-ratio box
-            // (the width still drives the height), so cap the width instead: 680px
-            // gives a 687px-tall stage, which is within ~60px of the copy column.
+            // A cap on width keeps the square from overhanging the copy column.
             style={{ aspectRatio: '1 / 1.01', maxWidth: 'min(100%, 680px)' }}
           >
             {/* Stage tone sampled from the artboard's hero product card: the device
                 sits on a WARM, LIGHT surface (beige/cream studio), not a cool blue
                 field. That contrast direction is what makes a white product read as
-                a product: warm light ground, cool white object. The site had a cool
-                mid-blue gradient (#e8f0f7 -> #5f7d9b) which fought the model — a
-                white body on cool blue sits at the same value and dissolves.
-                Measured after switching: product-region p5..p95 spread 70 -> see
-                scripts/model_check.mjs + the band note in docs/FIGMA_RECONSTRUCTION_LOG.md. */}
+                a product: warm light ground, cool white object. */}
             <div className="relative h-full w-full overflow-hidden rounded-soft bg-[radial-gradient(120%_95%_at_50%_20%,#fdfbf7_0%,#efe7db_55%,#d9cdbb_100%)]">
               <DeviceViewer
                 active={active}
@@ -96,11 +109,7 @@ export default function Hero() {
                 nudgeX={-0.014}
               />
               {/* The unit is shown open on purpose: the panels are modelled apart
-                  in the SketchUp file, and the interior IS the product argument.
-                  Two stickers used to say so; the artboard has neither, and the
-                  hero read as crowded. Keep ONE line (the bottom one, which also
-                  names the parts) and drop the "OPEN VIEW" pill — the open view is
-                  self-evident once the model is on screen. */}
+                  in the SketchUp file, and the interior IS the product argument. */}
               <p className="mt-2 px-1 text-center text-[11px] leading-snug text-ink-3 sm:pointer-events-none sm:absolute sm:bottom-4 sm:left-4 sm:right-[188px] sm:mt-0 sm:rounded-tight sm:bg-card sm:px-3 sm:py-2 sm:text-[12px] sm:text-ink sm:backdrop-blur-sm">
                 Open cutaway &middot; {HERO.stageNote}
               </p>
@@ -108,8 +117,7 @@ export default function Hero() {
           </div>
 
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
-              the photo's right edge into the white frame, as the PDF does —
-              narrow enough that it clips the frame corner, not the unit. */}
+              the photo's right edge into the white frame, as the PDF does. */}
           <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-e3 backdrop-blur-sm sm:absolute sm:-right-4 sm:bottom-3 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
             <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
             <p className="fx-tag mt-2 w-fit border-[#eaf2fc44] bg-[#eaf2fc12] text-on-dark-2">Illustrative reading</p>
@@ -120,11 +128,8 @@ export default function Hero() {
             <p className="mt-1 flex items-center justify-between gap-2 whitespace-nowrap text-[11px] text-on-dark-2">
               <span>Conditions steady</span>
             </p>
-            {/* ONE room, not three. content.ts is explicit that multi-room is a
-                planned premium tier and not in the base product, so a hero card
-                listing Living room + Bedroom + Closet claimed a capability the
-                FAQ then disclaims 4,000px lower. The band names are the site's
-                one vocabulary (Safe / Watch / Act), not Low / Elevated. */}
+            {/* ONE room: one device is scoped to one small room. The band names are
+                the site's one vocabulary (Safe / Watch / Act). */}
             <ul className="mt-3 divide-y divide-[#eaf2fc24] border-t border-[#eaf2fc24]">
               {[['Closet', 'Safe'], ['Dehumidifier', 'Standby']].map(([n, st]) => (
                 <li key={n} className="flex items-center justify-between gap-2 py-2">

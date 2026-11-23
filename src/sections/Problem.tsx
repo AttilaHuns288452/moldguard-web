@@ -17,6 +17,11 @@ export default function Problem() {
           <Reveal delay={80}>
             <p className="lede mt-2">{PROBLEM.lede}</p>
           </Reveal>
+          <Reveal delay={120}>
+            <p className="mt-4 max-w-[62ch] border-l-2 border-accent pl-4 text-[14.5px] leading-relaxed text-ink">
+              {PROBLEM.bridge}
+            </p>
+          </Reveal>
         </div>
 
         <div className="mt-12 grid gap-x-14 gap-y-0 border-t-2 border-line sm:grid-cols-2">

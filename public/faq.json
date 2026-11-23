@@ -7,7 +7,7 @@
       "name": "What is MoldGuard?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "An IoT mold risk prevention and detection system: a sensor pod that scores the Mold Risk Index for a room and can automatically control dehumidification."
+        "text": "A one-time-purchase device for one small enclosed room. It monitors humidity and temperature, scores a room-level Mold Risk Index, and runs a built-in thermoelectric dehumidifier automatically. The companion app shows status, alerts and control."
       }
     },
     {
@@ -15,7 +15,7 @@
       "name": "How does it detect mold risk?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature, and how long those conditions persist, instead of reacting to a single humidity threshold. Outdoor forecast data sharpens that window further."
+        "text": "It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature and how long those conditions persist, instead of a single humidity threshold, plus a dew-point estimate for condensation on cold surfaces."
       }
     },
     {
@@ -23,7 +23,7 @@
       "name": "Is it a dehumidifier?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, it is one. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses the threshold it starts pulling moisture down by itself."
+        "text": "Yes. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses its threshold it starts pulling moisture from the air, and stops once conditions return to range."
       }
     },
     {
@@ -31,7 +31,7 @@
       "name": "What does the app show?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Live status and history: the room, the readings behind the score, and humidity, temperature and dew-point trends over time (multi-room and multi-unit views are planned as a premium tier). You can step in with manual override from anywhere, any time."
+        "text": "Live status for the room: the readings behind the score, humidity and temperature history, alerts, and manual override when the device is online. The app is a companion to the device; monitoring and dehumidification run on the unit itself."
       }
     },
     {
@@ -39,7 +39,7 @@
       "name": "Can I monitor more than one room?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Not in the base product. Multi-room and multi-unit views are planned as an optional premium tier for larger households, dormitories or property managers."
+        "text": "One MoldGuard is scoped to one small enclosed room. Multi-room and multi-unit views are not part of this offer; ask about multiple units in your quotation."
       }
     },
     {
@@ -47,7 +47,7 @@
       "name": "How do I set it up?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Plug in, connect, done. Place the unit tabletop or wall-mounted, connect it to Wi-Fi, and watch the loop run."
+        "text": "Place it tabletop or wall-mounted and pair it with the companion app on Wi-Fi. Local Bluetooth control is also part of the design. Ask the team to confirm placement, setup requirements and support for your room in the quotation."
       }
     },
     {
@@ -55,7 +55,7 @@
       "name": "What happens if the internet goes down?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Bluetooth Low Energy keeps local monitoring and manual control working, and the dehumidification logic keeps running autonomously either way. One phone at a time over Bluetooth; several devices can connect over Wi-Fi."
+        "text": "The device keeps monitoring and dehumidifying on its own, and local Bluetooth control keeps working. Remote status, alerts and app control need the device online."
       }
     },
     {
@@ -63,7 +63,7 @@
       "name": "What maintenance does it need?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The loop runs on the device. Live status and history, alerts, and manual override are the parts that travel through the app and web dashboard."
+        "text": "Emptying the removable 1-litre reservoir, whose fill level is monitored so you are told before it is full. The device uses electricity and needs regular tank emptying."
       }
     },
     {
@@ -71,7 +71,7 @@
       "name": "Does it work without the internet?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "One development cost, no monthly fees. Standard, individually sourced parts inside one unit: sensors, a thermoelectric stack and a water tank. The hardware is yours, with no proprietary ecosystem."
+        "text": "Local monitoring, the risk logic and dehumidification run on the device. Live status and history in the app, alerts, and remote override are the parts that need a connection."
       }
     },
     {
@@ -79,7 +79,7 @@
       "name": "How much does it cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "One small enclosed room, about 30 m\\u00b3 (roughly 2.9 \\u00d7 4.2 \\u00d7 2.4 m), which is what the 1-litre reservoir is sized for. Larger or open-plan spaces are outside scope."
+        "text": "The proposed one-time selling price is ₱9,994: one payment for the hardware, with no subscription or monthly monitoring fee. Electricity and routine maintenance are separate from the purchase price. Your quotation confirms the final price and terms."
       }
     },
     {
@@ -87,7 +87,7 @@
       "name": "What room size does it handle?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Renters and small property owners, larger households, dormitories, and property managers."
+        "text": "It is intended for one small enclosed room such as a cupboard, bathroom, basement or small bedroom, and it is sized around that. Confirm suitability for your room in the inquiry; larger or open-plan spaces are outside scope."
       }
     },
     {
@@ -95,7 +95,7 @@
       "name": "Who is it for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Download →"
+        "text": "Renters and small property owners with one humidity-prone room, and anyone who would rather buy a device once than pay a monitoring subscription. It is not a mold clean-up service: existing growth needs professional remediation."
       }
     }
   ]

@@ -107,7 +107,7 @@ export default function WhatItDoes({ asHeading = 'h2' }: { asHeading?: 'h1' | 'h
                     </div>
                   ))}
                 </dl>
-                <p className="mt-3 border-t border-line pt-2.5 text-[11.5px] leading-snug text-ink-3">
+                <p className="mt-3 max-w-[72ch] border-t border-line pt-2.5 text-[11.5px] leading-snug text-ink-3">
                   A dew-point estimate for cold surfaces is derived from these two readings — not a separate sensor.
                 </p>
               </div>

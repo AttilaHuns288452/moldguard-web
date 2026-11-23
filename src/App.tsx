@@ -142,6 +142,7 @@ export default function App() {
             <Features />
             <Ownership />
             <Placement />
+            <Faq />
             <ClosingCta />
           </>
         )}

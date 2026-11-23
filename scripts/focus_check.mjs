@@ -114,8 +114,19 @@ try {
   for (let i = 0; i < 12; i++) baseline.push(await measure(i))
   for (let i = 0; i < 12; i++) {
     const label = (await rows.nth(i).innerText()).replace(/\s+/g, ' ').trim()
-    await rows.nth(i).click(); await page.waitForTimeout(2100)
-    const m = await measure(i, true)
+    await rows.nth(i).click()
+    // Rendering under SwiftShader can advance fewer frames than wall-clock
+    // sleeps imply. Wait for opacity and framing to converge before sampling.
+    let m
+    for (let attempt = 0; attempt < 40; attempt++) {
+      await page.waitForTimeout(250)
+      m = await measure(i)
+      const [x0, y0, x1, y1] = m.ndc
+      if (m.wrongOpacity === 0 && m.wrongFlags === 0 &&
+          Math.abs((x0 + x1) / 2) < 0.25 && Math.abs((y0 + y1) / 2) < 0.25 &&
+          (i >= 10 || m.radius < baseline[i].radius * 0.9)) break
+    }
+    m = await measure(i, true)
     const [x0, y0, x1, y1] = m.ndc
     const checks = {
       subject: m.picked > 0 && m.picked < 150,

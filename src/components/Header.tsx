@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import { Logo } from './Marks'
+import { OFFER } from '../content'
 
 import { navigate, pathFor, type Page, type Location_ } from '../lib/route'
 import { usePresence } from '../lib/motion'
@@ -9,7 +10,6 @@ const NAV: { id: Page; label: string }[] = [
   { id: 'features', label: 'Features' },
   { id: 'how-it-works', label: 'How it works' },
   { id: 'download', label: 'Get the app' },
-  { id: 'contact', label: 'Contact' },
 ]
 
 export default function Header({ page }: { page: Location_ }) {
@@ -86,12 +86,14 @@ export default function Header({ page }: { page: Location_ }) {
             {mobileOpen ? <X className="size-5" strokeWidth={2} /> : <Menu className="size-5" strokeWidth={2} />}
           </button>
 
+          {/* Primary sale action. The app link stays secondary: it is a companion to
+              the hardware, not the product being sold. */}
           <a
-            href={pathFor("download")}
-            onClick={(e) => { e.preventDefault(); navigate("download") }}
-            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn border border-line-hi px-[16px] py-2.5 text-[14px] font-[650] text-white bg-accent-ink border-accent-ink transition-colors hover:bg-deep active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
+            href={pathFor('contact')}
+            onClick={(e) => { e.preventDefault(); navigate('contact') }}
+            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn px-[16px] py-2.5 text-[14px] font-[650] text-white bg-accent-ink border border-accent-ink transition-colors hover:bg-deep active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
           >
-            Get the app
+            {OFFER.cta.label}
           </a>
         </nav>
 

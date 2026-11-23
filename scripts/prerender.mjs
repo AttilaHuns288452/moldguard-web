@@ -16,27 +16,29 @@ const HOST = 'https://moldguard-web.vercel.app'
 
 const ROUTES = {
   '': {
-    title: 'MoldGuard - know when conditions become mold-friendly',
+    title: 'MoldGuard - less guessing, more control over damp rooms',
     description:
-      'MoldGuard watches humidity, temperature and sustained exposure, scores a room-level environmental risk index, and dehumidifies automatically.',
+      'One device for one small damp room: room monitoring, a Mold Risk Index and automatic dehumidification, with status and control in the companion app. Proposed one-time price PHP 9,994, no subscription. Request a quotation.',
   },
   features: {
     title: 'Features - MoldGuard',
     description:
-      'Mold Risk Index engine, environmental and VOC monitoring, automatic dehumidification, analytics, alerts and automations. How MoldGuard compares with passive absorbers and commercial dehumidifiers.',
+      'Mold Risk Index engine, predictive weather integration, automatic dehumidification, analytics, alerts and automations. How MoldGuard compares with passive absorbers and commercial dehumidifiers.',
   },
   'how-it-works': {
     title: 'How it works - MoldGuard',
     description:
-      'The closed loop: sense the room, analyze the real mold risk, dehumidify on its own, and report everything to the app. Plus setup and straight answers.',
+      'The closed loop: sense the room, score the real mold risk, dehumidify on its own, and report status to the companion app. Plus setup and straight answers.',
   },
   contact: {
-    title: 'Contact - MoldGuard',
-    description: 'Tell us about your space and get a quote, or reach the MoldGuard team directly by email or phone.',
+    title: 'Request a quotation - MoldGuard',
+    description:
+      'Tell us the room, roughly how big it is and where condensation shows up. We reply with suitability, the proposed one-time price and the next step. No payment, no commitment.',
   },
   download: {
-    title: 'Get the app - MoldGuard',
-    description: 'Scan to get the MoldGuard app and monitor your home from anywhere.',
+    title: 'Get the MoldGuard app - MoldGuard',
+    description:
+      'The companion app for the MoldGuard device: live risk score, alerts and control. Pairs with the hardware; request the build from the team.',
   },
   '__404__': {
     title: 'Page not found - MoldGuard',

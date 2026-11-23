@@ -68,8 +68,8 @@ export default function GetApp() {
               className="max-w-[20ch] text-[clamp(2.2rem,4.1vw,3.9rem)] leading-[1.1] font-[650] text-deep"
             />
             <Reveal delay={80}>
-              <p className="lede mt-3 max-w-[38ch]">
-                Monitor your home from anywhere.
+              <p className="lede mt-3 max-w-[40ch]">
+                The companion app pairs with the MoldGuard device: live status, alerts and control for the room it watches. It is not a stand-alone service.
               </p>
             </Reveal>
 
@@ -97,6 +97,9 @@ export default function GetApp() {
                   See how it works &rarr;
                 </a>
               </div>
+              <p className="mt-4 max-w-[46ch] text-[13px] leading-relaxed text-ink-2">
+                New to MoldGuard? The app comes with the device. Request a quotation for your room and it covers hardware, price and next steps.
+              </p>
             </Reveal>
           </div>
 

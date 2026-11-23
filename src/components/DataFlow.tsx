@@ -145,7 +145,7 @@ export default function DataFlow() {
           loop simply holds on standby.
         </p>
 
-        <p className="mt-4 border-t border-line pt-4 text-[13.5px] leading-relaxed text-ink-2">{MEET.flowLede}</p>
+        <p className="mt-4 max-w-[72ch] border-t border-line pt-4 text-[13.5px] leading-relaxed text-ink-2">{MEET.flowLede}</p>
       </Seq>
     </figure>
   )

@@ -51,9 +51,9 @@ export function navigate(page: Page) {
  */
 const HEAD: Record<Location_, { title: string; description: string }> = {
   home: {
-    title: 'MoldGuard - know when conditions become mold-friendly',
+    title: 'MoldGuard - less guessing, more control over damp rooms',
     description:
-      'MoldGuard watches humidity, temperature and sustained exposure, scores a room-level environmental risk index, and dehumidifies automatically.',
+      'One device for one small damp room: room monitoring, a Mold Risk Index and automatic dehumidification, with status and control in the companion app. Proposed one-time price PHP 9,994, no subscription. Request a quotation.',
   },
   features: {
     title: 'Features - MoldGuard',
@@ -63,16 +63,17 @@ const HEAD: Record<Location_, { title: string; description: string }> = {
   'how-it-works': {
     title: 'How it works - MoldGuard',
     description:
-      'The closed loop: sense the room, analyze the real mold risk, dehumidify on its own, and report everything to the app. Plus setup and straight answers.',
+      'The closed loop: sense the room, score the real mold risk, dehumidify on its own, and report status to the companion app. Plus setup and straight answers.',
   },
   contact: {
-    title: 'Contact - MoldGuard',
+    title: 'Request a quotation - MoldGuard',
     description:
-      'Tell us about your space and get a quote, or reach the MoldGuard team directly by email or phone.',
+      'Tell us the room, roughly how big it is and where condensation shows up. We reply with suitability, the proposed one-time price and the next step. No payment, no commitment.',
   },
   download: {
-    title: 'Get the app - MoldGuard',
-    description: 'Scan to get the MoldGuard app and monitor your home from anywhere.',
+    title: 'Get the MoldGuard app - MoldGuard',
+    description:
+      'The companion app for the MoldGuard device: live risk score, alerts and control. Pairs with the hardware; request the build from the team.',
   },
   'not-found': {
     title: 'Page not found - MoldGuard',

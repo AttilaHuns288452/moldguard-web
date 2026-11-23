@@ -25,7 +25,7 @@ const VIEWPORTS = [
 // suite exists to catch a route that lost a section, so a stale map here
 // silently passes a broken page.
 const ROUTE_SECTIONS = {
-  '/': ['top', 'problem', 'meet', 'features', 'ownership', 'placement', 'closing-cta'],
+  '/': ['top', 'problem', 'meet', 'features', 'ownership', 'placement', 'faq', 'closing-cta'],
   '/features': ['capabilities', 'features', 'what', 'risk', 'compare', 'parts', 'closing-cta'],
   '/how-it-works': ['how', 'faq', 'closing-cta'],
   '/contact': ['contact', 'faq'],
@@ -69,12 +69,13 @@ let navigationInFlight = false
 async function open(page, url, settle = 700) {
   navigationInFlight = true
   try {
-    await page.goto(url, { waitUntil: 'load', timeout: 45000 })
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 })
+    await page.locator('main h1').first().waitFor({ state: 'attached', timeout: 20000 })
   } finally {
     navigationInFlight = false
   }
-  const idle = /localhost|127\.0\.0\.1/.test(url)
-  if (idle) await page.waitForLoadState?.('networkidle', { timeout: 8000 }).catch(() => {})
+  // App readiness is explicit above; lazy WebGL and font requests are checked
+  // separately and must not hold every navigation behind network-idle timing.
   await page.waitForTimeout(settle)
 }
 
@@ -279,7 +280,7 @@ for (const vp of VIEWPORTS) {
   const relay = page.locator('#meet li button').filter({ hasText: 'Relay' }).first()
   await relay.waitFor({ state: 'visible' })
   await relay.scrollIntoViewIfNeeded()
-  await relay.evaluate((el) => el.click())
+  await relay.click()
   await page.waitForFunction((before) => document.querySelector('#meet h3')?.textContent !== before, t0)
   record('explorer: component selection updates panel', (await title()) !== t0,
     `${t0} -> ${await title()}`)
