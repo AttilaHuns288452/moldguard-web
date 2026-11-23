@@ -50,6 +50,8 @@ try {
     await page.waitForURL('**/contact')
     assert.match(await page.locator('h1').innerText(), /quot|room/i)
     const form = page.locator('#contact-form')
+    // waitForURL fires before React renders the route; wait for the form itself.
+    await form.waitFor({ state: 'attached', timeout: 20000 })
     assert.equal(await form.count(), 1)
     assert.equal(await form.locator('button[type="submit"]').isDisabled(), true)
     const nameBox = await form.boundingBox()

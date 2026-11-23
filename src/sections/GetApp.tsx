@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Pause, Play } from 'lucide-react'
 import { Reveal, LineReveal } from '../components/ui'
-import { splitTitle } from '../lib/motion'
+import { splitTitle, useReducedMotion } from '../lib/motion'
 import { navigate } from '../lib/route'
 import StoreBadges from '../components/StoreBadges'
 import { FrameHome, FrameDetail, FrameControl, FrameAnalytics } from '../figma/PhoneFrames'
@@ -31,11 +31,32 @@ export default function GetApp() {
   const [more, setMore] = useState(false)
   const [activeFrame, setActiveFrame] = useState(0)
   const frameCount = FRAMES.length
+  // Autoplay is opt-out (WCAG 2.2.2 needs a pause mechanism for moving content),
+  // pauses on hover/focus so reading is never interrupted, and is disabled
+  // entirely for reduced-motion users.
+  const reduced = useReducedMotion()
+  const [autoplay, setAutoplay] = useState(true)
+  const [held, setHeld] = useState(false)
+  const frameIndex = useRef(0)
   const goFrame = (index: number) => {
     const next = (index + frameCount) % frameCount
+    frameIndex.current = next
     setActiveFrame(next)
-    rowRef.current?.children[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+    const el = rowRef.current
+    const child = el?.children[next] as HTMLElement | undefined
+    // Scroll the strip itself; scrollIntoView can drag the whole page when the
+    // carousel is partly off-screen during autoplay.
+    if (el && child) el.scrollTo({ left: child.offsetLeft, behavior: 'smooth' })
   }
+  useEffect(() => { frameIndex.current = activeFrame }, [activeFrame])
+  useEffect(() => {
+    if (reduced || !autoplay || held || !more) return
+    const id = window.setInterval(() => {
+      if (document.hidden) return
+      goFrame(frameIndex.current + 1)
+    }, 4800)
+    return () => window.clearInterval(id)
+  }, [reduced, autoplay, held, more, frameCount])
   useEffect(() => {
     const el = rowRef.current
     if (!el) return
@@ -149,10 +170,13 @@ export default function GetApp() {
             Inside the app
           </h2>
         </Reveal>
-        <div className="relative mt-4">
+        <div className="relative mt-4"
+          onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)}
+          onFocusCapture={() => setHeld(true)} onBlurCapture={() => setHeld(false)}>
         <div className="mb-3 flex items-center justify-between gap-3">
-          <p className="measure text-[11px] text-ink-3">Screen {String(activeFrame + 1).padStart(2, '0')} / {String(frameCount).padStart(2, '0')}</p>
+          <p className="measure text-[11px] text-ink-3" aria-live="polite">Screen {String(activeFrame + 1).padStart(2, '0')} / {String(frameCount).padStart(2, '0')}</p>
           <div className="flex items-center gap-2">
+            <button type="button" onClick={() => setAutoplay((v) => !v)} aria-label={autoplay ? 'Pause automatic app screen rotation' : 'Start automatic app screen rotation'} aria-pressed={autoplay} disabled={reduced} className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink disabled:opacity-40">{autoplay && !reduced ? <Pause className="size-3.5" aria-hidden="true" /> : <Play className="size-3.5" aria-hidden="true" />}</button>
             <button type="button" onClick={() => goFrame(activeFrame - 1)} aria-label="Previous app screen" className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink"><ArrowLeft className="size-4" aria-hidden="true" /></button>
             <button type="button" onClick={() => goFrame(activeFrame + 1)} aria-label="Next app screen" className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink"><ArrowRight className="size-4" aria-hidden="true" /></button>
           </div>
