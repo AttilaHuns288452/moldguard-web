@@ -116,7 +116,7 @@ export default function Contact() {
           <Reveal>
             <div className="mb-4 rounded-soft border border-line-hi bg-paper-deep px-4 py-3">
               <p className="max-w-[68ch] text-[12.5px] leading-relaxed text-ink-2">
-                Tell us the room, roughly how big it is, and where condensation shows up. The team can discuss suitability, the proposed one-time price and availability. No payment is taken here, and a request is not an order.
+                Tell us the room, roughly how big it is, and where condensation shows up. The team can discuss suitability, what the price includes and availability. No payment is taken here, and a request is not an order.
               </p>
             </div>
             {state === 'sent' ? (

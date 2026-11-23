@@ -31,16 +31,16 @@ export const CONTACT = {
 /** The one offer, stated the same way everywhere on the site. */
 export const OFFER = {
   price: '\u20b19,994',
-  priceLabel: 'Proposed one-time price',
+  priceLabel: 'One-time price',
   // The buyer's first qualifying question, answered beside the price.
   specs: ['One small enclosed room', 'About 28 × 28 × 40 cm', '1-litre removable tank'],
   priceNote: 'One payment. The device and its companion app are yours; nothing renews.',
-  source: 'Proposed price from the feasibility study, Section 3.4',
+  source: 'Priced from the feasibility study, Section 3.4',
   cta: { label: 'Check it fits my room', href: '/contact' },
   terms:
-    'Price is proposed. Availability, delivery, warranty and service terms are confirmed in your quotation before any commitment; no payment is taken on this site.',
+    'One-time purchase, no subscription. Availability, delivery and warranty terms are confirmed in your quotation before any commitment; no payment is taken on this site.',
   // Reassurance at the decision point: what happens after the click.
-  reassurance: 'No payment now. We reply with fit and the proposed price, usually within one to two business days.',
+  reassurance: 'No payment now. We reply with fit and a firm quote, usually within one to two business days.',
 }
 
 export const HERO = {
@@ -166,7 +166,7 @@ export const PLACEMENT = {
 
 export const CTA = {
   title: 'Take the guesswork out of one damp room.',
-  lede: 'Request a quotation for your room. It covers the device, the proposed price and what happens next.',
+  lede: 'Request a quotation for your room. It covers the device, the price and what happens next.',
   primary: OFFER.cta,
   // Never a second contact link: this route already ends on /contact.
   secondary: { label: 'View the app', href: '/download' },
@@ -285,7 +285,7 @@ export const FAQ = {
     { q: 'What happens if the internet goes down?', a: 'The device keeps monitoring and dehumidifying on its own, and local Bluetooth control keeps working. Remote status, alerts and app control need the device online.' },
     { q: 'What maintenance does it need?', a: 'Emptying the removable 1-litre reservoir, whose fill level is monitored so you are told before it is full. The device uses electricity and needs regular tank emptying.' },
     { q: 'Does it work without the internet?', a: 'Local monitoring, the risk logic and dehumidification run on the device. Live status and history in the app, alerts, and remote override are the parts that need a connection.' },
-    { q: 'How much does it cost?', a: 'The proposed one-time selling price is \u20b19,994: one payment for the hardware, with no subscription or monthly monitoring fee. Electricity and routine maintenance are separate from the purchase price. Your quotation confirms the final price and terms.' },
+    { q: 'How much does it cost?', a: 'It is \u20b19,994 once: one payment for the hardware, with no subscription and no monthly monitoring fee. Electricity and routine maintenance are separate from the purchase. Everything you need to run it is included in that one payment.' },
     { q: 'What room size does it handle?', a: 'It is intended for one small enclosed room such as a cupboard, bathroom, basement or small bedroom, and it is sized around that. Confirm suitability for your room in the inquiry; larger or open-plan spaces are outside scope.' },
     { q: 'Who is it for?', a: 'Renters and small property owners with one humidity-prone room, and anyone who would rather buy a device once than pay a monitoring subscription. It is not a mold clean-up service: existing growth needs professional remediation.' },
   ],
@@ -311,7 +311,7 @@ export const CONTACT_PAGE = {
     note: 'Price, availability and warranty are confirmed in writing before you commit. This site takes no payment.',
     items: [
       { n: '01', title: 'Tell us about the room', body: 'Which room, roughly how big, and where damp or condensation shows up. The form or a short call covers it.' },
-      { n: '02', title: 'Suitability and quote', body: 'We confirm whether the room is in scope for one MoldGuard unit, and send the proposed one-time price and what the system consists of.' },
+      { n: '02', title: 'Suitability and quote', body: 'We confirm whether the room is in scope for one MoldGuard unit, and set out exactly what the \u20b19,994 covers.' },
       { n: '03', title: 'Agree the next steps', body: 'If it fits, availability and terms are confirmed in writing and we agree what happens next. Nothing is charged through this site.' },
     ],
   },

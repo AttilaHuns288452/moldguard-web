@@ -17,7 +17,7 @@
 | C11 | Component/BOM details such as VOC sensor, controller variant, and enclosure dimensions are final. | `src/content.ts` vs `Proposal - FINISHED.docx` | **Unresolved**; reconcile before using as authoritative technical specification |
 | C12 | The project is a prototype under evaluation, not a confirmed commercial order. | `src/content.ts` `OFFER.terms`, `CONTACT_PAGE.steps.note` | Required contextual limitation; availability and terms are confirmed in the quotation |
 
-| C13 | One-time hardware sale with a proposed price of PHP 9,994 and no subscription. | `src/content.ts` `OFFER` / `OWN` / `FAQ`; feasibility study Section 3.4; `moldguard-defense/cba/MoldGuard_Cost_Benefit_Analysis.md` product summary and selling-price input | **Proposed** price, single price tested, no conversion data. Quote-only: stock, delivery, warranty and service terms are confirmed in the quotation. |
+| C13 | One-time hardware sale at PHP 9,994 with no subscription. | `src/content.ts` `OFFER` / `OWN` / `FAQ`; feasibility study Section 3.4; `moldguard-defense/cba/MoldGuard_Cost_Benefit_Analysis.md` product summary and selling-price input | Single price tested, no conversion data. Quote-only: stock, delivery, warranty and service terms are confirmed in the quotation. |
 | C14 | Internal component/BOM cost is not a customer price. | Feasibility study vs proposal; superseded premium/development-fee copy removed | Do not surface component cost or development fees on customer pages. |
 | C15 | The device is intended for one small enclosed room; numeric coverage is omitted. | Source documents conflict (9.7 m³ vs 30 m³) | No numeric room-coverage claim; suitability confirmed in the inquiry. |
 

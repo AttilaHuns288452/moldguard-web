@@ -26,14 +26,17 @@ try {
     assert.equal(await hero.locator('h1').count(), 1)
     assert.match(await hero.innerText(), /MoldGuard/)
     assert.match(await hero.innerText(), /9,994/)
-    assert.match(await hero.innerText(), /proposed/i)
+    // The price must be stated as the price, not hedged as a proposal.
+    assert.match(await hero.innerText(), /9,994/)
+    assert.doesNotMatch(await hero.innerText(), /proposed/i)
     assert.match(await hero.innerText(), /one.time/i)
     const quote = hero.getByRole('link', { name: /fits my room|request.*quot/i }).first()
     assert.equal(await quote.getAttribute('href'), '/contact')
     assert.match(await page.locator('#problem').innerText(), /damp|condens|cupboard|room/i)
     const ownership = await page.locator('#ownership').innerText()
     assert.match(ownership, /9,994/)
-    assert.match(ownership, /proposed/i)
+    assert.match(ownership, /9,994/)
+    assert.doesNotMatch(ownership, /proposed/i)
     assert.match(ownership, /no subscription|no monthly/i)
     assert.doesNotMatch(ownership, /4,363|development fee|component budget/i)
     assert.match(ownership, /app/i)
@@ -63,7 +66,7 @@ try {
     await form.locator('#c-email').fill('visitor@example.com')
     await form.locator('#c-phone').fill('09920000000')
     await form.locator('#c-role').selectOption('Renter')
-    await form.locator('#c-about').fill('Bedroom with recurring window condensation. Please confirm room suitability and the proposed one-time price.')
+    await form.locator('#c-about').fill('Bedroom with recurring window condensation. Please confirm room suitability and what the price covers.')
     let submitted = null
     await page.route('https://docs.google.com/forms/**/formResponse', async (route) => {
       submitted = Object.fromEntries(new URLSearchParams(route.request().postData() || ''))
@@ -102,7 +105,7 @@ try {
     assert.deepEqual(errors, [])
     evidence.push({ width, status: 'pass', inquiryIntercepted: true })
     await writeFile(`${out}/results.json`, JSON.stringify(evidence, null, 2))
-    console.log(`PASS ${width}px: product pitch, proposed price, quote funnel, intercepted form, objections/schema, preserved app carousel`)
+    console.log(`PASS ${width}px: product pitch, one-time price, quote funnel, intercepted form, objections/schema, preserved app carousel`)
     await page.close()
   }
   console.log('SALES: PASS. 4 viewports; no real enquiries submitted.')

@@ -242,7 +242,7 @@ export default function Meet() {
         <Reveal delay={40}>
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-soft border border-line bg-card px-5 py-4">
             <p className="text-[14px] text-ink-2">
-              <span className="font-[650] text-deep">{OFFER.price}</span> proposed one-time price. One small room, one device.
+              <span className="font-[650] text-deep">{OFFER.price} once.</span> No subscription, no monitoring fee. One small room, one device.
             </p>
             <a
               href="/contact"

@@ -7,8 +7,8 @@ MoldGuard is a prototype-level IoT device sold as one-time hardware: room sensin
 ## Offer
 
 - One business model: a one-time hardware sale. No subscriptions, no premium tiers, no development fees on customer surfaces.
-- Proposed selling price: **PHP 9,994**, one payment. Source: feasibility study Section 3.4 and `moldguard-defense/cba/MoldGuard_Cost_Benefit_Analysis.md` (product summary and selling-price input).
-- The price is **proposed**. Retail availability, certification, delivery, warranty and service terms are not confirmed; the quotation confirms them. No stock, shipping, warranty or payment claims are made on the site.
+- Selling price: **PHP 9,994**, one payment, no subscription. Source: feasibility study Section 3.4 and `moldguard-defense/cba/MoldGuard_Cost_Benefit_Analysis.md` (product summary and selling-price input).
+- The price is stated as the price. Retail availability, certification, delivery, warranty and service terms are not confirmed; the quotation confirms them. No stock, shipping, warranty or payment claims are made on the site.
 - The device is scoped to **one small enclosed room**. Numeric room coverage is deliberately omitted (source documents conflict: 9.7 m³ vs 30 m³); suitability is confirmed in the inquiry.
 - Not a mold diagnostic, no guaranteed prevention. Existing mold requires professional remediation.
 - App/dashboard values remain illustrative and labelled. No app-store listing exists; the build is sent on request.
@@ -32,7 +32,7 @@ MoldGuard is presented as a system that reasons about humidity, temperature, and
 
 | Route | Purpose |
 |---|---|
-| `/` | Outcome-led hero with the proposed price, problem, real hardware explorer, outcomes, purchase offer, placement, buyer FAQ, closing CTA |
+| `/` | Outcome-led hero with the price, problem, real hardware explorer, outcomes, purchase offer, placement, buyer FAQ, closing CTA |
 | `/features` | Mold-specific intelligence, risk engine, comparison, parts, and product capabilities |
 | `/how-it-works` | Sense → analyze → respond → protect loop, setup, FAQ, closing CTA |
 | `/contact` | Quotation request (form first on mobile), direct contact, three steps from room to quote, team, and FAQ |

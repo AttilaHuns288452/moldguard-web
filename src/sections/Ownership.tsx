@@ -7,7 +7,7 @@ import { ArrowRight, Check, Minus } from 'lucide-react'
  * Purchase-offer band: navy on page 1 (PDF band 0.702–0.774).
  *
  * It used to show a component build cost, which is an internal figure and not a
- * customer price. It now states the one offer — a proposed one-time price, no
+ * customer price. It now states the one offer — a one-time price, no
  * subscription — and what the system consists of, with an honest fit checklist.
  * Every term beyond price (stock, delivery, warranty, service) is confirmed in
  * the quotation, so nothing here promises what is not confirmed.

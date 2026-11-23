@@ -43,7 +43,7 @@ export default function Hero() {
           <div className="mt-6 flex flex-wrap items-end gap-x-6 gap-y-4 sm:mt-7">
             <div>
               <p className="measure text-[1.9rem] leading-none font-semibold text-deep">{OFFER.price}</p>
-              <p className="mt-1 text-[12.5px] text-ink-2">proposed one-time price</p>
+              <p className="mt-1 text-[12.5px] text-ink-2">one-time, nothing renews</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <MagButton href={HERO.primary.href} icon={<ArrowRight className="size-3.5" strokeWidth={2} />}>
