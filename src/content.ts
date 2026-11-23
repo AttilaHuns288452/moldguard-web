@@ -285,7 +285,7 @@ export const FAQ = {
     { q: 'What happens if the internet goes down?', a: 'The device keeps monitoring and dehumidifying on its own, and local Bluetooth control keeps working. Remote status, alerts and app control need the device online.' },
     { q: 'What maintenance does it need?', a: 'Emptying the removable 1-litre reservoir, whose fill level is monitored so you are told before it is full. The device uses electricity and needs regular tank emptying.' },
     { q: 'Does it work without the internet?', a: 'Local monitoring, the risk logic and dehumidification run on the device. Live status and history in the app, alerts, and remote override are the parts that need a connection.' },
-    { q: 'How much does it cost?', a: 'It is \u20b19,994 once: one payment for the hardware, with no subscription and no monthly monitoring fee. Electricity and routine maintenance are separate from the purchase. Everything you need to run it is included in that one payment.' },
+    { q: 'How much does it cost?', a: 'It is \u20b19,994 once: one payment for the hardware, with no subscription and no monthly monitoring fee. Electricity and routine maintenance sit outside that one payment.' },
     { q: 'What room size does it handle?', a: 'It is intended for one small enclosed room such as a cupboard, bathroom, basement or small bedroom, and it is sized around that. Confirm suitability for your room in the inquiry; larger or open-plan spaces are outside scope.' },
     { q: 'Who is it for?', a: 'Renters and small property owners with one humidity-prone room, and anyone who would rather buy a device once than pay a monitoring subscription. It is not a mold clean-up service: existing growth needs professional remediation.' },
   ],

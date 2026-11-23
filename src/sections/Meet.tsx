@@ -84,7 +84,7 @@ export default function Meet() {
           {/* ── the model ── */}
           <Reveal>
             <div className="relative overflow-hidden rounded-soft border border-line bg-card">
-              <div className="flex min-h-[49px] items-center justify-between border-b border-line px-4 py-2.5">
+              <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5">
                 <span className="text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{MEET.caption}</span>
                 <span className="measure text-[11px] tracking-[0.08em] text-ink-3 uppercase">{mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[1])} &times; {mm(MODEL_SIZE[2])} mm</span>
               </div>
