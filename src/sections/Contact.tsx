@@ -63,6 +63,13 @@ export default function Contact() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // Guard here rather than disabling the button: a disabled submit gave the
+    // user no way to trigger the browser's own "this field is invalid" prompt.
+    if (!valid) {
+      const first = !errs.name ? (errs.email ? 'c-email' : 'c-about') : 'c-name'
+      document.getElementById(first)?.focus()
+      return
+    }
     if (!useForm) { window.location.href = mailto; return }
     setState('sending')
     try {
@@ -177,12 +184,16 @@ export default function Contact() {
                   </a>.
                 </p>
               )}
+              {/* Only disabled while sending. Disabling on invalid input trapped
+                  the user: they could neither submit nor get the native
+                  validation message, so the form looked dead. Submission is
+                  blocked by validation instead, which explains itself. */}
               <button
                 type="submit"
-                disabled={!valid || state === 'sending'}
+                disabled={state === 'sending'}
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-btn bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#3f5670] disabled:opacity-100"
               >
-                {state === 'sending' ? 'Sending...' : 'Request a quotation'}
+                {state === 'sending' ? 'Sending...' : 'Ask about my room'}
                 <ArrowRight className="size-4" strokeWidth={2} />
               </button>
               </>

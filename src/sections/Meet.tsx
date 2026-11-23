@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Boxes, Eye, Layers, Play } from 'lucide-react'
 import DeviceViewer from '../components/DeviceViewer'
 import DataFlow from '../components/DataFlow'
 import { PARTS, PART_BY_ID, TOUR, MODEL_SIZE, type PartId } from '../components/parts'
-import { MEET } from '../content'
+import { MEET, OFFER } from '../content'
 import { Reveal, LineReveal } from '../components/ui'
 import { prefersReducedMotion, splitTitle } from '../lib/motion'
 import { navigate } from '../lib/route'
@@ -233,6 +233,23 @@ export default function Meet() {
             data-flow figure directly below them (and as Sense/Score/Act and the
             viewer's own "How it works" panel). On the home page the flow is now
             stated ONCE, as the diagram, with a link to the full walkthrough. */}
+        {/* Buy CTA: the explorer ends ~5,900px before the next call to action,
+            so a reader who has just inspected the hardware had no way to act. */}
+        <Reveal delay={40}>
+          <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3 rounded-soft border border-line bg-card px-5 py-4">
+            <p className="text-[14px] text-ink-2">
+              <span className="font-[650] text-deep">{OFFER.price}</span> proposed one-time price. One small room, one device.
+            </p>
+            <a
+              href="/contact"
+              onClick={(e) => { e.preventDefault(); navigate('contact') }}
+              className="inline-flex min-h-11 items-center rounded-btn bg-accent-ink px-5 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-deep"
+            >
+              Check it fits my room
+            </a>
+          </div>
+        </Reveal>
+
         <Reveal delay={60}>
           <p className="mt-8 text-[14px] text-ink-2">
             The loop in full, stage by stage:{' '}

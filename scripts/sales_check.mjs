@@ -53,7 +53,9 @@ try {
     // waitForURL fires before React renders the route; wait for the form itself.
     await form.waitFor({ state: 'attached', timeout: 20000 })
     assert.equal(await form.count(), 1)
-    assert.equal(await form.locator('button[type="submit"]').isDisabled(), true)
+    // Submit is enabled; invalid input is caught on submit with a focused field,
+    // so the browser's own validation message is reachable.
+    assert.equal(await form.locator('button[type="submit"]').isDisabled(), false)
     const nameBox = await form.boundingBox()
     const directBox = await page.locator('#contact a[href^="tel:"]').first().boundingBox()
     if (width < 1024) assert.ok(nameBox.y < directBox.y, 'inquiry form precedes direct-contact aside on mobile')
