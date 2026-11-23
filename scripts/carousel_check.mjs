@@ -22,11 +22,12 @@ try {
   await page.waitForTimeout(5300)
   assert.equal(await label(page), 'Screen 03 / 04', 'keeps advancing')
 
-  // Hover pauses: it must not advance while the pointer is over the carousel.
+  // Autoplay keeps running with the pointer parked over the strip; the explicit
+  // pause button is the stopping mechanism (and respects reduced motion).
   await carousel.hover()
-  const held = await label(page)
+  const beforeHover = await label(page)
   await page.waitForTimeout(5600)
-  assert.equal(await label(page), held, 'hover pauses autoplay')
+  assert.notEqual(await label(page), beforeHover, 'hover does not freeze autoplay')
   await page.mouse.move(0, 0)
 
   // The explicit pause control stops it, and the state is exposed.
@@ -53,5 +54,5 @@ try {
   await reduced.waitForTimeout(5600)
   assert.equal(await label(reduced), 'Screen 01 / 04', 'reduced motion never autoplays')
   assert.equal(await reduced.getByRole('button', { name: /automatic app screen rotation/ }).isDisabled(), true)
-  console.log('CAROUSEL: PASS. autoplay, hover/focus pause, pause control, manual controls, reduced motion.')
+  console.log('CAROUSEL: PASS. autoplay, hover keeps running, pause control, manual controls, reduced motion.')
 } finally { await browser.close() }

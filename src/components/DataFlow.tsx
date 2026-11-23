@@ -86,7 +86,7 @@ export default function DataFlow() {
               </li>
             </ul>
             <p className="mt-2.5 text-[13px] text-ink-3">
-              Air quality adds supplementary context, not a mold verdict.
+              Duration matters as much as the reading itself.
             </p>
           </Region>
 

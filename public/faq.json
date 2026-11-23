@@ -28,6 +28,22 @@
     },
     {
       "@type": "Question",
+      "name": "Why not just buy a cheap dehumidifier?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A dehumidifier dries when you switch it on. MoldGuard also decides when that should happen, using humidity, temperature and how long the room has stayed damp rather than one humidity reading. You are paying for the sensing and the automatic response in the same unit. If you only need a fan and a compressor on a manual switch, a cheaper unit covers that."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long until I get it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MoldGuard is built to order rather than shipped from stock. Your quotation confirms build time, delivery and any service coverage before you commit. No payment is taken on this site."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "What does the app show?",
       "acceptedAnswer": {
         "@type": "Answer",

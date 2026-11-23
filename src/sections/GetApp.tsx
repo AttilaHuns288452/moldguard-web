@@ -36,7 +36,6 @@ export default function GetApp() {
   // entirely for reduced-motion users.
   const reduced = useReducedMotion()
   const [autoplay, setAutoplay] = useState(true)
-  const [held, setHeld] = useState(false)
   const frameIndex = useRef(0)
   const goFrame = (index: number) => {
     const next = (index + frameCount) % frameCount
@@ -50,13 +49,13 @@ export default function GetApp() {
   }
   useEffect(() => { frameIndex.current = activeFrame }, [activeFrame])
   useEffect(() => {
-    if (reduced || !autoplay || held || !more) return
+    if (reduced || !autoplay || !more) return
     const id = window.setInterval(() => {
       if (document.hidden) return
       goFrame(frameIndex.current + 1)
     }, 4800)
     return () => window.clearInterval(id)
-  }, [reduced, autoplay, held, more, frameCount])
+  }, [reduced, autoplay, more, frameCount])
   useEffect(() => {
     const el = rowRef.current
     if (!el) return
@@ -170,9 +169,7 @@ export default function GetApp() {
             Inside the app
           </h2>
         </Reveal>
-        <div className="relative mt-4"
-          onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)}
-          onFocusCapture={() => setHeld(true)} onBlurCapture={() => setHeld(false)}>
+        <div className="relative mt-4">
         <div className="mb-3 flex items-center justify-between gap-3">
           <p className="measure text-[11px] text-ink-3" aria-live="polite">Screen {String(activeFrame + 1).padStart(2, '0')} / {String(frameCount).padStart(2, '0')}</p>
           <div className="flex items-center gap-2">

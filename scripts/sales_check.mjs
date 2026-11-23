@@ -80,7 +80,7 @@ try {
     await page.goto(base + '/how-it-works', { waitUntil: 'load' })
     assert.equal(await page.locator('#how [role="tab"]').count(), 4)
     const faqs = page.locator('#faq li')
-    assert.equal(await faqs.count(), 12)
+    assert.equal(await faqs.count(), 14)
     const priceQuestion = page.getByRole('button', { name: 'How much does it cost?', exact: true })
     await priceQuestion.click()
     assert.match(await page.locator('#faq').innerText(), /9,994/)

@@ -54,6 +54,8 @@ export const HERO = {
   ],
   primary: { label: 'Request a quotation', href: '/contact' },
   secondary: { label: 'See how it works', href: '/how-it-works' },
+  // One comparison a buyer makes immediately, answered before the FAQ.
+  compare: 'A cheap dehumidifier dries when you switch it on. This one decides when to dry, from humidity, temperature and how long the room has stayed damp.',
 }
 
 // The demo readout used by DataFlow. It is NOT the hero card (that is explicit
@@ -86,7 +88,7 @@ export const MEET = {
   lede: 'One device senses the room, scores the risk and dehumidifies on its own. You own the hardware.',
   caption: 'MoldGuard Pod · tabletop or wall-mounted',
   stages: [
-    { n: '01', title: 'The pod senses', body: 'Temperature, humidity and air quality, continuously.' },
+    { n: '01', title: 'The pod senses', body: 'Temperature and humidity, read continuously.' },
     { n: '02', title: 'The system understands', body: 'Readings become an environmental picture of the room.' },
     { n: '03', title: 'The system flags risk', body: 'A single Mold Risk Index, updated in real time.' },
     { n: '04', title: 'The system responds', body: 'The stack switches itself on and back off.' },
@@ -100,7 +102,7 @@ export const SENSE_SCORE_ACT = {
   title: 'Sense. Score. Act.',
   cta: { label: 'Full walkthrough', href: '/how-it-works' },
   steps: [
-    { n: '01', title: 'Sense', items: ['Humidity', 'Temperature', 'Air quality'] },
+    { n: '01', title: 'Sense', items: ['Humidity', 'Temperature', 'Time damp'] },
     { n: '02', title: 'Score', items: ['Mold Risk Index', 'Exposure duration', 'Dew-point conditions'] },
     { n: '03', title: 'Act', items: ['Dehumidification', 'Alerts'] },
   ],
@@ -267,6 +269,8 @@ export const FAQ = {
     { q: 'What is MoldGuard?', a: 'A one-time-purchase device for one small enclosed room. It monitors humidity and temperature, scores a room-level Mold Risk Index, and runs a built-in thermoelectric dehumidifier automatically. The companion app shows status, alerts and control.' },
     { q: 'How does it detect mold risk?', a: 'It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature and how long those conditions persist, instead of a single humidity threshold, plus a dew-point estimate for condensation on cold surfaces.' },
     { q: 'Is it a dehumidifier?', a: 'Yes. MoldGuard contains its own thermoelectric dehumidifier: when the index crosses its threshold it starts pulling moisture from the air, and stops once conditions return to range.' },
+    { q: 'Why not just buy a cheap dehumidifier?', a: 'A dehumidifier dries when you switch it on. MoldGuard also decides when that should happen, using humidity, temperature and how long the room has stayed damp rather than one humidity reading. You are paying for the sensing and the automatic response in the same unit. If you only need a fan and a compressor on a manual switch, a cheaper unit covers that.' },
+    { q: 'How long until I get it?', a: 'MoldGuard is built to order rather than shipped from stock. Your quotation confirms build time, delivery and any service coverage before you commit. No payment is taken on this site.' },
     { q: 'What does the app show?', a: 'Live status for the room: the readings behind the score, humidity and temperature history, alerts, and manual override when the device is online. The app is a companion to the device; monitoring and dehumidification run on the unit itself.' },
     { q: 'Can I monitor more than one room?', a: 'One MoldGuard is scoped to one small enclosed room. Multi-room and multi-unit views are not part of this offer; ask about multiple units in your quotation.' },
     { q: 'How do I set it up?', a: 'Place it tabletop or wall-mounted and pair it with the companion app on Wi-Fi. Local Bluetooth control is also part of the design. Ask the team to confirm placement, setup requirements and support for your room in the quotation.' },

@@ -57,6 +57,10 @@ export default function Hero() {
             </div>
           </div>
 
+          <p className="mt-5 max-w-[52ch] border-l-2 border-accent pl-3 text-[13px] leading-relaxed text-ink-2">
+            {HERO.compare}
+          </p>
+
           <ul className="mt-6 grid max-w-[52ch] gap-y-2 border-t border-line pt-4">
             {HERO.bullets.map((b) => (
               <li key={b.title} className="flex gap-3">
