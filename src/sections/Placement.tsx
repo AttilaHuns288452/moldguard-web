@@ -28,7 +28,7 @@ export default function Placement() {
             This render is the same model the other sections use, so the page now
             shows ONE device - and it is the one that actually exists. */}
         <Reveal delay={90}>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-soft border border-line bg-[radial-gradient(120%_95%_at_50%_20%,#fdfbf7_0%,#efe7db_55%,#d9cdbb_100%)]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-soft border border-line bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
             <DeviceViewer
               active={null}
               onSelect={() => {}}
