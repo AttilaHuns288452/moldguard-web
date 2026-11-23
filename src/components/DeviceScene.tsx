@@ -436,7 +436,7 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0, onS
         }
         const baseOpacity = u.baseOpacity as number
         const want = picked
-          ? baseOpacity
+          ? 1
           : m.userData.isShell
             ? (active ? 0.06 : explode ? 0.12 : baseOpacity)
             : dimmed ? 0.12 : baseOpacity

@@ -57,8 +57,9 @@ try {
     let wrongOpacity = 0, wrongFlags = 0
     for (const m of meshes) {
       for (const mat of Array.isArray(m.material) ? m.material : [m.material]) {
-        const expected = index === null || wanted.has(m) ? mat.userData.baseOpacity
-          : m.userData.isShell ? 0.06 : 0.12
+        const expected = index === null ? mat.userData.baseOpacity
+          : wanted.has(m) ? 1
+            : m.userData.isShell ? 0.06 : 0.12
         if (Math.abs(mat.opacity - expected) > 0.015) wrongOpacity++
         if (index === null && (mat.transparent !== mat.userData.baseTransparent || mat.depthWrite !== mat.userData.baseDepthWrite)) wrongFlags++
       }
