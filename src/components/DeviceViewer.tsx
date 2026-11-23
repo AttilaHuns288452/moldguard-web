@@ -133,7 +133,9 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
         src={chrome ? '/pod-meet.webp' : '/pod-hero.webp'}
         alt="MoldGuard assembly, open cutaway view"
         data-print-still
-        className="hidden h-full w-full object-contain"
+        // Also the real fallback on devices without WebGL: a product photo beats
+        // an empty stage, and the parts list beside it still explains the unit.
+        className={failed ? 'h-full w-full object-contain' : 'hidden h-full w-full object-contain'}
       />
       <div
         ref={hostRef}
@@ -170,12 +172,9 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
         )}
 
         {failed && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
-            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-tight border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
-            <p className="max-w-xs text-[0.8125rem] leading-relaxed text-ink-3">
-              3D unavailable on this device. Every component is listed beside the model.
-            </p>
-          </div>
+          <p className="absolute inset-x-0 bottom-2 px-4 text-center text-[11px] leading-snug text-ink-3">
+            Static view: this device cannot run the interactive 3D model. Every component is listed beside it.
+          </p>
         )}
       </div>
 

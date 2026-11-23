@@ -50,10 +50,10 @@ export default function Header({ page }: { page: Location_ }) {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-line bg-card">
-        <nav aria-label="Main" className="shell flex flex-wrap items-center gap-x-4 gap-y-1 py-3 lg:flex-nowrap lg:gap-x-6 lg:gap-y-2 lg:py-[18px]">
-          <a href={pathFor('home')} onClick={(e) => { e.preventDefault(); navigate('home') }} className="flex min-h-11 items-center gap-[11px]" aria-label="MoldGuard home">
-            <Logo className="size-[34px] text-accent" />
-            <span className="font-display text-[1.22rem] font-bold tracking-[-0.02em] text-ink">MoldGuard</span>
+        <nav aria-label="Main" className="shell flex flex-wrap items-center gap-x-2 gap-y-1 py-3 min-[380px]:gap-x-4 lg:flex-nowrap lg:gap-x-6 lg:gap-y-2 lg:py-[18px]">
+          <a href={pathFor('home')} onClick={(e) => { e.preventDefault(); navigate('home') }} className="flex min-h-11 shrink-0 items-center gap-2 min-[380px]:gap-[11px]" aria-label="MoldGuard home">
+            <Logo className="size-[30px] text-accent min-[380px]:size-[34px]" />
+            <span className="font-display text-[15px] font-bold tracking-[-0.02em] text-ink min-[380px]:text-[1.08rem] sm:text-[1.22rem]">MoldGuard</span>
           </a>
 
           {/* desktop links */}
@@ -91,9 +91,12 @@ export default function Header({ page }: { page: Location_ }) {
           <a
             href={pathFor('contact')}
             onClick={(e) => { e.preventDefault(); navigate('contact') }}
-            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn px-[16px] py-2.5 text-[14px] font-[650] text-white bg-accent-ink border border-accent-ink transition-colors hover:bg-deep active:scale-[.99] lg:ml-0 lg:-ml-2 lg:py-[10px]"
+            className="order-2 ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn px-3 py-2.5 text-[13px] font-[650] text-white bg-accent-ink border border-accent-ink transition-colors hover:bg-deep active:scale-[.99] sm:px-4 sm:text-[14px] lg:ml-0 lg:-ml-2 lg:py-[10px]"
           >
-            {OFFER.cta.label}
+            {/* Full label on desktop; a shorter one on phones so the primary
+                action stays on the logo row instead of wrapping to a second. */}
+            <span className="lg:hidden">Get a quote</span>
+            <span className="hidden lg:inline">{OFFER.cta.label}</span>
           </a>
         </nav>
 
