@@ -62,6 +62,10 @@ try {
             : m.userData.isShell ? 0.06 : 0.12
         if (Math.abs(mat.opacity - expected) > 0.015) wrongOpacity++
         if (index === null && (mat.transparent !== mat.userData.baseTransparent || mat.depthWrite !== mat.userData.baseDepthWrite)) wrongFlags++
+        if (index !== null && wanted.has(m)) {
+          if (mat.transparent || !mat.depthWrite) wrongFlags++
+          if (mat.emissive && mat.emissiveIntensity < mat.userData.baseEmissiveI + 0.8) wrongFlags++
+        }
       }
     }
     // Use the actual vertices, excluding the separate decorative shadow plane.
@@ -115,7 +119,7 @@ try {
     const [x0, y0, x1, y1] = m.ndc
     const checks = {
       subject: m.picked > 0 && m.picked < 150,
-      faded: m.wrongOpacity === 0,
+      faded: m.wrongOpacity === 0 && m.wrongFlags === 0,
       centered: Math.abs((x0 + x1) / 2) < 0.25 && Math.abs((y0 + y1) / 2) < 0.25,
       visible: m.paintedPixels > 60,
       framed: Math.max(x1 - x0, y1 - y0) > 0.05 && Math.max(Math.abs(x0), Math.abs(x1), Math.abs(y0), Math.abs(y1)) < 1.05,

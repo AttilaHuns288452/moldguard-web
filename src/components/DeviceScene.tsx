@@ -444,10 +444,14 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0, onS
         // Only a fully solid frame may go back into the opaque pass: keeping
         // transparent=true while it fades avoids the pop where the renderer
         // ignores opacity and the mesh snaps back to solid.
-        const restored = Math.abs(mat.opacity - baseOpacity) < 0.001
-        if (restored) mat.opacity = baseOpacity
-        mat.transparent = restored ? (u.baseTransparent as boolean) : true
-        mat.depthWrite = restored ? (u.baseDepthWrite as boolean) : false
+        // Selection is explicitly solid, even for translucent source materials.
+        // Restore the original material flags only after deselection settles.
+        const solidSelection = picked && mat.opacity > 0.999
+        const restored = !picked && Math.abs(mat.opacity - baseOpacity) < 0.001
+        if (solidSelection) mat.opacity = 1
+        else if (restored) mat.opacity = baseOpacity
+        mat.transparent = solidSelection ? false : restored ? (u.baseTransparent as boolean) : true
+        mat.depthWrite = solidSelection ? true : restored ? (u.baseDepthWrite as boolean) : false
       }
     }
 

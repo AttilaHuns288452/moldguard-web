@@ -34,7 +34,7 @@ export default function GetApp() {
   const goFrame = (index: number) => {
     const next = (index + frameCount) % frameCount
     setActiveFrame(next)
-    rowRef.current?.children[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+    rowRef.current?.children[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
   }
   useEffect(() => {
     const el = rowRef.current
@@ -42,9 +42,9 @@ export default function GetApp() {
     const check = () => setMore(el.scrollWidth - el.clientWidth > 8)
     const onScroll = () => {
       const items = [...el.children] as HTMLElement[]
-      const center = el.scrollLeft + el.clientWidth / 2
+      const left = el.scrollLeft
       let next = 0; let distance = Infinity
-      items.forEach((item, i) => { const d = Math.abs(item.offsetLeft + item.offsetWidth / 2 - center); if (d < distance) { distance = d; next = i } })
+      items.forEach((item, i) => { const d = Math.abs(item.offsetLeft - left); if (d < distance) { distance = d; next = i } })
       setActiveFrame(next)
     }
     check(); el.addEventListener('scroll', onScroll, { passive: true })
