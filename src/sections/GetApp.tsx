@@ -121,8 +121,12 @@ export default function GetApp() {
         </div>
 
         {/* the approved Figma application frames, shown as a scrollable showcase */}
+        {/* A rule separates the two jobs of this section: getting access to the
+            page/device (above) and seeing what the app looks like (below). Without
+            it the screens read as part of the QR card's block. */}
+        <div className="mt-14 border-t border-line pt-10">
         <Reveal delay={60}>
-          <p className="mt-12 text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Illustrative app screens</p>
+          <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Illustrative app screens</p>
           <h2 className="mt-2 text-[clamp(1.4rem,2.4vw,1.9rem)] font-[650] text-deep">
             Inside the app
           </h2>
@@ -162,6 +166,7 @@ export default function GetApp() {
             </li>
           ))}
         </ul>
+        </div>
         </div>
         </div>
       </div>
