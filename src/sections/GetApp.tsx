@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Reveal, LineReveal } from '../components/ui'
 import { splitTitle } from '../lib/motion'
 import { navigate } from '../lib/route'
@@ -26,16 +27,29 @@ export default function GetApp() {
   // The right-edge fade is only honest when there IS more to scroll. At 1440 the
   // row overflows by ~40px, so an unconditional 64px fade sat on top of a fully
   // visible card and dimmed 24px of it permanently.
-  const rowRef = useRef<HTMLDivElement>(null)
+  const rowRef = useRef<HTMLUListElement>(null)
   const [more, setMore] = useState(false)
+  const [activeFrame, setActiveFrame] = useState(0)
+  const frameCount = FRAMES.length
+  const goFrame = (index: number) => {
+    const next = (index + frameCount) % frameCount
+    setActiveFrame(next)
+    rowRef.current?.children[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }
   useEffect(() => {
-    const el = rowRef.current?.querySelector('ul')
+    const el = rowRef.current
     if (!el) return
-    const check = () => setMore(el.scrollWidth - el.clientWidth > 64)
-    check()
-    const ro = new ResizeObserver(check)
-    ro.observe(el)
-    return () => ro.disconnect()
+    const check = () => setMore(el.scrollWidth - el.clientWidth > 8)
+    const onScroll = () => {
+      const items = [...el.children] as HTMLElement[]
+      const center = el.scrollLeft + el.clientWidth / 2
+      let next = 0; let distance = Infinity
+      items.forEach((item, i) => { const d = Math.abs(item.offsetLeft + item.offsetWidth / 2 - center); if (d < distance) { distance = d; next = i } })
+      setActiveFrame(next)
+    }
+    check(); el.addEventListener('scroll', onScroll, { passive: true })
+    const ro = new ResizeObserver(check); ro.observe(el)
+    return () => { el.removeEventListener('scroll', onScroll); ro.disconnect() }
   }, [])
   return (
     <section id="app" className="section band-white">
@@ -132,8 +146,15 @@ export default function GetApp() {
             Inside the app
           </h2>
         </Reveal>
-        <div className="relative mt-4" ref={rowRef}>
-        <ul tabIndex={0} aria-label="MoldGuard app screens, scrollable" className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 pr-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">
+        <div className="relative mt-4">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <p className="measure text-[11px] text-ink-3">Screen {String(activeFrame + 1).padStart(2, '0')} / {String(frameCount).padStart(2, '0')}</p>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => goFrame(activeFrame - 1)} aria-label="Previous app screen" className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink"><ArrowLeft className="size-4" aria-hidden="true" /></button>
+            <button type="button" onClick={() => goFrame(activeFrame + 1)} aria-label="Next app screen" className="grid size-10 place-items-center rounded-full border border-line-hi bg-white text-ink-2 transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent-ink"><ArrowRight className="size-4" aria-hidden="true" /></button>
+          </div>
+        </div>
+        <ul ref={rowRef} tabIndex={0} aria-label="MoldGuard app screens carousel" onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); goFrame(activeFrame + 1) } if (e.key === 'ArrowLeft') { e.preventDefault(); goFrame(activeFrame - 1) } }} className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 pr-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">
           {FRAMES.map(({ el: Frame, label, note }) => (
             <li key={label} className="snap-start">
               <Reveal>
@@ -157,6 +178,9 @@ export default function GetApp() {
             </li>
           ))}
         </ul>
+        <div className="mt-2 flex justify-center gap-1.5" role="tablist" aria-label="Choose app screen">
+          {FRAMES.map(({ label }, i) => <button key={label} type="button" role="tab" aria-selected={activeFrame === i} aria-label={`Show ${label} app screen`} onClick={() => goFrame(i)} className={`h-1.5 rounded-full transition-all ${activeFrame === i ? 'w-6 bg-accent-ink' : 'w-1.5 bg-line-hi hover:bg-accent'}`} />)}
+        </div>
         {/* fades the right edge so a clipped frame reads as "more to scroll" */}
         {more && (
           <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent" aria-hidden="true" />
