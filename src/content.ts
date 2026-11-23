@@ -88,7 +88,9 @@ export const PROBLEM = {
 }
 
 export const MEET = {
-  title: 'See what takes care of the room.',
+  // Explicit break: the auto-splitter cut mid-phrase into "See what takes / care
+  // of the room.", which separated the verb from its object.
+  title: 'See what takes care|of the room.',
   lede: 'One device senses the room, scores the risk and dehumidifies on its own. You own the hardware.',
   caption: 'MoldGuard Pod · tabletop or wall-mounted',
   stages: [

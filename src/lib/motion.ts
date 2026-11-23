@@ -88,6 +88,9 @@ export function clamp(n: number, lo: number, hi: number) {
 /** Split a headline into reveal lines. Breaks after a period, or mid-string at
  *  the last space so long single-sentence headlines still lift in two beats. */
 export function splitTitle(title: string): string[] {
+  // An explicit pipe marks a deliberate break. Without it the character-count
+  // heuristic can split mid-phrase ("See what takes / care of the room").
+  if (title.includes('|')) return title.split('|').map((s) => s.trim()).filter(Boolean)
   const parts = title.split(/(?<=\.)\s+/).filter(Boolean)
   if (parts.length > 1) return parts
   if (title.length < 26) return [title]

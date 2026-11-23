@@ -71,20 +71,24 @@ export default function DataFlow() {
       {/* one shared dark rule across all three regions */}
       <div aria-hidden="true" className="h-[3px] w-full bg-deep" />
 
-      <Seq className="px-5 pb-6 md:px-7 md:pb-7">
+      <Seq className="px-5 pt-5 pb-8 md:px-7 md:pt-6 md:pb-10">
         <ol className="grid divide-y divide-line lg:grid-cols-3 lg:divide-x lg:divide-y-0">
           <Region n="01" name="SENSE" title="The pod senses" icon={<Thermometer className="size-4" strokeWidth={1.9} />} next>
             <p>Temperature and relative humidity, read continuously in the room.</p>
-            <ul className="mt-3">
-              <li className="flex items-baseline justify-between gap-2 border-b border-line pb-1.5">
-                <span>Temperature</span>
-                <span className="text-[12.5px] text-ink-3">continuous</span>
-              </li>
-              <li className="flex items-baseline justify-between gap-2 pt-1.5">
-                <span>Relative humidity</span>
-                <span className="text-[12.5px] text-ink-3">continuous</span>
-              </li>
-            </ul>
+            {/* Boxed like the data panels in the other two columns, so all three
+                stages carry the same shape: title, data panel, description. */}
+            <div className="mt-3 rounded-tight border border-line bg-card px-3 py-2">
+              <dl className="grid gap-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <dt className="text-[12.5px] text-ink-2">Temperature</dt>
+                  <dd className="text-[11.5px] text-ink-3">continuous</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-2 border-t border-line pt-1">
+                  <dt className="text-[12.5px] text-ink-2">Relative humidity</dt>
+                  <dd className="text-[11.5px] text-ink-3">continuous</dd>
+                </div>
+              </dl>
+            </div>
             <p className="mt-2.5 text-[13px] text-ink-3">
               Duration matters as much as the reading itself.
             </p>

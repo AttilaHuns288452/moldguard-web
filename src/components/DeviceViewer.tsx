@@ -166,8 +166,8 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
 
         {!loaded && !failed && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-            <div className="device-silhouette h-[46%] w-[16%] min-h-[150px] min-w-[44px] rounded-tight border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
-            <span className="text-[0.6875rem] font-semibold tracking-[0.14em] text-ink-3 uppercase">Loading model</span>
+            <div className="device-silhouette h-[56%] w-[20%] min-h-[180px] min-w-[56px] rounded-soft border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
+            <span className="text-[0.75rem] font-semibold tracking-[0.14em] text-ink-2 uppercase">Loading model</span>
           </div>
         )}
 

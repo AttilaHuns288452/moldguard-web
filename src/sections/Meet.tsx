@@ -52,53 +52,39 @@ export default function Meet() {
   return (
     <section id="meet" className="section band-pale">
       <div className="shell">
-        <div className="flex flex-wrap items-start justify-between gap-6">
-          <div className="max-w-[620px]">
-          <LineReveal
+        {/* Heading on the left, the four stages on the right. Stacking both in one
+            narrow column left ~600px of empty band beside them. */}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,1fr)] lg:items-start lg:gap-6">
+          <div>
+            <LineReveal
               lines={splitTitle(MEET.title)}
-              className="max-w-[24ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.08] font-[650] text-deep"
+              className="max-w-[18ch] text-[clamp(1.55rem,3.2vw,2.9rem)] leading-[1.08] font-[650] text-deep"
             />
             <Reveal delay={70}>
-              <p className="lede mt-3">{MEET.lede}</p>
+              <p className="lede mt-3 max-w-[54ch]">{MEET.lede}</p>
             </Reveal>
-            {/* One column, not two. This block sits in the left half of a
-                two-column section (the 3D stage takes the right), so a 2-col grid
-                left each item ~130px wide and orphaned the last word ("…
-                continuously." / "… real time.") on its own line. Measured on the
-                rendered page; one column reads cleanly and keeps the four rows as
-                a list, which is what the artboard shows anyway. */}
-            <ol className="mt-6 grid gap-y-3">
-              {MEET.stages.map((s, i) => (
-                <Reveal key={s.n} delay={90 + i * 40} as="li">
-                  <div className="flex items-baseline gap-2.5 border-t border-line pt-2.5">
-                    <span className="measure text-[10.5px] tracking-[0.16em] text-accent-ink">{s.n}</span>
-                    <div>
-                      <p className="text-[0.9375rem] font-[650] text-deep">{s.title}</p>
-                      <p className="mt-0.5 text-[13.5px] leading-snug text-ink-2">{s.body}</p>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </ol>
           </div>
 
-          {/* Balances the half-empty header: the four steps occupied the left 620px
-              of a 1260px row, leaving a large blank right side above the cards. */}
-          <Reveal delay={150}>
-            <div className="rounded-soft border border-line bg-card px-5 py-4 lg:max-w-[300px]">
-              <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">In this section</p>
-              <p className="mt-2 text-[13.5px] leading-relaxed text-ink-2">
-                The device below is the real assembly — 12 parts, each listed. Pick one to read what it does, or take the guided tour.
-              </p>
-            </div>
-          </Reveal>
+          <ol className="grid gap-y-0 lg:mt-1">
+            {MEET.stages.map((s, i) => (
+              <Reveal key={s.n} delay={90 + i * 40} as="li">
+                <div className="flex items-baseline gap-3 border-t border-line py-3">
+                  <span className="measure shrink-0 text-[10.5px] tracking-[0.16em] text-accent-ink">{s.n}</span>
+                  <div>
+                    <p className="text-[0.9375rem] font-[650] text-deep">{s.title}</p>
+                    <p className="mt-0.5 text-[13.5px] leading-snug text-ink-2">{s.body}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
         </div>
 
         <div className="mt-9 grid gap-5 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,1fr)] lg:gap-6">
           {/* ── the model ── */}
           <Reveal>
             <div className="relative overflow-hidden rounded-soft border border-line bg-card">
-              <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
+              <div className="flex min-h-[49px] items-center justify-between border-b border-line px-4 py-2.5">
                 <span className="text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{MEET.caption}</span>
                 <span className="measure text-[11px] tracking-[0.08em] text-ink-3 uppercase">{mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[1])} &times; {mm(MODEL_SIZE[2])} mm</span>
               </div>
@@ -254,14 +240,14 @@ export default function Meet() {
             content inside the same two cards above. */}
         <div className="mt-12 border-t border-line pt-10">
         <Reveal delay={40}>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 rounded-soft border border-line bg-card px-5 py-4">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-soft border border-line bg-card px-5 py-4">
             <p className="text-[14px] text-ink-2">
               <span className="font-[650] text-deep">{OFFER.price}</span> proposed one-time price. One small room, one device.
             </p>
             <a
               href="/contact"
               onClick={(e) => { e.preventDefault(); navigate('contact') }}
-              className="inline-flex min-h-11 items-center rounded-btn bg-accent-ink px-5 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-deep"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-btn bg-accent-ink px-5 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-deep"
             >
               Check it fits my room
             </a>
@@ -269,7 +255,7 @@ export default function Meet() {
         </Reveal>
 
         <Reveal delay={60}>
-          <p className="mt-8 text-[14px] text-ink-2">
+          <p className="mt-12 text-[14px] text-ink-2">
             The loop in full, stage by stage:{' '}
             <a
               href="/how-it-works"
