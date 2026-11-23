@@ -174,7 +174,6 @@ export default function Loop() {
                 className="loop-panel grid gap-8 border-t border-line px-5 py-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-12 md:px-8 md:py-9"
               >
                 <div>
-                  <p className="measure text-[11px] tracking-[0.14em] text-accent-ink uppercase">{stg.kicker}</p>
                   <h2 className="mt-2 text-[clamp(1.25rem,2.2vw,1.65rem)] leading-tight font-[650] text-deep">
                     {stg.head}
                   </h2>

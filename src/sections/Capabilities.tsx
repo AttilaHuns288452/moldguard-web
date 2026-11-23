@@ -62,7 +62,6 @@ export default function Capabilities() {
               />
               <figcaption className="bg-deep px-5 py-3.5 text-[11px] font-[650] tracking-[0.1em] text-on-dark uppercase">
                 <span>Warm air meets cold stone, and condensation wants to form.</span>
-                <span className="measure text-[10px] font-normal tracking-[0.08em] text-on-dark-2">Fig. 01</span>
               </figcaption>
             </figure>
           </Reveal>
@@ -89,7 +88,7 @@ export default function Capabilities() {
                 </div>
 
                 <div>
-                  <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Current band</p>
+                  <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Where this reading sits</p>
                   <p className="mt-1 text-[1.05rem] font-[650] text-deep">
                     {band} <span className="text-[12px] font-normal text-ink-2">· illustrated room</span>
                   </p>
@@ -132,7 +131,7 @@ export default function Capabilities() {
                   ))}
                 </ol>
                 <div>
-                  <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Why it matters</p>
+                  <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">What changes</p>
                   <p className="mt-1.5 text-[13px] leading-relaxed text-ink-2">
                     Outdoor trend plus indoor history lets the loop act on the rise <em>before</em> the room
                     crosses its threshold, instead of chasing a spike that already happened.

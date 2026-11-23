@@ -47,7 +47,7 @@ export default function Features() {
         <Reveal delay={60}>
           <article className="fx-feature-panel card-lift mt-8" data-feature-overview>
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-6 py-4">
-              <p className="text-[11px] font-[650] tracking-[0.13em] text-ink-3 uppercase">System capability index</p>
+              <h2 className="text-[13px] font-[650] text-deep">What you get</h2>
               <span className="fx-tag">One unit · one room</span>
             </div>
             <div className="fx-feature-grid">
@@ -64,7 +64,6 @@ export default function Features() {
                     </div>
                     <h3 className="mt-4 text-[1.02rem] leading-snug">{f.title}</h3>
                     <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-2">{f.body}</p>
-                    {lead && <p className="mt-3 text-[10.5px] font-[650] tracking-[0.13em] text-accent-ink uppercase">Core engine</p>}
                   </div>
                 )
               })}

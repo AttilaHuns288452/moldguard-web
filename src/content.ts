@@ -40,12 +40,12 @@ export const OFFER = {
 }
 
 export const HERO = {
-  cat: 'MoldGuard Pod · for one humidity-prone room',
+  cat: '',
   titleLines: ['Less guessing.', 'More control over damp rooms.'],
   lede: 'MoldGuard combines room monitoring, a mold-risk score and automatic dehumidification in one device. Built for humidity-prone small rooms, with status and controls in its companion app.',
   // the hero shows the unit open; one line so the visitor knows what they are
   // looking at rather than reading it as a broken front door
-  stageNote: 'Sensors · thermoelectric stack · fan · water tank',
+  stageNote: 'Sensors, stack, fan, tank',
   // Under the CTAs, beside the price: what the buyer gets, in their terms.
   bullets: [
     { title: 'One number for the room', body: 'A risk score from humidity, temperature and how long damp conditions last.' },

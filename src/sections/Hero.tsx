@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, BadgeCheck } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { HERO, OFFER } from '../content'
 import { LineReveal, MagButton } from '../components/ui'
 import DeviceViewer from '../components/DeviceViewer'
@@ -31,7 +31,7 @@ export default function Hero() {
       <div className="shell relative grid gap-5 pt-6 pb-8 lg:items-center lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-[6%] lg:pt-14 lg:pb-10 min-[1352px]:pt-[104px] min-[1352px]:pb-[52px]">
         {/* copy */}
         <div className="relative z-10">
-          <p className="mb-4 text-[13px] text-ink-3">{HERO.cat}</p>
+          {HERO.cat && <p className="mb-4 text-[13px] text-ink-3">{HERO.cat}</p>}
           <LineReveal
             as="h1"
             className="max-w-[20ch] text-[clamp(2.4rem,4.2vw,3.85rem)] leading-[1.03] font-bold tracking-[-0.032em] text-deep"
@@ -45,10 +45,6 @@ export default function Hero() {
               <p className="text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">{OFFER.priceLabel}</p>
               <p className="measure mt-1 flex items-baseline gap-2 text-[1.9rem] leading-none font-semibold text-deep">
                 {OFFER.price}
-                <span className="inline-flex items-center gap-1 rounded-full border border-[#177069]/30 bg-[#1770690d] px-2 py-0.5 text-[10.5px] font-[650] tracking-[0.06em] text-[#177069] uppercase">
-                  <BadgeCheck className="size-3" strokeWidth={2} aria-hidden="true" />
-                  No subscription
-                </span>
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -116,8 +112,7 @@ export default function Hero() {
           {/* app card: navy panel, exactly the artboard's readout. It overlaps
               the photo's right edge into the white frame, as the PDF does. */}
           <div className="mt-3 rounded-soft border border-[#2b5c8f]/70 bg-deep/95 p-3 shadow-e3 backdrop-blur-sm sm:absolute sm:-right-4 sm:bottom-3 sm:mt-0 sm:w-[164px] sm:rounded-shell sm:p-3">
-            <p className="text-[12px] font-[650] text-on-dark">MoldGuard</p>
-            <p className="fx-tag mt-2 w-fit border-[#eaf2fc44] bg-[#eaf2fc12] text-on-dark-2">Sample data</p>
+            <p className="fx-tag w-fit border-[#eaf2fc44] bg-[#eaf2fc12] text-on-dark-2">Sample data</p>
             <p className="mt-2.5 text-[10px] tracking-[0.08em] text-on-dark-2 uppercase">Mold Risk Index</p>
             <p className="measure mt-0.5 text-[30px] leading-none font-semibold text-white">
               38<span className="text-[13px] text-on-dark-2">/100</span>
