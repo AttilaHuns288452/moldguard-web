@@ -2,11 +2,11 @@
  * Customer-facing copy for the sales site.
  *
  * ONE business model: a one-time hardware sale. No subscriptions, no premium
- * tiers, no development fees on customer surfaces. The proposed selling price
+ * tiers, no development fees on customer surfaces. The selling price
  * (PHP 9,994) comes from the feasibility study (Section 3.4) and the
- * cost-benefit analysis; it is a PROPOSED price — availability, delivery,
- * warranty and service terms are confirmed in a written quotation, never on
- * this site. Nothing here is a checkout: every funnel path ends at /contact.
+ * cost-benefit analysis. Availability, delivery, warranty and service terms
+ * are confirmed in a written quotation, never on this site. Nothing here is a
+ * checkout: every funnel path ends at /contact.
  *
  * Dashboard/app numbers are sample data and are labelled as such on screen
  * (hero, Meet, data-flow figure). MoldGuard monitors environmental conditions;
