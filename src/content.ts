@@ -46,7 +46,10 @@ export const OFFER = {
 export const HERO = {
   cat: '',
   titleLines: ['Less guessing.', 'More control over damp rooms.'],
-  lede: 'MoldGuard combines room monitoring, a mold-risk score and automatic dehumidification in one device. Built for humidity-prone small rooms, with status and controls in its companion app.',
+  // Leads with the problem the buyer already has, then the mechanism. The old
+  // version opened with a three-item feature list, which told a stranger what
+  // the device contains before telling them why they should care.
+  lede: 'Nothing is watching the room between the times you check it. MoldGuard measures the conditions, scores the risk and runs its own dehumidifier before the damp sets in.',
   // the hero shows the unit open; one line so the visitor knows what they are
   // looking at rather than reading it as a broken front door
   stageNote: 'Sensors, stack, fan, tank',

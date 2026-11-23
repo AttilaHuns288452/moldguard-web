@@ -20,7 +20,12 @@ for (const route of ROUTES) {
   for (const vw of WIDTHS) {
     const p = await b.newPage({ viewport: { width: vw, height: 800 } })
     await p.goto(URL_.replace(/\/$/, '') + route, { waitUntil: 'load' })
-    await p.waitForTimeout(500)
+    // Wait for webfonts before measuring: with the fallback face still active a
+    // word can be 4px wider than its box and reports as clipped, then fits once
+    // the real font lands. That is a measurement race, not a layout bug. Bounded
+    // because fonts.ready never settles if a font request is aborted.
+    await p.evaluate(() => Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]))
+    await p.waitForTimeout(300)
     const r = await p.evaluate(() => ({
       over: document.documentElement.scrollWidth - innerWidth,
       // unscrollable clipped text (a word wider than its box)
