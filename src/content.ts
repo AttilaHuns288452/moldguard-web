@@ -22,12 +22,12 @@ export const CONTACT = {
 
 export const HERO = {
   cat: 'Indoor environmental monitoring',
-  titleLines: ['Know when', 'conditions become', 'mold-friendly.'],
+  titleLines: ['Know when conditions', 'become mold-friendly.'],
   lede: 'MoldGuard watches humidity, temperature and sustained exposure, then turns those conditions into a room-level risk score and an automatic dehumidification response.',
   // the hero shows the unit open; one line so the visitor knows what they are
   // looking at rather than reading it as a broken front door
   stageNote: 'Sensors · thermoelectric stack · fan · water tank',
-  status: 'Direct app access',
+  status: 'Build sent on request',
   // The artboard's CTA pair is "Get Started" + "See how it works". "See how it
   // works" is the more useful second action here: it answers the question the
   // hero raises (how does it know?) and it points at the /how-it-works page this

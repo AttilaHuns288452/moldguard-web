@@ -16,10 +16,10 @@ import { FrameHome, FrameDetail, FrameControl, FrameAnalytics } from '../figma/P
  * NOT redesigned: their internals stay exactly as the Figma file defines them.
  */
 const FRAMES = [
-  { el: FrameHome, label: 'Home' },
-  { el: FrameDetail, label: 'Room detail' },
-  { el: FrameControl, label: 'Control' },
-  { el: FrameAnalytics, label: 'Analytics' },
+  { el: FrameHome, label: 'Home', note: 'Illustrative screen' },
+  { el: FrameDetail, label: 'Room detail', note: 'Illustrative screen' },
+  { el: FrameControl, label: 'Control', note: 'Illustrative screen' },
+  { el: FrameAnalytics, label: 'Analytics', note: 'Illustrative screen' },
 ]
 
 export default function GetApp() {
@@ -127,13 +127,14 @@ export default function GetApp() {
 
         {/* the approved Figma application frames, shown as a scrollable showcase */}
         <Reveal delay={60}>
-          <h2 className="mt-12 text-[clamp(1.4rem,2.4vw,1.9rem)] font-[650] text-deep">
+          <p className="mt-12 text-[11px] font-[650] tracking-[0.12em] text-ink-3 uppercase">Illustrative app screens</p>
+          <h2 className="mt-2 text-[clamp(1.4rem,2.4vw,1.9rem)] font-[650] text-deep">
             Inside the app
           </h2>
         </Reveal>
         <div className="relative mt-4" ref={rowRef}>
         <ul tabIndex={0} aria-label="MoldGuard app screens, scrollable" className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-2 pr-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink [scrollbar-width:thin]">
-          {FRAMES.map(({ el: Frame, label }) => (
+          {FRAMES.map(({ el: Frame, label, note }) => (
             <li key={label} className="snap-start">
               <Reveal>
                 {/* group scaling: the frames are authored at 390x844 and must not
@@ -143,14 +144,14 @@ export default function GetApp() {
                       so it is scaled as a whole. The wrapper must carry the SCALED
                       footprint: transform does not affect layout, so leaving it at
                       390px made the row claim 1628px and clip the 4th frame. */}
-                  <div className="h-[793px] w-[366px] overflow-hidden">
+                  <div className="h-auto w-[min(366px,100%)] overflow-hidden">
                     <div className="origin-top-left scale-[0.94] [width:390px] [height:844px]">
                       <Frame />
                     </div>
                   </div>
                 </figure>
                 <figcaption className="mt-2.5 text-[12px] font-[650] tracking-[0.06em] text-ink-3 uppercase">
-                  {label}
+                  {label} <span className="font-normal tracking-normal normal-case">· {note}</span>
                 </figcaption>
               </Reveal>
             </li>
@@ -158,7 +159,7 @@ export default function GetApp() {
         </ul>
         {/* fades the right edge so a clipped frame reads as "more to scroll" */}
         {more && (
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-paper to-transparent" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent" aria-hidden="true" />
         )}
         </div>
       </div>

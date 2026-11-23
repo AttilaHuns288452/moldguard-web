@@ -127,6 +127,7 @@ export default function Contact() {
               </div>
             ) : (
             <form
+              id="contact-form"
               className="rounded-soft border border-line bg-card p-7 md:p-8"
               onSubmit={submit}
             >
@@ -281,7 +282,7 @@ export default function Contact() {
               <p className="mt-1.5 text-[1rem] text-ink-2">One message starts the conversation.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="#contact" className="inline-flex items-center rounded-btn bg-accent-ink px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-deep">
+              <a href="#contact-form" className="inline-flex items-center rounded-btn bg-accent-ink px-6 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-deep">
                 {CONTACT_PAGE.closing.primary}
               </a>
               <a href={`mailto:${CONTACT.email}`} className="inline-flex items-center rounded-btn border border-line-hi bg-card px-6 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-ink-3">

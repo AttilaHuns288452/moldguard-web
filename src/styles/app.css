@@ -12,6 +12,7 @@
    the reveal itself firing on first scroll, plus the fold check in useInView. */
 .reveal {
   opacity: 0;
+  /* Entering content must not be hit-testable while it is moving. Otherwise a held pointer can start on one row and release on another. */
   pointer-events: none;
   /* 24px of travel is the threshold where a reveal reads as motion on a phone
      as well as a desktop; 14px was at the edge of perceptible. */
@@ -24,7 +25,18 @@
     transform var(--dur-reveal) var(--ease-out) var(--d, 0ms);
   will-change: opacity, transform;
 }
+/* Interactive reveals stay geometrically stable while fading. A moving ancestor
+   can start a real pointer on one row and release it over another row, causing the
+   browser to retarget the click to their shared list. Keep the motion for passive
+   content; controls get opacity-only entry and remain hit-testable. */
+.reveal:has(button, a, input, select, textarea, summary) {
+  pointer-events: auto;
+  transform: none;
+}
 .reveal.is-in { opacity: 1; pointer-events: auto; transform: none; }
+/* Interactive sequence children also fade without shifting their click targets. */
+.seq > :is(button, a, input, select, textarea, summary),
+.seq > :has(button, a, input, select, textarea, summary) { transform: none; }
 /* a revealed child must be able to show itself even if its wrapper has not
    revealed yet (e.g. a <details> the user tabs to early) */
 .reveal .reveal { visibility: visible; }

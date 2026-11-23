@@ -107,7 +107,7 @@ export function FrameHome() {
           </div>
           <div className="pod-card">
             <div className="pod-top">
-              <div className="risk-tag sub-crit"><span className="dot9" style={{ background: '#ef5350' }} />88% • Critical</div>
+              <div className="risk-tag sub-crit"><span className="dot9" style={{ background: '#ef5350' }} />88/100 • Act</div>
               <div className="pw on"><I d={P.bolt} s={15} /></div>
             </div>
             <div className="readout">30°C · 82% RH</div>
@@ -156,8 +156,8 @@ export function FrameDetail() {
             <circle cx={95} cy={95} r={76} fill="none" stroke="#e3e8f0" strokeWidth={12} />
             <circle cx={95} cy={95} r={76} fill="none" stroke="#ef5350" strokeWidth={12} strokeLinecap="round"
               strokeDasharray="420 478" transform="rotate(-90 95 95)" />
-            <text x={95} y={95} textAnchor="middle" dominantBaseline="middle" fontSize={40} fontWeight={700} fill="#ef5350">88%</text>
-            <text x={95} y={122} textAnchor="middle" fontSize={13} fontWeight={700} fill="#ef5350">HIGH RISK</text>
+            <text x={95} y={95} textAnchor="middle" dominantBaseline="middle" fontSize={40} fontWeight={700} fill="#ef5350">88/100</text>
+            <text x={95} y={122} textAnchor="middle" fontSize={13} fontWeight={700} fill="#ef5350">ACT</text>
           </svg>
           <div className="banner" style={{ width: '100%' }}>
             <span><b>Warning:</b> Surface Condensation Risk Rising (Dew Point 26.2°C)</span>
@@ -184,7 +184,7 @@ export function FrameDetail() {
           ))}
           <div className="kpi">
             <div className="hstack between"><span className="kl">Dew point</span><I d={P.drop} s={15} /></div>
-            <div className="kv">105 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--safe)' }}>Normal</span></div>
+            <div className="kv">3.8°C <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--safe)' }}>Normal</span></div>
             <div className="ku">Surface condensation margin</div>
           </div>
         </div>

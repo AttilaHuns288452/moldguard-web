@@ -40,7 +40,7 @@ function AppleGlyph() {
 function Badge({ store, glyph, kicker }: { store: string; glyph: ReactNode; kicker: string }) {
   return (
     <span
-      className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-floating transition-transform hover:-translate-y-px"
+      className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-floating"
       // Presentation only: the app is distributed directly, so there is no store
       // URL to link to. A real <a> would promise a destination that does not exist.
       role="img"

@@ -158,7 +158,7 @@ export default function RiskShowcase() {
                   owned it). Wrapping is the honest fix; the row is a legend, it
                   has no reason to be one line on a narrow phone. */}
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11.5px] text-ink-3">
-                {[['Safe', 0, 40], ['Watch', 40, 70], ['Act', 70, 100]].map(([n, lo, hi]) => (
+                {[['Safe', 0, 39], ['Watch', 40, 69], ['Act', 70, 100]].map(([n, lo, hi]) => (
                   <span key={n as string} className="flex items-center gap-1.5 whitespace-nowrap">
                     <span className="h-[3px] w-4 rounded-full" style={{ background: n === 'Act' ? '#1d4ed8' : n === 'Watch' ? '#5b7591' : '#465e7a' }} />
                     {n} <span className="measure opacity-70">{lo}–{hi}</span>

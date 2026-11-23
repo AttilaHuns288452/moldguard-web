@@ -14,7 +14,7 @@ import { Seq } from './ui'
  * Sense because monitoring never stops, not because risk is high.
  */
 
-// Safe 0–40 / Watch 40–70 / Act 70–100, acting at 70: the exact thresholds
+// Safe 0–39 / Watch 40–69 / Act 70–100, acting at 70: the exact thresholds
 // RiskShowcase prints, not a new number invented for this diagram.
 const THRESHOLD = 70
 const BAND = APP_MOCK.risk >= THRESHOLD ? 'Act' : APP_MOCK.risk >= 40 ? 'Watch' : 'Safe'

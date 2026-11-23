@@ -8,7 +8,7 @@ const { chromium } = require('playwright')
 const fs = require('fs')
 const { findChromium } = require('./find-chromium.cjs')
 
-const BASE = process.argv[2] || 'http://127.0.0.1:4173'
+const BASE = (process.argv[2] || 'http://127.0.0.1:4173').replace(/\/$/, '')
 const DIR = '.qa/motion'
 
 const diff = async (page, a, b, label) => {
@@ -55,7 +55,7 @@ const diff = async (page, a, b, label) => {
 
   // ── card: rest vs hover ───────────────────────────────────────────────────
   await p.goto(BASE + '/features', { waitUntil: 'load' })
-  const card = p.locator('#features article.card-lift').first()
+  const card = p.locator('#capabilities .fx-cap-card').first()
   await card.scrollIntoViewIfNeeded()
   await p.waitForTimeout(1000)
   const box = await card.boundingBox()
