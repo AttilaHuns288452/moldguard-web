@@ -23,6 +23,13 @@
   transition:
     opacity var(--dur-reveal) var(--ease-out) var(--d, 0ms),
     transform var(--dur-reveal) var(--ease-out) var(--d, 0ms);
+  /* will-change is deliberately NOT set here. Left on permanently it pins the
+     element to its own compositor layer forever, and a WebGL canvas inside a
+     promoted layer repaints badly while it animates — which is the flicker seen
+     around the 3D model. It is applied only for the duration of the entrance
+     below. */
+}
+.reveal:not(.is-in) {
   will-change: opacity, transform;
 }
 /* Interactive reveals stay geometrically stable while fading. A moving ancestor

@@ -68,6 +68,8 @@ type Props = {
   hotspots?: boolean
   /** shift the framed centre left/right in model units (hero clears its readout card) */
   nudgeX?: number
+  /** false when the stage is off-screen: stops the render loop entirely */
+  visible?: boolean
 }
 
 const PART_NODE_MATCHERS: Partial<Record<PartId, RegExp>> = {
@@ -241,6 +243,16 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0, onS
       // every frame allocated ~280 throwaway arrays per frame.
       m.userData.mats = matsOf(m)
     })
+
+    // Flicker: while the camera swings, ~2.5% of painted pixels flip back and forth
+    // and with rotation off the same probe reads exactly 0.0000%. An instability
+    // heatmap puts the red on the front-panel labels and buttons rather than the
+    // silhouette, i.e. thin decal geometry sitting a hair above the face it is
+    // printed on. Tried and rejected at runtime: polygonOffset on exactly-coincident
+    // bounding boxes (went UP to 3.67%), logarithmicDepthBuffer (2.74%) and a
+    // tightened near/far (1.92%) — none beat doing nothing, so the geometry stands.
+    // Probe: scripts/check_flicker.mjs.
+
     meshList.current = list
     // Meshes sit under the export root, which is scaled ~0.001, so a WORLD metre
     // is 1/scale local units. Read it from the mesh's PARENT: getWorldScale on
@@ -440,16 +452,21 @@ function Rig({ active, mode, autoSpin, resetKey, onLoaded, zoom, nudgeX = 0, onS
           : m.userData.isShell
             ? (active ? 0.06 : explode ? 0.12 : baseOpacity)
             : dimmed ? 0.12 : baseOpacity
+        // Snap once the exponential approach is visually finished. Without this the
+        // value only ever got asymptotically close to `want`, so `restored` below
+        // never became true and EVERY material was pinned to transparent=true /
+        // depthWrite=false for the life of the page. 278 depth-sorted translucent
+        // meshes re-sorting while the camera moved is the flicker around the model.
         mat.opacity += (want - mat.opacity) * k
+        if (Math.abs(want - mat.opacity) < 0.004) mat.opacity = want
         // Only a fully solid frame may go back into the opaque pass: keeping
         // transparent=true while it fades avoids the pop where the renderer
         // ignores opacity and the mesh snaps back to solid.
         // Selection is explicitly solid, even for translucent source materials.
         // Restore the original material flags only after deselection settles.
         const solidSelection = picked && mat.opacity > 0.999
-        const restored = !picked && Math.abs(mat.opacity - baseOpacity) < 0.001
+        const restored = !picked && mat.opacity === baseOpacity
         if (solidSelection) mat.opacity = 1
-        else if (restored) mat.opacity = baseOpacity
         mat.transparent = solidSelection ? false : restored ? (u.baseTransparent as boolean) : true
         mat.depthWrite = solidSelection ? true : restored ? (u.baseDepthWrite as boolean) : false
       }
@@ -581,6 +598,10 @@ export default function DeviceScene(props: Props) {
   return (
     <Canvas
       data-device-canvas
+      // Two stages (hero + explorer) both mounted meant two live WebGL contexts
+      // rendering every frame; the main thread dropped to ~4fps and the models
+      // visibly stuttered. Only the visible stage gets a frame loop.
+      frameloop={props.visible === false ? 'never' : 'always'}
       dpr={Math.min(window.devicePixelRatio || 1, 1.75)}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {

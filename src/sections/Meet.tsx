@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Boxes, Eye, Layers, RefreshCw } from 'lucide-react'
 import DeviceViewer from '../components/DeviceViewer'
 import DataFlow from '../components/DataFlow'
@@ -28,14 +28,32 @@ export default function Meet() {
   // so a 3D stage that spins regardless was the one place it was ignored.
   const [autoSpin, setAutoSpin] = useState(() => !prefersReducedMotion())
   const [tourStep, setTourStep] = useState(0)
+  /** the 3D stage card, so a part pick can scroll it back on screen on phones */
+  const stageRef = useRef<HTMLDivElement>(null)
 
   const selected = active ? PART_BY_ID[active] : null
+
+  // On a phone the parts list sits below the stage, so selecting a part zoomed a
+  // model that was already scrolled off the top of the screen: the highlight
+  // happened where the user could not see it. Bring the stage back into view on
+  // narrow screens only — on desktop both are visible side by side, and scrolling
+  // there would yank the page for no reason.
+  const revealStage = () => {
+    if (typeof window === 'undefined' || window.innerWidth >= 1024) return
+    const el = stageRef.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const clear = r.top >= 8 && r.bottom <= window.innerHeight - 8
+    if (clear) return
+    el.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
+  }
 
   const pick = (id: PartId) => {
     setActive(id)
     setAutoSpin(false)
     const i = TOUR.indexOf(id)
     if (i >= 0) setTourStep(i)
+    revealStage()
   }
 
   const step = (dir: 1 | -1) => {
@@ -47,6 +65,7 @@ export default function Meet() {
     setTourStep(next)
     setActive(TOUR[next])
     setAutoSpin(false)
+    revealStage()
   }
 
   return (
@@ -83,7 +102,7 @@ export default function Meet() {
         <div className="mt-9 grid gap-5 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,1fr)] lg:gap-6">
           {/* ── the model ── */}
           <Reveal>
-            <div className="relative overflow-hidden rounded-soft border border-line bg-card">
+            <div ref={stageRef} className="relative overflow-hidden rounded-soft border border-line bg-card">
               <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5">
                 <span className="text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{MEET.caption}</span>
                 <span className="measure text-[11px] tracking-[0.08em] text-ink-3 uppercase">{mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[1])} &times; {mm(MODEL_SIZE[2])} mm</span>

@@ -35,6 +35,7 @@ type Props = {
 export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome = true, hotspots = true, nudgeX }: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [failed, setFailed] = useState(false)
   const [resetKey, setResetKey] = useState(0)
@@ -47,19 +48,28 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
   const handleLoaded = useCallback(() => setLoaded(true), [])
   const handleHover = useCallback(() => setHovering(true), [])
 
+  // Mount lazily (first time it comes near the viewport) but keep tracking
+  // visibility afterwards: this stage and the hero stage are both real WebGL
+  // contexts, and leaving both rendering off-screen halved the frame rate for
+  // whichever one the user was actually looking at.
   useEffect(() => {
     const el = hostRef.current
     if (!el) return
+    let armed = false
     const io = new IntersectionObserver(
       (entries) => {
-        if (!entries.some((e) => e.isIntersecting)) return
-        io.disconnect()
+        const shown = entries.some((e) => e.isIntersecting)
+        setVisible(shown)
+        if (!shown) return
+        if (armed) return
+        armed = true
         if ('requestIdleCallback' in window) {
           (window as unknown as { requestIdleCallback: (cb: () => void, o?: { timeout: number }) => void })
             .requestIdleCallback(() => setMounted(true), { timeout: 1200 })
         } else setTimeout(() => setMounted(true), 300)
       },
-      { rootMargin: '0px' },
+      // a little slack so the model is ready before it is centred on screen
+      { rootMargin: '200px' },
     )
     io.observe(el)
     return () => io.disconnect()
@@ -159,6 +169,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
               onHoverHotspot={handleHover}
               hotspots={hotspots}
               nudgeX={nudgeX}
+              visible={visible}
             />
           </Suspense>
           </SceneBoundary>
