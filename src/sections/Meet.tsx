@@ -99,15 +99,30 @@ export default function Meet() {
           </ol>
         </div>
 
-        <div className="mt-9 grid gap-5 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,1fr)] lg:gap-6">
+        {/* Row height is fixed at lg so picking a part cannot resize the cards:
+            the description is taller than the empty state, and letting it stretch
+            the row changed the 3D stage aspect on every selection. */}
+        {/* Row height is fixed at lg so picking a part cannot resize the cards:
+            the description is taller than the empty state, and letting it stretch
+            the row changed the 3D stage aspect on every selection. */}
+        <div className="mt-9 grid gap-5 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,1fr)] lg:items-start lg:gap-6">
           {/* ── the model ── */}
           <Reveal>
-            <div ref={stageRef} className="relative overflow-hidden rounded-soft border border-line bg-card">
+            <div ref={stageRef} className="relative flex min-h-0 flex-col overflow-hidden rounded-soft border border-line bg-card">
               <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5">
                 <span className="text-[11px] font-[650] tracking-[0.1em] text-ink-3 uppercase">{MEET.caption}</span>
                 <span className="measure text-[11px] tracking-[0.08em] text-ink-3 uppercase">{mm(MODEL_SIZE[0])} &times; {mm(MODEL_SIZE[1])} &times; {mm(MODEL_SIZE[2])} mm</span>
               </div>
-              <div className="relative h-[clamp(400px,58vh,560px)] w-full bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)]">
+              {/* flex-1, not a viewport clamp. The card is stretched to match the
+                components list beside it (692px), but a clamp(400px,58vh,560px)
+                stage only ever filled part of that: at a 620px-tall window it was
+                400px tall inside a 692px card, leaving 252px of empty pale field
+                under the product. Letting the stage take the remaining space
+                keeps the model framed and removes the dead area at any height. */}
+              {/* Below lg the cards stack, so h-full has no row to fill and flex-1
+                collapses: keep a viewport floor there, and let flex take over
+                only when the two cards sit side by side. */}
+              <div className="relative h-[clamp(380px,62vh,560px)] w-full bg-[radial-gradient(70%_60%_at_50%_40%,#ffffff_0%,#e8f1fb_55%,#cadcef_100%)] lg:h-[590px]">
                 <DeviceViewer active={active} onSelect={(id) => { if (id) pick(id); else setActive(null) }} autoSpin={autoSpin} mode={mode} />
               </div>
               {/* The view toggle belongs to the model it changes, so it sits in the
@@ -156,9 +171,11 @@ export default function Meet() {
 
           {/* ── the information panel ── */}
           <Reveal delay={90}>
-            <div className="flex h-full flex-col overflow-hidden rounded-soft border border-line bg-card">
-              {/* selected part */}
-              <div className="border-b border-line p-5">
+            <div className="flex min-h-0 flex-col overflow-hidden rounded-soft border border-line bg-card lg:h-[692px]">
+              {/* selected part. min-height reserves the description's space, so
+                  picking a part does not grow this panel by ~170px and stretch the
+                  whole row (which changed the 3D stage aspect on every click). */}
+              <div className="min-h-[clamp(150px,22vh,240px)] border-b border-line p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-[650] tracking-[0.12em] text-accent uppercase">
@@ -210,7 +227,11 @@ export default function Meet() {
               </div>
 
               {/* component index */}
-              <ul className="flex-1 divide-y divide-line overflow-y-auto">
+              {/* A max height, so selecting a part (which grows the panel above)
+                  scrolls this list instead of stretching the row. Without it the
+                  cards resized by 170px on every selection and the 3D stage
+                  changed aspect with them. */}
+              <ul className="max-h-[clamp(240px,32vh,340px)] flex-1 divide-y divide-line overflow-y-auto">
                 {PARTS.map((p) => {
                   const on = active === p.id
                   return (
