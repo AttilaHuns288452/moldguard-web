@@ -46,10 +46,10 @@ export const OFFER = {
 export const HERO = {
   cat: '',
   titleLines: ['Less guessing.', 'More control over damp rooms.'],
-  // Leads with the problem the buyer already has, then the mechanism. The old
-  // version opened with a three-item feature list, which told a stranger what
-  // the device contains before telling them why they should care.
-  lede: 'Nothing is watching the room between the times you check it. MoldGuard measures the conditions, scores the risk and runs its own dehumidifier before the damp sets in.',
+  // The problem only. The mechanism is stated once below, by the comparison line
+  // and the three bullets; repeating it here made the hero say the same thing
+  // three times in one viewport.
+  lede: 'Nothing is watching the room between the times you check it. MoldGuard does that part for you.',
   // the hero shows the unit open; one line so the visitor knows what they are
   // looking at rather than reading it as a broken front door
   stageNote: 'Sensors, stack, fan, tank',
@@ -62,7 +62,7 @@ export const HERO = {
   primary: { label: 'Check it fits my room', href: '/contact' },
   secondary: { label: 'See how it works', href: '/how-it-works' },
   // One comparison a buyer makes immediately, answered before the FAQ.
-  compare: 'A cheap dehumidifier dries when you switch it on. This one decides when to dry, from humidity, temperature and how long the room has stayed damp.',
+  compare: 'A cheap dehumidifier dries when you switch it on. This one decides when to dry.',
 }
 
 // The demo readout used by DataFlow. It is NOT the hero card (that is explicit
