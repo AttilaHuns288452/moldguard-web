@@ -95,7 +95,7 @@ export default function Header({ page }: { page: Location_ }) {
           >
             {/* Full label on desktop; a shorter one on phones so the primary
                 action stays on the logo row instead of wrapping to a second. */}
-            <span className="lg:hidden">Get a quote</span>
+            <span className="lg:hidden">Ask us anything</span>
             <span className="hidden lg:inline">{OFFER.cta.label}</span>
           </a>
         </nav>

@@ -202,7 +202,7 @@ export default function Meet() {
                       onClick={(e) => { e.preventDefault(); navigate('contact') }}
                       className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-[13px] font-[650] text-accent-ink underline-offset-2 hover:underline"
                     >
-                      Ask if this fits your room
+                      Ask about MoldGuard
                       <ArrowRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
                     </a>
                   </>
@@ -289,7 +289,7 @@ export default function Meet() {
               onClick={(e) => { e.preventDefault(); navigate('contact') }}
               className="inline-flex min-h-11 shrink-0 items-center rounded-btn bg-accent-ink px-5 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-deep"
             >
-              Check it fits my room
+              Ask about MoldGuard
             </a>
           </div>
         </Reveal>

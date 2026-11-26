@@ -116,7 +116,7 @@ export default function Contact() {
           <Reveal>
             <div className="mb-4 rounded-soft border border-line-hi bg-paper-deep px-4 py-3">
               <p className="max-w-[68ch] text-[12.5px] leading-relaxed text-ink-2">
-                Tell us the room, roughly how big it is, and where condensation shows up. The team can discuss suitability, what the price includes and availability. No payment is taken here, and a request is not an order.
+                Tell us what you want to know. Mention the room if it matters to your question, but you can also ask about the device, app, price, setup, availability or concerns. No payment is taken here, and a message is not an order.
               </p>
             </div>
             {state === 'sent' ? (
@@ -140,7 +140,7 @@ export default function Contact() {
               className="rounded-soft border border-line bg-card p-7 md:p-8"
               onSubmit={submit}
             >
-              <h2 className="text-[1.15rem] font-[650] text-deep">{CONTACT_PAGE.formTitle}</h2>
+              <h2 className="text-[1.15rem] font-[650] text-deep">Tell us what you want to know.</h2>
 
               <div className="mt-5 space-y-4">
                 <Field id="c-name" label="Name" error={touched.name ? errs.name : ''}>
@@ -168,7 +168,7 @@ export default function Contact() {
                 </Field>
                 <Field id="c-about" label="Message" error={touched.about ? errs.about : ''}>
                   <textarea id="c-about" required rows={4} value={about} onChange={(e) => setAbout(e.target.value)}
-                    placeholder="Which room, roughly how big, and where condensation or damp shows up..."
+                    placeholder="Ask about the device, app, price, setup, availability or anything else..."
                     className="input resize-y"
                     aria-invalid={touched.about && !!errs.about}
                     aria-describedby={touched.about && errs.about ? 'c-about-err' : undefined} />

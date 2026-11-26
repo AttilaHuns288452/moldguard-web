@@ -36,7 +36,7 @@ export const OFFER = {
   specs: ['One small enclosed room', 'About 28 × 28 × 40 cm', '1-litre removable tank'],
   priceNote: 'One payment. The device and its companion app are yours; nothing renews.',
   source: 'Priced from the feasibility study, Section 3.4',
-  cta: { label: 'Check it fits my room', href: '/contact' },
+  cta: { label: 'Ask about MoldGuard', href: '/contact' },
   terms:
     'One-time purchase, no subscription. Availability, delivery and warranty terms are confirmed in your quotation before any commitment; no payment is taken on this site.',
   // Reassurance at the decision point: what happens after the click.
@@ -59,7 +59,7 @@ export const HERO = {
     { title: 'It runs the dehumidifier', body: 'Starts when the score crosses its threshold, stops once conditions settle.' },
     { title: 'Status from your phone', body: 'Alerts and manual control in the companion app while the device is online.' },
   ],
-  primary: { label: 'Check it fits my room', href: '/contact' },
+  primary: { label: 'Ask about MoldGuard', href: '/contact' },
   secondary: { label: 'See how it works', href: '/how-it-works' },
   // One comparison a buyer makes immediately, answered before the FAQ.
   compare: 'A cheap dehumidifier dries when you switch it on. This one decides when to dry.',
@@ -169,7 +169,7 @@ export const PLACEMENT = {
 
 export const CTA = {
   title: 'Take the guesswork out of one damp room.',
-  lede: 'Request a quotation for your room. It covers the device, the price and what happens next.',
+  lede: 'Ask about the device, the app, the price, setup, availability or anything else before you decide. We will reply with the relevant details and next steps.',
   primary: OFFER.cta,
   // Never a second contact link: this route already ends on /contact.
   secondary: { label: 'View the app', href: '/download' },
@@ -295,9 +295,9 @@ export const FAQ = {
 }
 
 export const CONTACT_PAGE = {
-  title: 'Request a quotation for your room.',
-  lede: 'Tell us which room and how damp it gets. We reply with whether one unit suits it, and the next step.',
-  formTitle: 'Tell us about the room.',
+  title: 'What would you like to know about MoldGuard?',
+  lede: 'Ask about the device, the app, the price, setup, availability or anything else before you decide. We will reply with the relevant details and next steps.',
+  formTitle: 'Tell us what you want to know.',
   directTitle: 'Prefer direct?',
   directNotes: [
     'Quotations and product questions, replies from the team.',
@@ -314,13 +314,13 @@ export const CONTACT_PAGE = {
     note: 'Price, availability and warranty are confirmed in writing before you commit. This site takes no payment.',
     items: [
       { n: '01', title: 'Tell us about the room', body: 'Which room, roughly how big, and where damp or condensation shows up. The form or a short call covers it.' },
-      { n: '02', title: 'Suitability and quote', body: 'We confirm whether the room is in scope for one MoldGuard unit, and set out exactly what the \u20b19,994 covers.' },
+      { n: '02', title: 'Your questions answered', body: 'We reply to the details you care about — what the ₱9,994 includes, setup, availability, warranty and whether the device suits your use.' },
       { n: '03', title: 'Agree the next steps', body: 'If it fits, availability and terms are confirmed in writing and we agree what happens next. Nothing is charged through this site.' },
     ],
   },
   teamTitle: 'One team. One loop.',
   teamLede: 'MoldGuard is built in house, across hardware, firmware, backend, frontend, design and QA.',
-  closing: { title: 'Ready when you are.', primary: 'Request a quotation', secondary: 'Email us directly' },
+  closing: { title: 'Ready when you are.', primary: 'Ask about MoldGuard', secondary: 'Email us directly' },
 }
 
 export type TeamMember = {

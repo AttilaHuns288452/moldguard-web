@@ -53,7 +53,7 @@ const HEAD: Record<Location_, { title: string; description: string }> = {
   home: {
     title: 'MoldGuard - less guessing, more control over damp rooms',
     description:
-      'One device for one small damp room: room monitoring, a Mold Risk Index and automatic dehumidification, with status and control in the companion app. One-time price PHP 9,994, no subscription. Request a quotation.',
+      'One device for one small damp room: room monitoring, a Mold Risk Index and automatic dehumidification, with status and control in the companion app. One-time price PHP 9,994, no subscription. Ask about MoldGuard.',
   },
   features: {
     title: 'Features - MoldGuard',
@@ -66,7 +66,7 @@ const HEAD: Record<Location_, { title: string; description: string }> = {
       'The closed loop: sense the room, score the real mold risk, dehumidify on its own, and report status to the companion app. Plus setup and straight answers.',
   },
   contact: {
-    title: 'Request a quotation - MoldGuard',
+    title: 'Ask about MoldGuard - MoldGuard',
     description:
       'Tell us the room, roughly how big it is and where condensation shows up. We reply with suitability, what the price covers and the next step. No payment, no commitment.',
   },
