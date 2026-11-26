@@ -33,7 +33,7 @@ const ROUTES = {
   contact: {
     title: 'Ask about MoldGuard - MoldGuard',
     description:
-      'Tell us the room, roughly how big it is and where condensation shows up. We reply with suitability, what the price covers and the next step. No payment, no commitment.',
+      'Tell us what you want to know about MoldGuard, including the device, app, price, setup, availability, or concerns. No payment, no commitment.',
   },
   download: {
     title: 'Get the MoldGuard app - MoldGuard',

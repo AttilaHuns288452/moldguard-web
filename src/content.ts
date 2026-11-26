@@ -273,7 +273,7 @@ export const SETUP = {
 }
 
 export const FAQ = {
-  title: 'Before you request a quote.',
+  title: 'Before you ask or request a quote.',
   items: [
     { q: 'What is MoldGuard?', a: 'A one-time-purchase device for one small enclosed room. It monitors humidity and temperature, scores a room-level Mold Risk Index, and runs a built-in thermoelectric dehumidifier automatically. The companion app shows status, alerts and control.' },
     { q: 'How does it detect mold risk?', a: 'It scores the conditions mold needs rather than looking for mold. The Mold Risk Index combines humidity, temperature and how long those conditions persist, instead of a single humidity threshold, plus a dew-point estimate for condensation on cold surfaces.' },

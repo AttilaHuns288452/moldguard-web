@@ -37,18 +37,18 @@ function AppleGlyph() {
   )
 }
 
-function Badge({ store, glyph, kicker }: { store: string; glyph: ReactNode; kicker: string }) {
+function Badge({ store, glyph }: { store: string; glyph: ReactNode }) {
   return (
     <span
       className="relative inline-flex min-h-[60px] items-center gap-3 rounded-[13px] border border-white/25 bg-[#0b1220] px-4 py-2.5 text-white shadow-floating"
       // Presentation only: the app is distributed directly, so there is no store
       // URL to link to. A real <a> would promise a destination that does not exist.
       role="img"
-      aria-label={`Download on ${store}`}
+      aria-label={`App access by request on ${store}`}
     >
-      <span className="text-white">{glyph}</span>
+        <span className="text-white">{glyph}</span>
       <span className="flex flex-col leading-none">
-        <span className="text-[9.5px] tracking-[0.14em] text-white/70 uppercase">{kicker}</span>
+        <span className="text-[9.5px] tracking-[0.14em] text-white/70 uppercase">App access by request</span>
         <span className="mt-1 text-[15px] leading-none font-semibold">{store}</span>
       </span>
     </span>
@@ -59,11 +59,11 @@ export default function StoreBadges() {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <Badge store="Google Play" glyph={<PlayGlyph />} kicker="Get it on" />
-        <Badge store="App Store" glyph={<AppleGlyph />} kicker="Download on the" />
+        <Badge store="Google Play" glyph={<PlayGlyph />} />
+        <Badge store="App Store" glyph={<AppleGlyph />} />
       </div>
       <p className="mt-3 max-w-[56ch] text-[12px] leading-relaxed text-ink-3">
-        iOS 15+ and Android 10+. Request access and the team sends the build.
+        iOS 15+ and Android 10+. Email the team and they send the build.
       </p>
     </div>
   )

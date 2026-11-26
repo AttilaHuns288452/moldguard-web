@@ -61,12 +61,12 @@ export default function GetApp() {
 
             <Reveal delay={160}>
               <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
-                <a
-                  href={`mailto:moldguard.dev.team@gmail.com?subject=MoldGuard%20app%20access`}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-btn bg-accent-ink px-5 py-2.5 text-[15px] font-semibold text-white transition-colors hover:bg-deep"
-                >
-                  Request access
-                </a>
+        <a
+          href="mailto:moldguard.dev.team@gmail.com?subject=MoldGuard%20app%20access"
+          className="inline-flex min-h-11 items-center gap-2 rounded-btn bg-accent-ink px-5 py-2.5 text-[15px] font-semibold text-white transition-colors hover:bg-deep"
+        >
+          Email the team for app access
+        </a>
                 <a
                   href="/how-it-works"
                   onClick={(e) => { e.preventDefault(); navigate('how-it-works') }}
@@ -76,7 +76,7 @@ export default function GetApp() {
                 </a>
               </div>
               <p className="mt-4 max-w-[46ch] text-[13px] leading-relaxed text-ink-2">
-                New to MoldGuard? The app comes with the device. Request a quotation for your room and it covers hardware, price and next steps.
+                New to MoldGuard? The app comes with the device. Ask about the device, app access, price, setup or next steps.
               </p>
             </Reveal>
           </div>
@@ -112,7 +112,7 @@ export default function GetApp() {
                     moldguard-web.vercel.app/download
                   </a>
                   <p className="mt-2 border-t border-line pt-2 text-[11.5px] leading-relaxed text-ink-3">
-                    Request access and the team sends the build for your phone.
+                    Email the team and they send the build for your phone.
                   </p>
                 </div>
               </div>
