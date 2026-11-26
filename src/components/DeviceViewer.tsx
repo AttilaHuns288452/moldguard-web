@@ -178,7 +178,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
         {!loaded && !failed && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
             <div className="device-silhouette h-[56%] w-[20%] min-h-[180px] min-w-[56px] rounded-soft border border-line-hi/70 bg-gradient-to-b from-white to-[#efece7]" />
-            <span className="text-[0.75rem] font-semibold tracking-[0.14em] text-ink-2 uppercase">Loading model</span>
+            <span className="text-[0.75rem] font-semibold tracking-[0.14em] text-ink-2 uppercase">Preparing the 3D view</span>
           </div>
         )}
 
@@ -196,7 +196,7 @@ export default function DeviceViewer({ active, onSelect, autoSpin, mode, chrome 
       {!failed && chrome && (
         <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex items-center justify-between px-2 pb-1">
           <span className="text-[11px] text-ink-3">
-            {armed ? 'Drag to orbit · scroll to zoom · Esc to release' : loaded ? 'Select to explore · drag to orbit' : 'Loading model'}
+            {armed ? 'Drag to orbit · scroll to zoom · Esc to release' : loaded ? 'Select to explore · drag to orbit' : 'Preparing the 3D view'}
           </span>
           <div className="flex items-center gap-0.5">
             <button type="button" onClick={() => setZoom((z) => Math.min(2.4, z + 0.18))}

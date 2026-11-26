@@ -2,7 +2,7 @@
 
 ## Purpose
 
-MoldGuard is a prototype-level IoT device sold as one-time hardware: room sensing, a Mold Risk Index, a thermoelectric dehumidification response, and a companion app. The site is a sales funnel: every path ends at a quotation request (`/contact`), never a checkout.
+MoldGuard is a real IoT product being built and sold as one-time hardware: room sensing, a Mold Risk Index, a thermoelectric dehumidification response, and a companion app. The site is a sales funnel: every path ends at a conversation or quotation request (`/contact`), never a checkout.
 
 ## Offer
 

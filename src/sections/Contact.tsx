@@ -121,7 +121,7 @@ export default function Contact() {
             </div>
             {state === 'sent' ? (
               <div role="status" aria-live="polite" className="rounded-soft border border-[#177069]/30 bg-[#1770690d] p-7 text-center md:p-8">
-                <p className="text-[1.15rem] font-[650] text-[#177069]">Your quotation request has been submitted.</p>
+                <p className="text-[1.15rem] font-[650] text-[#177069]">Your message has been submitted.</p>
                 <p className="mt-2 text-[13.5px] leading-relaxed text-ink-2">
                   The form sends the request; this page cannot confirm that the team inbox received it. We reply to {email}. If you do not hear back within two business days, email us directly at{' '}
                   <a href={`mailto:${CONTACT.email}`} className="font-[650] text-accent-ink underline-offset-2 hover:underline">{CONTACT.email}</a>.
@@ -168,7 +168,7 @@ export default function Contact() {
                 </Field>
                 <Field id="c-about" label="Message" error={touched.about ? errs.about : ''}>
                   <textarea id="c-about" required rows={4} value={about} onChange={(e) => setAbout(e.target.value)}
-                    placeholder="Ask about the device, app, price, setup, availability or anything else..."
+                    placeholder="Ask about the device, app, price, setup, availability or concerns"
                     className="input resize-y"
                     aria-invalid={touched.about && !!errs.about}
                     aria-describedby={touched.about && errs.about ? 'c-about-err' : undefined} />
@@ -193,7 +193,7 @@ export default function Contact() {
                 disabled={state === 'sending'}
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-btn bg-accent-ink px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-deep active:scale-[.99] disabled:cursor-not-allowed disabled:bg-[#d7e3f2] disabled:text-[#3f5670] disabled:opacity-100"
               >
-                {state === 'sending' ? 'Sending...' : 'Ask about my room'}
+                {state === 'sending' ? 'Sending...' : 'Send my question'}
                 <ArrowRight className="size-4" strokeWidth={2} />
               </button>
               </>
@@ -214,8 +214,8 @@ export default function Contact() {
 
           {/* ── Prefer direct? ── */}
           <Reveal delay={80}>
-            {/* The form comes first on mobile: a buyer is here to request a quote,
-                and the direct channels sit below it. */}
+            {/* The form comes first on mobile: a visitor is here to ask a question,
+                share a concern, or request pricing, not only request a quote. */}
             <div className="rounded-soft border border-line bg-card p-7 md:p-8 lg:flex lg:h-full lg:flex-col">
               <h2 className="text-[1.15rem] font-[650] text-deep">{CONTACT_PAGE.directTitle}</h2>
               <ul className="mt-5 divide-y divide-line lg:flex lg:flex-1 lg:flex-col">
